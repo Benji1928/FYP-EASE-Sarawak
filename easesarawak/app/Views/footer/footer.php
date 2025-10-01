@@ -10,7 +10,7 @@
         <li><a href="#how">How It Works</a></li>
         <li><a href="#why-choose-ease">Why Us</a></li>
         <li><a href="#contact">Contact Us</a></li>
-        <li><a href="#about">About Us</a></li>
+        <li><a href="view/about">About Us</a></li>
         <li><a href="#privacy">Privacy Policy</a></li>
         <li><a href="#terms">Terms & Conditions</a></li>
     </ul>

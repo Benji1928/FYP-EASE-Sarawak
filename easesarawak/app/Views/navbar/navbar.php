@@ -10,7 +10,7 @@
                 <a href="#services">Our Services</a>
                 <a href="#how">How it works</a>
                 <a href="#why-choose-ease">Why us</a>
-                <a href="#about">About Us</a>
+                <a href="<?= base_url('/about'); ?>">About Us</a>
                 <a href="#contact">Contact Us</a>
             </div>
         </div>
