@@ -39,31 +39,60 @@
 
         /* Hero section */
         .hero {
-            background: url('assets/images/close-up-traveler-with-luggage_11zon.webp') no-repeat center center/cover;
+            position: relative;
             height: 100vh;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
-            position: relative;
         }
 
-        .hero::before {
-            content: "";
+        .hero-overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
+            /* semi-transparent black */
+            z-index: 1;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scale(1);
+            animation: zoom 20s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0;
+        }
+
+        .hero::before {
+            background-image: url("assets/images/close-up-tourist-with-suitcase_11zon.webp");
+            animation-delay: 0s;
+        }
+
+        .hero::after {
+            background-image: url("assets/images/close-up-traveler-with-luggage_11zon.webp");
+            animation-delay: 10s;
+            /* Half of total duration */
         }
 
         .hero-content {
             position: relative;
+            z-index: 2;
             max-width: 1000px;
             padding: 1rem;
-            z-index: 1;
         }
 
         .hero-content h1 {
@@ -98,18 +127,37 @@
         }
 
         .btn-primary:hover {
-            background: #000000ff;
+            background: #000;
         }
 
-        .btn-outline {
-            border: 2px solid #fff;
-            color: #fff;
+        /* Zoom & Crossfade Animation */
+        @keyframes zoom {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            45% {
+                opacity: 1;
+                transform: scale(1.1);
+                /* slow zoom-in */
+            }
+
+            50% {
+                opacity: 0;
+                transform: scale(1.15);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
         }
 
-        .btn-outline:hover {
-            background: #fff;
-            color: #333;
-        }
 
         /* INTRODUCING EASE Section */
         .intro {
@@ -690,6 +738,7 @@
     <?= $this->include('navbar/navbar') ?>
     <!-- Hero -->
     <section class="hero">
+        <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="pill-title">
                 <span class="dot"></span>
