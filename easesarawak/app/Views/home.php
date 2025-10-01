@@ -564,6 +564,16 @@
             margin-bottom: 15px;
         }
 
+        .contact-item:hover .icon-circle {
+            background-color: #f2be00;
+            /* yellow fill */
+            color: #000;
+            /* make icon black */
+            border-color: #f2be00;
+            /* keep border consistent */
+            transition: all 0.3s ease;
+        }
+
         .icon-circle {
             display: flex;
             align-items: center;
@@ -607,9 +617,16 @@
         }
 
         .connect-with-us .connect-right .tagline {
-            font-size: 24px;
+            font-size: 40px;
             color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .message-desc {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 25px;
         }
 
         .contact-form {
@@ -618,12 +635,21 @@
             gap: 15px;
         }
 
+        .row-inputs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row-inputs input {
+            flex: 1;
+        }
+
         .contact-form input,
         .contact-form textarea {
             padding: 12px 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 16px;
             outline: none;
             transition: border-color 0.3s;
         }
@@ -631,6 +657,26 @@
         .contact-form input:focus,
         .contact-form textarea:focus {
             border-color: #0077cc;
+        }
+
+        .contact-form input::-webkit-input-placeholder,
+        .contact-form textarea::-webkit-input-placeholder {
+            font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
+        }
+
+        .contact-form input::-moz-placeholder,
+        .contact-form textarea::-moz-placeholder {
+            font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
+        }
+
+        .contact-form input:-ms-input-placeholder,
+        .contact-form textarea:-ms-input-placeholder {
+            font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
         }
 
         .contact-form button {
@@ -649,22 +695,23 @@
             background: black;
         }
 
+        /* CALL TO ACTION Section */
         .cta-section {
             background: #dbd9d9ff;
             /* light grey background */
-            padding: 80px 20px;
+            padding: 50px 20px;
             text-align: center;
         }
 
         .cta-section h2 {
-            font-size: 26px;
+            font-size: 40px;
             font-weight: bold;
             color: #333;
             margin-bottom: 15px;
         }
 
         .cta-section p {
-            font-size: 18px;
+            font-size: 22px;
             color: #f2be00;
             margin-bottom: 30px;
         }
@@ -985,11 +1032,14 @@
                     MESSAGE US TODAY
                     <span class="dot"></span>
                 </h2>
-                <p class="tagline">FILL THE FORM BELOW<br>Travel Light. Travel Smart. Travel with EASE.</p>
+                <p class="tagline">FILL THE FORM BELOW</p>
+                <p class="message-desc">Travel Light. Travel Smart. Travel with EASE.</p>
 
                 <form class="contact-form">
-                    <input type="email" placeholder="Your Email" required>
-                    <input type="text" placeholder="Your Phone Number" required>
+                    <div class="row-inputs">
+                        <input type="email" placeholder="Your Email" required>
+                        <input type="text" placeholder="Your Phone Number" required>
+                    </div>
                     <input type="text" placeholder="Subject" required>
                     <textarea placeholder="Your Message" rows="5" required></textarea>
                     <button type="submit">SUBMIT FORM</button>
