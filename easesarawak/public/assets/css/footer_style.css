@@ -15,7 +15,7 @@
     border: none;
     border-top: 2px solid #f2be00;
     margin: 20px auto;
-    max-width: 800px;
+    max-width: 850px;
 }
 
 .footer-links {
@@ -31,7 +31,7 @@
 .footer-links li a {
     color: #ddd;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 18px;
     transition: color 0.3s;
 }
 

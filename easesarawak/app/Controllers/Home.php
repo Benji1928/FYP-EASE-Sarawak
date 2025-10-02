@@ -18,4 +18,9 @@ class Home extends BaseController
     {
         return view('policy');
     }
+
+    public function tnc(): string
+    {
+        return view('tnc');
+    }
 }
