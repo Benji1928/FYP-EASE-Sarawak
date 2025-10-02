@@ -13,4 +13,9 @@ class Home extends BaseController
     {
         return view('about');
     }
+
+    public function policy(): string
+    {
+        return view('policy');
+    }
 }
