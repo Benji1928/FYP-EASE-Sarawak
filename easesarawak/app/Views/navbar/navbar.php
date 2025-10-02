@@ -7,13 +7,13 @@
         <div class="dropdown">
             <a>Menu ▾</a>
             <div class="dropdown-content">
-                <a href="#services">Our Services</a>
-                <a href="#how">How it works</a>
-                <a href="#why-choose-ease">Why us</a>
+                <a href="<?= base_url('/#services'); ?>">Our Services</a>
+                <a href="<?= base_url('/#how'); ?>">How it works</a>
+                <a href="<?= base_url('/#why-choose-ease'); ?>">Why us</a>
                 <a href="<?= base_url('/about'); ?>">About Us</a>
-                <a href="#contact">Contact Us</a>
+                <a href="<?= base_url('/#contact'); ?>">Contact Us</a>
             </div>
         </div>
-        <a href="#book" class="btn">Book Now</a>
+        <a href="<?= base_url('/#book'); ?>" class="btn">Book Now</a>
     </div>
 </nav>
