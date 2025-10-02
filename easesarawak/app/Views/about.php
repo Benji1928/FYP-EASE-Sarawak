@@ -321,7 +321,7 @@
         <h1>About Us</h1>
     </section>
 
-    <!-- Title -->
+    <!-- Offer -->
     <section class="offer">
         <div class="left">
             <h2 class="pill-title">
