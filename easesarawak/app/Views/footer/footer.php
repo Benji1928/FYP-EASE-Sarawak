@@ -12,7 +12,7 @@
         <li><a href="#contact">Contact Us</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/policy">Privacy Policy</a></li>
-        <li><a href="#terms">Terms & Conditions</a></li>
+        <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
     </ul>
 
     <hr>
