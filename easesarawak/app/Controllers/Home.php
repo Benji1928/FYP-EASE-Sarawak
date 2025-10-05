@@ -23,4 +23,8 @@ class Home extends BaseController
     {
         return view('tnc');
     }
+    public function booking(): string
+    {
+        return view('booking');
+    }
 }

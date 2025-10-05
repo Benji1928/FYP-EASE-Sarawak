@@ -799,7 +799,7 @@
                 with our easy-to-use Kuching Luggage Storage and Delivery service.
             </p>
             <a href="#contact" class="btn btn-primary">CONTACT NOW</a>
-            <a href="#book" class="btn btn-primary">BOOK NOW</a>
+            <a href="booking" class="btn btn-primary">BOOK NOW</a>
         </div>
     </section>
 
@@ -856,7 +856,7 @@
                     Looking for short-term storage? Our Kuching Luggage Storage service keeps your luggage safe
                     for as long as needed while you explore the city worry-free!
                 </p>
-                <a href="#book" class="btn-card">BOOK NOW</a>
+                <a href="booking" class="btn-card">BOOK NOW</a>
             </div>
 
             <!-- Card 2 -->
@@ -870,7 +870,7 @@
                     Enjoy our complimentary Kuching Luggage Transfer with 24 hours of secure storage, offering
                     seamless transfers between selected locations for added convenience!
                 </p>
-                <a href="#book" class="btn-card">BOOK NOW</a>
+                <a href="booking" class="btn-card">BOOK NOW</a>
             </div>
 
             <!-- Card 3 -->
@@ -884,7 +884,7 @@
                     Carrying oversized luggage or need a specific pickup/drop-off location? Our Kuching Luggage
                     Delivery service got you covered—flexible and hassle-free!
                 </p>
-                <a href="#book" class="btn-card">BOOK NOW</a>
+                <a href="booking" class="btn-card">BOOK NOW</a>
             </div>
         </div>
     </section>

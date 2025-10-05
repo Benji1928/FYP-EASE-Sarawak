@@ -14,6 +14,6 @@
                 <a href="<?= base_url('/#contact'); ?>">Contact Us</a>
             </div>
         </div>
-        <a href="<?= base_url('/#book'); ?>" class="btn">Book Now</a>
+        <a href="<?= base_url('/booking'); ?>" class="btn">Book Now</a>
     </div>
 </nav>
