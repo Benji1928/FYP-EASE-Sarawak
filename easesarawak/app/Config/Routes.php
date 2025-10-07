@@ -9,3 +9,7 @@ $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/policy', 'Home::policy');
 $routes->get('/terms-and-conditions', 'Home::tnc');
+
+$routes->group('admin',['namespace' => 'App\Controllers'],function ($routes) {
+    $routes->get('/', 'Admin::index');
+});
