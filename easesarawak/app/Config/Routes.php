@@ -10,6 +10,7 @@ $routes->get('/about', 'Home::about');
 $routes->get('/policy', 'Home::policy');
 $routes->get('/terms-and-conditions', 'Home::tnc');
 
-$routes->group('admin',['namespace' => 'App\Controllers'],function ($routes) {
-    $routes->get('/', 'Admin::index');
-});
+
+$routes->get('/admin', 'Admin::index');
+$routes->get('/report', 'Admin::report');
+

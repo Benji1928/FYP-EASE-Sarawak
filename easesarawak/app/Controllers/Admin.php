@@ -9,4 +9,9 @@ class Admin extends BaseController
         return view('admin/dashboard');
     }
 
+    public function report()
+    {
+        return view('admin/report');
+    }
+
 }
