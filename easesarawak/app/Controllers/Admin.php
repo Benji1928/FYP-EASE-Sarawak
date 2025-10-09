@@ -9,7 +9,28 @@ class Admin extends BaseController
 {
     public function index(): string
     {
-        return view('admin/dashboard');
+        $order_model = new Order_model();
+        $user_model = new User_model();
+
+        $order = $order_model->where('is_deleted', 0)->countAllResults();
+        $user  = $user_model->where('is_deleted', 0)->countAllResults();
+        $sales = $order_model
+            ->selectSum('amount')
+            ->where('is_deleted', 0)
+            ->get()
+            ->getRow()
+            ->amount ?? 0;
+        $totalOrders = $order_model
+            ->where('is_deleted', 0)
+            ->countAllResults();
+
+        $data = [ 'order_count' => $order,
+                  'user_count'  => $user,
+                  'sales'       => $sales,
+                  'orders'      => $totalOrders,
+                ];
+
+        return view('admin/dashboard', $data);
     }
 
     public function report()
@@ -119,7 +140,7 @@ class Admin extends BaseController
                 'password'      => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
                 'created_date'  => date('Y-m-d H:i:s'),
             ];
-            
+
             $userModel->insert($data);
             return redirect()->to(base_url('/user'))->with('success', 'User created successfully!');
         }
