@@ -43,16 +43,16 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
-        <div class="sidebar" data-background-color="dark">
+        <div class="sidebar" data-background-color="white">
             <div class="sidebar-logo">
                 <!-- Logo Header -->
-                <div class="logo-header" data-background-color="dark">
+                <div class="logo-header" data-background-color="white">
                     <a href="<?= base_url('/admin'); ?>" class="logo">
                         <img
-                            src="assets/images/Ease_PNG_File-09.png"
+                            src="assets/images/Ease_PNG_File-01-1.png"
                             alt="navbar brand"
                             class="navbar-brand"
-                            height="20" />
+                            height="65" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -71,7 +71,7 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a href="<?= base_url('/admin'); ?>">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
@@ -81,7 +81,7 @@
                             <span class="sidebar-mini-icon">
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
-                            <h4 class="text-section">Components</h4>
+                            <h4 class="text-section">Tabs</h4>
                         </li>
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#base">
@@ -93,7 +93,7 @@
                                 <ul class="nav nav-collapse">
                                     <li>
                                         <a href="<?= base_url('/order'); ?>">
-                                            <span class="sub-item">orders</span>
+                                            <span class="sub-item">Order Management</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -598,7 +598,7 @@
                                     aria-expanded="false">
                                     <div class="avatar-sm">
                                         <img
-                                            src="assets/img/profile.jpg"
+                                            src="assets/images/user.png"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
