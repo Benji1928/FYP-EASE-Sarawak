@@ -47,7 +47,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="index.html" class="logo">
+                    <a href="<?= base_url('/admin'); ?>" class="logo">
                         <img
                             src="assets/images/Ease_PNG_File-09.png"
                             alt="navbar brand"
@@ -106,48 +106,8 @@
                             <div class="collapse" id="base">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="components/avatars.html">
-                                            <span class="sub-item">Avatars</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/buttons.html">
-                                            <span class="sub-item">Buttons</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/gridsystem.html">
-                                            <span class="sub-item">Grid System</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/panels.html">
-                                            <span class="sub-item">Panels</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/notifications.html">
-                                            <span class="sub-item">Notifications</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/sweetalert.html">
-                                            <span class="sub-item">Sweet Alert</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/font-awesome-icons.html">
-                                            <span class="sub-item">Font Awesome Icons</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/simple-line-icons.html">
-                                            <span class="sub-item">Simple Line Icons</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/typography.html">
-                                            <span class="sub-item">Typography</span>
+                                        <a href="<?= base_url('/order'); ?>">
+                                            <span class="sub-item">orders</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -162,13 +122,13 @@
                             <div class="collapse" id="sidebarLayouts">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="sidebar-style-2.html">
-                                            <span class="sub-item">Sidebar Style 2</span>
+                                        <a href="<?= base_url('/user'); ?>">
+                                            <span class="sub-item">User Management</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="icon-menu.html">
-                                            <span class="sub-item">Icon Menu</span>
+                                        <a href="<?= base_url('/create_user');?>">
+                                            <span class="sub-item">Add User</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -185,6 +145,27 @@
                                     <li>
                                         <a href="<?= base_url('/report'); ?>">
                                             <span class="sub-item">Report</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#management">
+                                <i class="fas fa-table"></i>
+                                <p>Management</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="management">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="<?= base_url('/'); ?>">
+                                            <span class="sub-item">Content</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('/'); ?>">
+                                            <span class="sub-item">Promo Code</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -637,7 +618,7 @@
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
-                                        <span class="fw-bold">Hizrian</span>
+                                        <span class="fw-bold">Allan</span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
