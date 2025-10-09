@@ -23,4 +23,14 @@ class Home extends BaseController
     {
         return view('tnc');
     }
+
+    public function payment(): string
+    {
+        return view('payment');
+    }
+
+    public function intowndelivery(): string 
+    {
+        return view('intowndelivery');
+    }
 }
