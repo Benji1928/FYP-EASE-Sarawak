@@ -381,17 +381,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             setMinDateTime();
             
-            // Add event listeners for date-time validation
+            // Add event listeners for date-time validation - ONLY for delivery
             document.getElementById('dropoff-date').addEventListener('change', validateDropoffDateTime);
             document.getElementById('dropoff-time').addEventListener('change', validateDropoffDateTime);
             document.getElementById('pickup-date').addEventListener('change', validatePickupDateTime);
             document.getElementById('pickup-time').addEventListener('change', validatePickupDateTime);
             
-            // Storage form listeners
-            document.getElementById('storage-dropoff-date').addEventListener('change', validateStorageDropoffDateTime);
-            document.getElementById('storage-dropoff-time').addEventListener('change', validateStorageDropoffDateTime);
-            document.getElementById('storage-pickup-date').addEventListener('change', validateStoragePickupDateTime);
-            document.getElementById('storage-pickup-time').addEventListener('change', validateStoragePickupDateTime);
+            // Storage form listeners - NO 2-hour restriction
+            document.getElementById('storage-dropoff-date').addEventListener('change', validateStorageDropoffDateTimeBasic);
+            document.getElementById('storage-dropoff-time').addEventListener('change', validateStorageDropoffDateTimeBasic);
+            document.getElementById('storage-pickup-date').addEventListener('change', validateStoragePickupDateTimeBasic);
+            document.getElementById('storage-pickup-time').addEventListener('change', validateStoragePickupDateTimeBasic);
         });
 
         function setMinDateTime() {
@@ -405,7 +405,7 @@
             document.getElementById('storage-dropoff-date').min = currentDate;
             document.getElementById('storage-pickup-date').min = currentDate;
             
-            // Set default values to current date and future time
+            // Set default values for DELIVERY (2 hours from now)
             const futureTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
             const futureTimeString = futureTime.getHours().toString().padStart(2, '0') + ':' + futureTime.getMinutes().toString().padStart(2, '0');
             
@@ -414,12 +414,17 @@
             document.getElementById('pickup-date').value = currentDate;
             document.getElementById('pickup-time').value = new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getHours().toString().padStart(2, '0') + ':' + new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getMinutes().toString().padStart(2, '0');
             
+            // Set default values for STORAGE (current time + 30 minutes)
+            const storageTime = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes from now
+            const storageTimeString = storageTime.getHours().toString().padStart(2, '0') + ':' + storageTime.getMinutes().toString().padStart(2, '0');
+            
             document.getElementById('storage-dropoff-date').value = currentDate;
-            document.getElementById('storage-dropoff-time').value = futureTimeString;
+            document.getElementById('storage-dropoff-time').value = storageTimeString;
             document.getElementById('storage-pickup-date').value = currentDate;
-            document.getElementById('storage-pickup-time').value = new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getHours().toString().padStart(2, '0') + ':' + new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getMinutes().toString().padStart(2, '0');
+            document.getElementById('storage-pickup-time').value = new Date(storageTime.getTime() + 2 * 60 * 60 * 1000).getHours().toString().padStart(2, '0') + ':' + new Date(storageTime.getTime() + 2 * 60 * 60 * 1000).getMinutes().toString().padStart(2, '0');
         }
 
+        // DELIVERY VALIDATION FUNCTIONS (with 2-hour restriction)
         function validateDropoffDateTime() {
             const selectedDate = document.getElementById('dropoff-date').value;
             const selectedTime = document.getElementById('dropoff-time').value;
@@ -467,17 +472,14 @@
             }
         }
 
-        function validateStorageDropoffDateTime() {
+        // STORAGE VALIDATION FUNCTIONS (NO 2-hour restriction, only past time check)
+        function validateStorageDropoffDateTimeBasic() {
             const selectedDate = document.getElementById('storage-dropoff-date').value;
             const selectedTime = document.getElementById('storage-dropoff-time').value;
             const warningDiv = document.getElementById('storage-dropoff-time-warning');
             
             if (!isDateTimeValid(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
-                warningDiv.classList.add('show');
-                return false;
-            } else if (!isAtLeast2HoursFromNow(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Drop-off date and time cannot be in the past.';
                 warningDiv.classList.add('show');
                 return false;
             } else {
@@ -488,7 +490,7 @@
             }
         }
 
-        function validateStoragePickupDateTime() {
+        function validateStoragePickupDateTimeBasic() {
             const selectedDate = document.getElementById('storage-pickup-date').value;
             const selectedTime = document.getElementById('storage-pickup-time').value;
             const dropoffDate = document.getElementById('storage-dropoff-date').value;
@@ -496,11 +498,7 @@
             const warningDiv = document.getElementById('storage-pickup-time-warning');
             
             if (!isDateTimeValid(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
-                warningDiv.classList.add('show');
-                return false;
-            } else if (!isAtLeast2HoursFromNow(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Pick-up date and time cannot be in the past.';
                 warningDiv.classList.add('show');
                 return false;
             } else if (isDateTime1BeforeDateTime2(selectedDate, selectedTime, dropoffDate, dropoffTime)) {
@@ -695,7 +693,7 @@
                 const destinationCategory = document.getElementById('destination-category').value;
                 const destinationSpecific = document.getElementById('destination-specific').value;
                 
-                // Validate date-time first
+                // Validate date-time first (with 2-hour restriction for delivery)
                 if (!validateDropoffDateTime() || !validatePickupDateTime()) {
                     return; // Stop if date-time validation fails - warnings will be shown
                 }
@@ -720,8 +718,8 @@
                     errorMessage = 'Please enter your destination address.';
                 }
             } else {
-                // Validate storage date-time
-                if (!validateStorageDropoffDateTime() || !validateStoragePickupDateTime()) {
+                // Validate storage date-time (basic validation only - no 2-hour restriction)
+                if (!validateStorageDropoffDateTimeBasic() || !validateStoragePickupDateTimeBasic()) {
                     return; // Stop if date-time validation fails - warnings will be shown
                 }
             }
@@ -731,12 +729,70 @@
                 return;
             }
 
-            // Proceed to payment
+            // Collect form data and store in session storage for the booking detail page
+            let bookingData = {};
+            
             if (currentService === 'delivery') {
-                window.location.href = '<?= base_url('payment?service=delivery') ?>';
+                // Get origin data
+                const originCategory = document.getElementById('origin-category').value;
+                let originLocation = '';
+                let originAddress = '';
+                
+                if (originCategory === 'other') {
+                    originLocation = 'Other Location';
+                    originAddress = document.getElementById('origin-address-text').value;
+                } else {
+                    const originSpecific = document.getElementById('origin-specific');
+                    originLocation = originSpecific.options[originSpecific.selectedIndex].text;
+                }
+                
+                // Get destination data
+                const destinationCategory = document.getElementById('destination-category').value;
+                let destinationLocation = '';
+                let destinationAddress = '';
+                
+                if (destinationCategory === 'other') {
+                    destinationLocation = 'Other Location';
+                    destinationAddress = document.getElementById('destination-address-text').value;
+                } else {
+                    const destinationSpecific = document.getElementById('destination-specific');
+                    destinationLocation = destinationSpecific.options[destinationSpecific.selectedIndex].text;
+                }
+                
+                bookingData = {
+                    service: 'delivery',
+                    origin: originLocation,
+                    originAddress: originAddress,
+                    destination: destinationLocation,
+                    destinationAddress: destinationAddress,
+                    dropoffDate: document.getElementById('dropoff-date').value,
+                    dropoffTime: document.getElementById('dropoff-time').value,
+                    pickupDate: document.getElementById('pickup-date').value,
+                    pickupTime: document.getElementById('pickup-time').value
+                };
             } else {
-                window.location.href = '<?= base_url('payment?service=storage') ?>';
+                // Storage service data
+                const storageLocation = document.getElementById('storage-location');
+                
+                bookingData = {
+                    service: 'storage',
+                    storageLocation: storageLocation.options[storageLocation.selectedIndex].text,
+                    quantity: document.getElementById('quantity').value,
+                    dropoffDate: document.getElementById('storage-dropoff-date').value,
+                    dropoffTime: document.getElementById('storage-dropoff-time').value,
+                    pickupDate: document.getElementById('storage-pickup-date').value,
+                    pickupTime: document.getElementById('storage-pickup-time').value
+                };
             }
+            
+            // Store booking data in session storage
+            sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
+            
+            // Debug: Check if data is stored
+            console.log('Booking data stored:', bookingData);
+            
+            // Redirect to booking detail page using relative URL
+            window.location.href = 'bookingdetail';
         }
     </script>
 </body>

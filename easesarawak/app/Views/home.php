@@ -934,7 +934,7 @@
         </div>
 
         <div class="how-footer">
-            <a href="#book" class="btn-how">BOOK NOW</a>
+            <a href="booking" class="btn-how">BOOK NOW</a>
         </div>
     </section>
 
