@@ -142,7 +142,7 @@
     <!-- Title -->
     <section class="about-title">
         <div class="title-overlay"></div>
-        <h1>Privacy Policy</h1>
+        <h1>TERMS & CONDITIONS</h1>
     </section>
 
     <!-- Title -->
