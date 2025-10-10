@@ -147,4 +147,22 @@ class Admin extends BaseController
 
         return view('admin/create_user');
     }
+
+    public function getDetails($order_id)
+    {
+        $orderModel = new Order_model();
+        $order = $orderModel->where('order_id', $order_id)->first();
+
+        if ($order) {
+            return $this->response->setJSON([
+                'success' => true,
+                'order' => $order
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Order not found.'
+            ]);
+        }
+    }
 }

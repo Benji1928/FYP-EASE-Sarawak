@@ -38,6 +38,20 @@
     <link rel="stylesheet" href="assets/css/admin/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/admin/plugins.min.css" />
     <link rel="stylesheet" href="assets/css/admin/kaiadmin.min.css" />
+    <style>
+        #orderModal .card {
+            border-radius: 1rem;
+        }
+
+        #orderModal .card-header {
+            border-bottom: 1px solid #e9ecef;
+            font-size: 1rem;
+        }
+
+        #orderModal p {
+            margin-bottom: 0.4rem;
+        }
+    </style>
 </head>
 
 <body>
