@@ -51,9 +51,25 @@
     <div class="row mt-4">
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Revenue Breakdown (Last 6 Months)</h5>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Revenue Breakdown</h5>
+
+                    <!-- Filter Controls -->
+                    <div class="d-flex align-items-center">
+                        <select id="serviceType" class="form-select form-select-sm me-2">
+                            <option value="all">All Services</option>
+                            <option value="storage">Storage</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+
+                        <select id="timeframe" class="form-select form-select-sm">
+                            <option value="day">Day</option>
+                            <option value="week">Week</option>
+                            <option value="month" selected>Month</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <canvas id="revenueChart" height="120"></canvas>
                 </div>
@@ -77,36 +93,60 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Revenue Breakdown (Line Chart)
-    const months = <?= json_encode($months ?? []); ?>;
-    const revenues = <?= json_encode($revenues ?? []); ?>;
+    let revenueChart;
 
-    new Chart(document.getElementById('revenueChart'), {
-        type: 'line',
-        data: {
-            labels: months,
-            datasets: [{
-                label: 'Revenue (RM)',
-                data: revenues,
-                borderColor: '#4e73df',
-                backgroundColor: 'rgba(78,115,223,0.1)',
-                fill: true,
-                tension: 0.3
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
+    // Initial render
+    function loadRevenueData(serviceType = 'all', timeframe = 'month') {
+        fetch(`<?= base_url('admin/getRevenueData'); ?>?service=${serviceType}&timeframe=${timeframe}`)
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                if (revenueChart) revenueChart.destroy();
+
+                revenueChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Revenue (RM)',
+                            data: data.values,
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78,115,223,0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+    }
+
+    // Event listeners for filters
+    document.getElementById('serviceType').addEventListener('change', function() {
+        loadRevenueData(this.value, document.getElementById('timeframe').value);
     });
 
-    // Peak Booking Times (Bar Chart)
+    document.getElementById('timeframe').addEventListener('change', function() {
+        loadRevenueData(document.getElementById('serviceType').value, this.value);
+    });
+
+    // Load default chart
+    loadRevenueData();
+
+    // Peak Booking Times (static or preloaded)
     const hours = <?= json_encode($hours ?? []); ?>;
     const counts = <?= json_encode($hourCounts ?? []); ?>;
-
     new Chart(document.getElementById('peakTimesChart'), {
         type: 'bar',
         data: {

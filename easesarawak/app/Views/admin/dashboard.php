@@ -95,82 +95,47 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="card card-round">
                                 <div class="card-header">
                                     <div class="card-head-row">
-                                        <div class="card-title">User Statistics</div>
-                                        <div class="card-tools">
-                                            <a
-                                                href="#"
-                                                class="btn btn-label-success btn-round btn-sm me-2">
-                                                <span class="btn-label">
-                                                    <i class="fa fa-pencil"></i>
-                                                </span>
-                                                Export
-                                            </a>
-                                            <a href="#" class="btn btn-label-info btn-round btn-sm">
-                                                <span class="btn-label">
-                                                    <i class="fa fa-print"></i>
-                                                </span>
-                                                Print
-                                            </a>
-                                        </div>
+                                        <div class="card-title">Pending Orders</div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container" style="min-height: 375px">
-                                        <canvas id="statisticsChart"></canvas>
-                                    </div>
-                                    <div id="myChartLegend"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-primary card-round">
-                                <div class="card-header">
-                                    <div class="card-head-row">
-                                        <div class="card-title">Daily Sales</div>
-                                        <div class="card-tools">
-                                            <div class="dropdown">
-                                                <button
-                                                    class="btn btn-sm btn-label-light dropdown-toggle"
-                                                    type="button"
-                                                    id="dropdownMenuButton"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    Export
-                                                </button>
-                                                <div
-                                                    class="dropdown-menu"
-                                                    aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
-                                            </div>
+                                    <?php if (!empty($pending_orders)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Order ID</th>
+                                                        <th>Customer</th>
+                                                        <th>Order Date</th>
+                                                        <th>Service</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($pending_orders as $order): ?>
+                                                        <tr>
+                                                            <td><?= esc($order['order_id']); ?></td>
+                                                            <td><?= esc($order['first_name']); ?> <?= esc($order['last_name']); ?></td>
+                                                            <td><?= esc($order['created_date']); ?></td>
+                                                            <td><?= esc($order['service_type']); ?></td>
+                                                            <td>
+                                                                <a href="<?= base_url('/order'); ?>" 
+                                                                class="btn btn-sm" style="background: #f2be00">
+                                                                    <i class="fa fa-eye"></i> View
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
-                                    <div class="card-category">March 25 - April 02</div>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div class="mb-4 mt-2">
-                                        <h1>$4,578.58</h1>
-                                    </div>
-                                    <div class="pull-in">
-                                        <canvas id="dailySalesChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card card-round">
-                                <div class="card-body pb-0">
-                                    <div class="h1 fw-bold float-end text-primary">+5%</div>
-                                    <h2 class="mb-2">17</h2>
-                                    <p class="text-muted">Users online</p>
-                                    <div class="pull-in sparkline-fix">
-                                        <div id="lineChart"></div>
-                                    </div>
+                                    <?php else: ?>
+                                        <p class="text-muted">No pending orders found.</p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

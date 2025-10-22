@@ -14,8 +14,8 @@
                         <th>#</th>
                         <th>Username</th>
                         <th>Role</th>
+                        <th>Email</th>
                         <th>Created Date</th>
-                        <th>Modified Date</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -25,17 +25,16 @@
                             <tr>
                                 <td><?= $index + 1 ?></td>
                                 <td><?= esc($user['username']) ?></td>
-                                <td><span class="badge bg-primary"><?= esc($user['role']) ?></span></td>
-                                <td><?= esc($user['created_date']) ?></td>
                                 <td>
-                                    <?php if (!empty($user['modified_date'])): ?>
-                                        <?= esc($user['modified_date']) ?></td>
-                            <?php else: ?>
-                                -
-                            <?php endif ?>
-                            <td class="text-center">
-                                <a href="<?= base_url('admin/user/edit/' . $user['user_id']); ?>" class="btn btn-sm btn-outline-primary"><i class="fa fa-edit"></i></a>
-                            </td>
+                                    <span class="badge <?= $user['role'] == 1 ? 'bg-danger' : 'bg-info' ?>">
+                                        <?= $user['role'] == 1 ? 'Superadmin' : 'Admin' ?>
+                                    </span>
+                                </td>
+                                <td><?= esc($user['email'])?></td>
+                                <td><?= esc($user['created_date']) ?></td>
+                                <td class="text-center">
+                                    <a href="<?= base_url('admin/user/edit/' . $user['user_id']); ?>" class="btn btn-sm btn-outline-primary"><i class="fa fa-edit"></i></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>

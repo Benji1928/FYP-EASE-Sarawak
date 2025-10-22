@@ -55,10 +55,19 @@
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-outline-primary viewOrderBtn"
-                                                data-id="<?= $order['order_id']; ?>">
-                                                <i class="fa fa-eye"></i>
-                                            </button>
+                                            <div class="d-inline-flex align-items-center">
+                                                <button type="button" class="btn btn-sm viewOrderBtn me-2"
+                                                    data-id="<?= $order['order_id']; ?>"
+                                                    style="background: #f2be00">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+
+                                                <button class="btn btn-sm btn-dark btn-add-note"
+                                                    data-id="<?= $order['order_id']; ?>"
+                                                    data-note="<?= htmlspecialchars($order['comment'] ?? '', ENT_QUOTES); ?>">
+                                                    <i class="fa fa-sticky-note"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -99,7 +108,30 @@
         </div>
     </div>
 </div>
-
+<!-- Add Note Modal -->
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-softblue text-white">
+                <h5 class="modal-title" id="noteModalLabel">Add Note</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <input type="hidden" name="order_id" id="noteOrderId">
+                    <div class="form-group">
+                        <label for="orderNote">Note</label>
+                        <textarea class="form-control" id="orderNote" name="note" rows="4" placeholder="Write your note here..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="saveNoteBtn" class="btn btn-softblue">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?= $this->include('admin/footer'); ?>
 
 <script>
@@ -165,6 +197,7 @@
                                             <p><strong>Special:</strong> ${o.special}</p>
                                             <p><strong>Special Note:</strong> ${o.special_note || '-'}</p>
                                             <p><strong>Promo Code:</strong> ${o.promo_code || '-'}</p>
+                                            <p><strong>Last Modified:</strong> ${o.modified_date || '-'}</p>
                                         </div>
                                         <div class="col-md-6">
                                             <p><strong>Status:</strong> ${
@@ -181,6 +214,7 @@
                                                     ? `<a href="<?= base_url('uploads/'); ?>${o.upload}" target="_blank" class="text-decoration-none text-primary">View File</a>`
                                                     : 'No file uploaded'
                                             }</p>
+                                            <p><strong>Modified By:</strong> ${o.modified_by_username || '-'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -195,6 +229,16 @@
                                     <pre class="bg-light p-3 rounded" style="font-size: 0.9rem; white-space: pre-wrap;">${o.order_details_json}</pre>
                                 </div>
                             </div>
+
+                            <!-- Section 4 -->
+                            <div class="card border-0 shadow-sm rounded-3">
+                                <div class="card-header bg-light fw-semibold">
+                                    <i class="fa fa- me-2 text-primary"></i>Comment
+                                </div>
+                                <div class="card-body">
+                                    <pre class="bg-light p-3 rounded" style="font-size: 0.9rem; white-space: pre-wrap;">${o.comment || '-'}</pre>
+                                </div>
+                            </div>
                         </div>
                     `;
                     } else {
@@ -204,6 +248,49 @@
                 .catch(() => {
                     contentDiv.innerHTML = `<div class="text-danger text-center py-4">Error loading order details.</div>`;
                 });
+        });
+    });
+
+    $(document).ready(function() {
+        // Show modal with existing note if any
+        $('.btn-add-note').on('click', function() {
+            const orderId = $(this).data('id');
+            const note = $(this).data('note');
+            $('#noteOrderId').val(orderId);
+            $('#orderNote').val(note);
+            $('#noteModal').modal('show');
+        });
+
+        // Save note via AJAX
+        $('#saveNoteBtn').on('click', function() {
+            const orderId = $('#noteOrderId').val();
+            const note = $('#orderNote').val();
+
+            $.ajax({
+                url: '<?= base_url("/save_note") ?>',
+                type: 'POST',
+                data: {
+                    order_id: orderId,
+                    note: note
+                },
+                success: function(response) {
+                    $('#noteModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Note Saved!',
+                        text: 'Your note has been successfully saved.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to save note. Please try again.'
+                    });
+                }
+            });
         });
     });
 </script>
