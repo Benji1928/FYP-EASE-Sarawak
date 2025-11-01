@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\OrderModel;
 
 class Home extends BaseController
 {
@@ -23,19 +24,22 @@ class Home extends BaseController
     {
         return view('tnc');
     }
+    
     public function booking(): string
     {
         return view('booking');
     }
+    
     public function bookingdetail(): string
     {
         return view('bookingdetail');
     }
+    
     public function bookingcustomerdetail(): string
     {
         return view('bookingcustomerdetail');
     }
-
+    
     public function bookingConfirmation(): string
     {
         $data = [
@@ -47,109 +51,118 @@ class Home extends BaseController
     
     public function saveOrder()
     {
-        // Set response header for JSON
+        // Add CORS headers for debugging
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+        
+        log_message('info', 'saveOrder method called');
+        
+        // Load the OrderModel and process the entire order
+        $orderModel = new \App\Models\OrderModel();
+        $result = $orderModel->processAndSaveOrder($this->request);
+        
+        // Return the result directly from the model
+        return $this->response->setJSON($result);
+    }
+    
+    public function checkPromoCode()
+    {
         $this->response->setContentType('application/json');
-
+        
         try {
-            // Get raw POST data
-            $rawData = $this->request->getBody();
-            $jsonData = json_decode($rawData, true);
+            $rawInput = $this->request->getBody();
+            $jsonData = json_decode($rawInput, true);
             
-            // Log the incoming data for debugging
-            log_message('info', 'Received order data: ' . $rawData);
-            
-            if (!$jsonData) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Invalid JSON data received']);
-            }
-            
-            // Validate required fields
-            $requiredFields = ['first_name', 'last_name', 'id_num', 'email', 'phone', 'social', 'social_num', 'service_type', 'order_details_json'];
-            $missingFields = [];
-            
-            foreach ($requiredFields as $field) {
-                if (!isset($jsonData[$field]) || empty($jsonData[$field])) {
-                    $missingFields[] = $field;
-                }
-            }
-            
-            if (!empty($missingFields)) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 return $this->response->setJSON([
-                    'success' => false, 
-                    'message' => 'Missing required fields: ' . implode(', ', $missingFields)
+                    'success' => false,
+                    'valid' => false,
+                    'message' => 'Invalid request data'
                 ]);
             }
-
-            // Load database
-            $db = \Config\Database::connect();
             
-            // Prepare data for insertion - keeping id_num as string
-            $orderData = [
-                'service_type' => trim($jsonData['service_type']),
-                'first_name' => trim($jsonData['first_name']),
-                'last_name' => trim($jsonData['last_name']),
-                'id_num' => trim($jsonData['id_num']), // Keep as string - no conversion
-                'email' => trim($jsonData['email']),
-                'phone' => (int)$jsonData['phone'], // Convert to int as per your table
-                'social' => $this->getSocialTypeId($jsonData['social']), // Convert to int ID
-                'social_num' => (int)$jsonData['social_num'], // Convert to int as per your table
-                'upload' => '', // Empty string for now since file upload is optional
-                'special' => null, // NULL for now
-                'special_note' => null, // NULL for now
-                'order_details_json' => $jsonData['order_details_json'],
-                'promo_code' => '', // Empty string for now
-                'status' => 0, // Default status (0 = pending)
-                'amount' => 0, // Will calculate later
-                'payment_method' => '', // Empty for now since we're not processing payment
-                'is_deleted' => 0, // Default not deleted
-                'created_date' => date('Y-m-d H:i:s'),
-                'modified_date' => null
-            ];
-
-            // Log the data being inserted
-            log_message('info', 'Inserting order data into order table');
-            log_message('info', 'Data: ' . json_encode($orderData));
-
-            // Insert into order table
-            $builder = $db->table('order');
-            $result = $builder->insert($orderData);
-
-            if ($result) {
-                $orderId = $db->insertID();
-                log_message('info', 'Order saved successfully with ID: ' . $orderId);
-                
+            $promoCode = trim($jsonData['promo_code'] ?? '');
+            
+            if (empty($promoCode)) {
                 return $this->response->setJSON([
-                    'success' => true, 
-                    'message' => 'Order saved successfully',
-                    'order_id' => $orderId
-                ]);
-            } else {
-                $error = $db->error();
-                log_message('error', 'Database insert failed: ' . json_encode($error));
-                
-                return $this->response->setJSON([
-                    'success' => false, 
-                    'message' => 'Failed to save order to database: ' . $error['message']
+                    'success' => false,
+                    'valid' => false,
+                    'message' => 'Please enter a promo code'
                 ]);
             }
-
-        } catch (\Exception $e) {
-            log_message('error', 'Exception in saveOrder: ' . $e->getMessage());
+            
+            // Use raw MySQLi connection (same as your working databases)
+            $mysqli = new \mysqli('localhost', 'root', '', 'easesarawak', 3306);
+            
+            if ($mysqli->connect_error) {
+                log_message('error', 'MySQLi connection failed: ' . $mysqli->connect_error);
+                return $this->response->setJSON([
+                    'success' => false,
+                    'valid' => false,
+                    'message' => 'Database connection failed'
+                ]);
+            }
+            
+            // Prepare and execute query
+            $stmt = $mysqli->prepare("SELECT * FROM promo_code WHERE code = ? AND is_deleted = 0");
+            $stmt->bind_param("s", $promoCode);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 0) {
+                $stmt->close();
+                $mysqli->close();
+                return $this->response->setJSON([
+                    'success' => true,
+                    'valid' => false,
+                    'message' => 'Invalid promo code'
+                ]);
+            }
+            
+            $promoData = $result->fetch_assoc();
+            $currentDateTime = date('Y-m-d H:i:s');
+            
+            // Check if promo code is active
+            if ($promoData['validation_date'] > $currentDateTime) {
+                $stmt->close();
+                $mysqli->close();
+                return $this->response->setJSON([
+                    'success' => true,
+                    'valid' => false,
+                    'message' => 'This promo code is not yet active'
+                ]);
+            }
+            
+            // Check if promo code is not expired
+            if ($promoData['expired_date'] < $currentDateTime) {
+                $stmt->close();
+                $mysqli->close();
+                return $this->response->setJSON([
+                    'success' => true,
+                    'valid' => false,
+                    'message' => 'This promo code has expired'
+                ]);
+            }
+            
+            // Promo code is valid
+            $stmt->close();
+            $mysqli->close();
+            
             return $this->response->setJSON([
-                'success' => false, 
-                'message' => 'Server error: ' . $e->getMessage()
+                'success' => true,
+                'valid' => true,
+                'discount' => isset($promoData['discount_percentage']) ? $promoData['discount_percentage'] : 20,
+                'message' => 'Promo code applied successfully!'
+            ]);
+            
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in checkPromoCode: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'valid' => false,
+                'message' => 'Server error occurred'
             ]);
         }
-    }
-
-    // Helper function to convert social platform names to IDs
-    private function getSocialTypeId($socialType)
-    {
-        $socialTypes = [
-            'whatsapp' => 1,
-            'wechat' => 2,
-            'line' => 3
-        ];
-        
-        return isset($socialTypes[$socialType]) ? $socialTypes[$socialType] : 1; // Default to WhatsApp
     }
 }

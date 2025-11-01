@@ -11,6 +11,14 @@
     <link rel="stylesheet" href="assets/css/navbar_style.css">
 
     <style>
+        .navbar-nav,
+        .navbar .btn {
+            margin-right: 60px !important;
+        }
+        .btn-book-now {
+            margin-left: 0px !important;
+        }
+        
         @font-face {
             font-family: 'EurostarRegular';
             src: url('assets/Eurostar Regular.ttf') format('truetype');
@@ -267,6 +275,37 @@
                     <div class="file-info" id="fileInfo"></div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label>Do you have a special luggage? <i class="bi bi-info-circle"></i></label>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: inline-flex; align-items: center; margin-right: 2rem; font-weight: normal; cursor: pointer;">
+                        <input type="radio" id="specialLuggageYes" name="specialLuggage" value="1" style="margin-right: 0.5rem; width: auto;">
+                        Yes
+                    </label>
+                    <label style="display: inline-flex; align-items: center; font-weight: normal; cursor: pointer;">
+                        <input type="radio" id="specialLuggageNo" name="specialLuggage" value="0" style="margin-right: 0.5rem; width: auto;" checked>
+                        No
+                    </label>
+                </div>
+                
+                <!-- Attention notice -->
+                <div style="margin-top: 1.5rem; padding: 1rem; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #856404; font-size: 1rem;">
+                        <i class="bi bi-exclamation-triangle-fill" style="color: #f39c12; margin-right: 0.5rem;"></i>
+                        Attention Please
+                    </h4>
+                    <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+                        Please ensure all information provided is accurate and complete to avoid any delays or service interruptions.
+                    </p>
+                </div>
+
+                <!-- Special Luggage Note input (hidden by default) -->
+                <div id="specialLuggageNoteDiv" style="display: none; margin-top: 1rem;">
+                    <label for="specialLuggageNote">Special Luggage Note <i class="bi bi-info-circle"></i></label>
+                    <textarea id="specialLuggageNote" name="specialLuggageNote" placeholder="Please describe your special luggage requirements..." rows="3"></textarea>
+                </div>
+            </div>
         </form>
 
         <div class="action-buttons">
@@ -325,6 +364,29 @@
                 `;
                 fileUpload.querySelector('p').textContent = 'File selected: ' + file.name;
             }
+
+            // Special luggage handling
+            const specialLuggageYes = document.getElementById('specialLuggageYes');
+            const specialLuggageNo = document.getElementById('specialLuggageNo');
+            const specialLuggageNoteDiv = document.getElementById('specialLuggageNoteDiv');
+            const specialLuggageNote = document.getElementById('specialLuggageNote');
+
+            function toggleSpecialLuggageNote() {
+                if (specialLuggageYes.checked) {
+                    specialLuggageNoteDiv.style.display = 'block';
+                    specialLuggageNote.setAttribute('required', 'required');
+                } else {
+                    specialLuggageNoteDiv.style.display = 'none';
+                    specialLuggageNote.removeAttribute('required');
+                    specialLuggageNote.value = ''; // Clear the note when "No" is selected
+                }
+            }
+
+            specialLuggageYes.addEventListener('change', toggleSpecialLuggageNote);
+            specialLuggageNo.addEventListener('change', toggleSpecialLuggageNote);
+            
+            // Initialize on page load
+            toggleSpecialLuggageNote();
         });
 
         function submitBooking() {
@@ -343,57 +405,57 @@
                 return;
             }
 
-            // Collect customer data
-            const customerData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                identificationNumber: document.getElementById('identificationNumber').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                socialContactType: document.getElementById('socialContactType').value,
-                socialContactValue: document.getElementById('socialContactValue').value,
-                document: document.getElementById('documentUpload').files[0] || null
-            };
-
-            // Prepare order data for database
-            const orderData = {
-                first_name: customerData.firstName,
-                last_name: customerData.lastName,
-                id_num: customerData.identificationNumber,
-                email: customerData.email,
-                phone: customerData.phone,
-                social: customerData.socialContactType,
-                social_num: customerData.socialContactValue,
-                service_type: bookingData.service,
-                order_details_json: JSON.stringify(bookingData)
-            };
-
-            // Debug: Log the data being sent
-            console.log('Sending order data:', orderData);
-
             // Show loading message
             const submitButton = document.querySelector('.btn-submit');
             const originalText = submitButton.innerHTML;
             submitButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Submitting...';
             submitButton.disabled = true;
 
-            // Send data to server using relative URL
+            // Create FormData object to handle file upload
+            const formData = new FormData();
+            
+            // Add customer data
+            formData.append('firstName', document.getElementById('firstName').value);
+            formData.append('lastName', document.getElementById('lastName').value);
+            formData.append('identificationNumber', document.getElementById('identificationNumber').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('phone', document.getElementById('phone').value);
+            formData.append('socialContactType', document.getElementById('socialContactType').value);
+            formData.append('socialContactValue', document.getElementById('socialContactValue').value);
+            
+            // Add special luggage data
+            const specialLuggageValue = document.querySelector('input[name="specialLuggage"]:checked').value;
+            formData.append('specialLuggage', specialLuggageValue);
+            
+            if (specialLuggageValue === '1') {
+                formData.append('specialLuggageNote', document.getElementById('specialLuggageNote').value);
+            }
+            
+            // Add booking data as JSON string
+            formData.append('bookingData', JSON.stringify(bookingData));
+            
+            // Add file if selected
+            const fileInput = document.getElementById('documentUpload');
+            if (fileInput.files.length > 0) {
+                formData.append('documentUpload', fileInput.files[0]);
+            }
+
+            // Debug: Log the data being sent
+            console.log('Sending form data with file upload');
+
+            // Send data to server using FormData (not JSON)
             fetch('saveOrder', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData)
+                body: formData 
             })
             .then(response => {
                 console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                return response.text(); // Get as text first to see raw response
+                return response.text();
             })
             .then(text => {
                 console.log('Raw response:', text);
@@ -414,7 +476,6 @@
                         window.location.href = 'booking-confirmation?order_id=' + data.order_id;
                     } else {
                         alert('Error submitting booking: ' + data.message);
-                        // Reset button
                         submitButton.innerHTML = originalText;
                         submitButton.disabled = false;
                     }
@@ -428,7 +489,6 @@
             .catch(error => {
                 console.error('Fetch error:', error);
                 alert('An error occurred while submitting your booking: ' + error.message);
-                // Reset button
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
             });

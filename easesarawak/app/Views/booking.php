@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="assets/css/navbar_style.css">
     
     <style>
+        .navbar-nav,
+        .navbar .btn {
+            margin-right: 60px !important;
+        }
+        .btn-book-now {
+            margin-left: 0px !important;
+        }
+        
         @font-face {
             font-family: 'EurostarRegular';
             src: url('assets/Eurostar Regular.ttf') format('truetype');
@@ -22,64 +30,162 @@
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
+            padding-top: 80px;
         }
 
         .booking-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1400px;
+            margin-left: 60px;
+            margin-right: 120px;
+            margin-bottom: 0;
+            margin-top: 0;
             padding: 2rem;
             min-height: calc(100vh - 200px);
         }
 
-        .booking-header {
-            text-align: center;
+        /* Header and tagline section */
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
             margin-bottom: 2rem;
+        }
+
+        .left-content {
+            max-width: 600px;
+        }
+
+        .right-content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 2rem;
+        }
+
+        .booking-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+            opacity: 0.95;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .booking-tagline {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .booking-tagline h1 {
+            font-family: 'EurostarRegular', sans-serif;
+            font-size: 3rem;
+            color: #000000;
+            font-weight: bold;
+            margin-left: 20px;
+            margin-top: 120px;
+            line-height: 1.3;
+        }
+
+        .booking-tagline p {
+            font-family: 'EurostarRegular', sans-serif;
+            font-size: 1.3rem;
+            color: #000000;
+            margin-left: 20px;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        /* Service tabs - positioned above forms section */
+        .service-tabs {
+            display: flex;
+            gap: 0; 
+            margin-bottom: 0; 
+            justify-content: flex-start;
             margin-top: 2rem;
         }
 
-        .booking-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .service-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-        }
-
         .tab-btn {
-            background: white;
-            border: 2px solid #ddd;
-            padding: 1rem 2rem;
-            border-radius: 10px;
+            background: #000000; 
+            border: 2px solid #000000; 
+            border-bottom: none; 
+            padding: 1.5rem 3rem; 
+            border-radius: 10px 10px 0 0;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+            color: white; 
+            font-weight: bold;
+            min-width: 200px; 
+            text-align: center;
         }
 
         .tab-btn:hover {
-            border-color: #007bff;
+            background: #333333; 
+            border-color: #333333;
         }
 
         .tab-btn.active {
-            background: #007bff;
-            color: white;
-            border-color: #007bff;
+            background: #f2be00 !important; 
+            color: #000000 !important; 
+            border-color: #f2be00 !important; 
+            border-bottom: 2px solid white !important; 
+        }
+
+        .tab-btn.active:hover {
+            background: #e6a800 !important; 
+            border-color: #e6a800 !important;
+        }
+
+        .tab-btn:not(.active) {
+            background: #000000 !important; 
+            color: white !important; 
+            border-color: #000000 !important; 
+        }
+
+        .tab-btn:not(.active):hover {
+            background: #333333 !important; 
+            border-color: #333333 !important;
+        }
+
+        /* Full width forms section */
+        .forms-section {
+            width: 100%;
+            margin-top: 0;
         }
 
         .booking-form {
             background: white;
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 3rem;
+            border-radius: 0 15px 15px 15px; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            margin-bottom: 0; 
+            width: 100%;
+            border: 2px solid #f2be00; 
+            border-top: none; 
+            min-height: 400px;
+        }
+
+        /* Two column layout for form fields */
+        .form-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .form-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
         }
 
         .form-group label {
@@ -92,7 +198,7 @@
         .form-group select,
         .form-group input {
             width: 100%;
-            padding: 0.8rem;
+            padding: 1.2rem;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
@@ -158,13 +264,16 @@
             color: #999;
         }
 
+        /* Continue button */
         .continue-section {
-            text-align: right;
+            text-align: center;
             margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee; 
         }
 
         .continue-btn {
-            background: #28a745;
+            background: #f2be00; 
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -172,10 +281,130 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s ease;
+            font-weight: bold; 
         }
 
         .continue-btn:hover {
-            background: #218838;
+            background: #000000ff; 
+        }
+
+        .service-description-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Service Description Section */
+        .service-description-content {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .service-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .service-logo-img {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .service-text {
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-left: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .service-description-text {
+            font-family: 'EurostarRegular', sans-serif;
+            font-size: 1.4rem;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            text-align: left;
+        }
+
+        /* Limit dropdown height to show 5 options with scroll */
+        select#quantity {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            
+            /* Custom dropdown arrow */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        select#quantity:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Style the dropdown when it opens - limit visible options */
+        select#quantity option {
+            padding: 8px 12px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+        }
+
+        /* For browsers that support limiting dropdown height */
+        @supports (size: 5) {
+            select#quantity {
+                size: 1; /* Normal dropdown */
+            }
+        }
+
+        /* Alternative approach for webkit browsers */
+        select#quantity:focus {
+            /* When focused/clicked, limit the dropdown height */
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1200px) {
+            .header-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .right-content {
+                order: -1;
+                padding-top: 0;
+                margin-bottom: 2rem;
+            }
+            
+            .booking-image {
+                max-width: 400px;
+                margin-top: 0;
+            }
+            
+            body {
+                padding-top: 100px;
+            }
+            
+            .form-columns {
+                gap: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -183,8 +412,51 @@
                 padding: 1rem;
             }
             
+            .booking-tagline {
+                text-align: center;
+            }
+            
+            .booking-tagline h1 {
+                font-size: 1.5rem;
+            }
+            
+            .booking-tagline p {
+                font-size: 1rem;
+                max-width: none;
+            }
+            
             .service-tabs {
                 flex-direction: column;
+                justify-content: center;
+            }
+            
+            .tab-btn {
+                border-radius: 10px !important; 
+                border-bottom: 2px solid #000000 !important; 
+                margin-bottom: 0.5rem;
+            }
+            
+            .tab-btn.active {
+                background: #f2be00 !important; 
+                border-bottom: 2px solid #f2be00 !important; 
+                color: #000000 !important; 
+            }
+            
+            .tab-btn:not(.active) {
+                background: #000000 !important; 
+                color: white !important; 
+                border-bottom: 2px solid #000000 !important; 
+            }
+            
+            .booking-form {
+                border-radius: 15px; 
+                border-top: 2px solid #f2be00; 
+                margin-top: 1rem;
+            }
+            
+            .form-columns {
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
             
             .dropdown-group,
@@ -192,8 +464,67 @@
                 grid-template-columns: 1fr;
             }
             
-            .continue-section {
+            .booking-image {
+                max-width: 300px;
+                margin-top: 0;
+            }
+            
+            body {
+                padding-top: 90px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .booking-image {
+                max-width: 250px;
+            }
+            
+            body {
+                padding-top: 80px;
+            }
+            
+            .booking-form {
+                padding: 1rem;
+            }
+        }
+
+        /* Responsive design for service description */
+        @media (max-width: 768px) {
+            .service-description-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
                 text-align: center;
+            }
+
+            .service-text {
+                margin-left: 0;                   /* Remove left margin on mobile */
+                margin-top: 1rem;                 /* Add top margin instead */
+                padding: 1.5rem;                  /* Reduce padding on mobile */
+                min-height: auto;                 /* Remove min-height on mobile */
+            }
+            
+            .service-logo-img {
+                height: 60px;
+            }
+            
+            .service-description-text {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .service-description-section {
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-logo-img {
+                height: 50px;
+            }
+            
+            .service-description-text {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -202,131 +533,191 @@
     <?= $this->include('navbar/navbar') ?>
     
     <main class="booking-container">
-        <div class="booking-header">
-            <h1>Book Your Service</h1>
+        <!-- Header Section -->
+        <div class="header-section">
+            <!-- Left Content -->
+            <div class="left-content">      
+                <div class="booking-tagline">
+                    <h1>TRAVEL SMART WITH EASE</h1>
+                    <p>Whether you need secure storage or prompt delivery, we provide reliable and convenient solutions to ensure your journey is as smooth as possible.</p>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="right-content">
+                <img src="<?= base_url('assets/images/bookingpage.png') ?>" alt="Booking Service" class="booking-image">
+            </div>
         </div>
 
+        <!-- Service Tabs - positioned above forms -->
         <div class="service-tabs">
             <button class="tab-btn active" onclick="showService('delivery')">In Town Delivery</button>
             <button class="tab-btn" onclick="showService('storage')">Luggage Storage</button>
         </div>
 
-        <!-- Delivery Form -->
-        <div id="deliveryForm" class="booking-form">
-            <div class="form-group">
-                <label for="origin">Where is your origin? <i class="bi bi-info-circle"></i></label>
-                <div class="dropdown-group">
-                    <select id="origin-category" name="origin_category" onchange="updateOriginSpecific()">
-                        <option value="">Choose Category</option>
-                        <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
-                        <option value="hotel">Hotel</option>
-                        <option value="shopping-mall">Shopping Mall</option>
-                        <option value="airport">Airport</option>
-                        <option value="other">Other Location</option>
-                    </select>
-                    <select id="origin-specific" name="origin_specific" disabled>
-                        <option value="">Select category first</option>
-                    </select>
+        <!-- Forms Section - Full Width -->
+        <div class="forms-section">
+            <!-- Delivery Form -->
+            <div id="deliveryForm" class="booking-form">
+                <!-- Service Description Section for Delivery -->
+                <div class="service-description-section">
+                    <div class="service-description-content">
+                        <div class="service-logo">
+                            <img src="<?= base_url('assets/images/booking-container.png') ?>" alt="Service Logo" class="service-logo-img">
+                        </div>
+                        <div class="service-text">
+                            <p class="service-description-text">Explore Sarawak's beauty and culture without the hassle of managing luggage. Our easy-to-use luggage storage and delivery service ensures handsfree travel in Kuching.</p>
+                        </div>
+                    </div>
                 </div>
-                <div id="origin-address" class="address-input hidden">
-                    <input type="text" id="origin-address-text" name="origin_address" placeholder="Please enter your specific address">
+                <div class="form-columns">
+                    <!-- Left Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="origin">Where is your origin? <i class="bi bi-info-circle"></i></label>
+                            <div class="dropdown-group">
+                                <select id="origin-category" name="origin_category" onchange="updateOriginSpecific()">
+                                    <option value="">Choose Category</option>
+                                    <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="shopping-mall">Shopping Mall</option>
+                                    <option value="airport">Airport</option>
+                                    <option value="other">Other Location</option>
+                                </select>
+                                <select id="origin-specific" name="origin_specific" disabled>
+                                    <option value="">Select category first</option>
+                                </select>
+                            </div>
+                            <div id="origin-address" class="address-input hidden">
+                                <input type="text" id="origin-address-text" name="origin_address" placeholder="Please enter your specific address">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
+                            <div class="datetime-group">
+                                <input type="date" id="dropoff-date" name="dropoff_date" value="2025-10-04">
+                                <input type="time" id="dropoff-time" name="dropoff_time" value="14:00">
+                            </div>
+                            <div id="dropoff-time-warning" class="time-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="destination">Where is your destination? <i class="bi bi-info-circle"></i></label>
+                            <div class="dropdown-group">
+                                <select id="destination-category" name="destination_category" onchange="updateDestinationSpecific()">
+                                    <option value="">Choose Category</option>
+                                    <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="shopping-mall">Shopping Mall</option>
+                                    <option value="airport">Airport</option>
+                                    <option value="other">Other Location</option>
+                                </select>
+                                <select id="destination-specific" name="destination_specific" disabled>
+                                    <option value="">Select category first</option>
+                                </select>
+                            </div>
+                            <div id="destination-address" class="address-input hidden">
+                                <input type="text" id="destination-address-text" name="destination_address" placeholder="Please enter your specific address">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
+                            <div class="datetime-group">
+                                <input type="date" id="pickup-date" name="pickup_date" value="2025-10-04">
+                                <input type="time" id="pickup-time" name="pickup_time" value="16:00">
+                            </div>
+                            <div id="pickup-time-warning" class="time-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue button inside the form container -->
+                <div class="continue-section">
+                    <button class="continue-btn" onclick="continueBooking()">CONTINUE</button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
-                <div class="datetime-group">
-                    <input type="date" id="dropoff-date" name="dropoff_date" value="2025-10-04">
-                    <input type="time" id="dropoff-time" name="dropoff_time" value="14:00">
+            <!-- Storage Form -->
+            <div id="storageForm" class="booking-form hidden">
+                <!-- Service Description Section for Storage -->
+                <div class="service-description-section">
+                    <div class="service-description-content">
+                        <div class="service-logo">
+                            <img src="<?= base_url('assets/images/booking-container.png') ?>" alt="Service Logo" class="service-logo-img">
+                        </div>
+                        <div class="service-text">
+                            <p class="service-description-text">Flexible storage service lets you store bags for hours or days—travel freely without the weight!</p>
+                        </div>
+                    </div>
                 </div>
-                <div id="dropoff-time-warning" class="time-warning">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                <div class="form-columns">
+                    <!-- Left Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="storage-location">Storage Location <i class="bi bi-info-circle"></i></label>
+                            <select id="storage-location" name="storage_location">
+                                <option value="ease-plaza-aurora">EASE Storage Hub @ Plaza Aurora</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storage-dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
+                            <div class="datetime-group">
+                                <input type="date" id="storage-dropoff-date" name="storage_dropoff_date" value="2025-10-04">
+                                <input type="time" id="storage-dropoff-time" name="storage_dropoff_time" value="12:00">
+                            </div>
+                            <div id="storage-dropoff-time-warning" class="time-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="quantity">Luggage Quantity <i class="bi bi-info-circle"></i></label>
+                            <select id="quantity" name="quantity">
+                                <option value="1">1 piece</option>
+                                <option value="2">2 pieces</option>
+                                <option value="3">3 pieces</option>
+                                <option value="4">4 pieces</option>
+                                <option value="5">5 pieces</option>
+                                <option value="6">6 pieces</option>
+                                <option value="7">7 pieces</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storage-pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
+                            <div class="datetime-group">
+                                <input type="date" id="storage-pickup-date" name="storage_pickup_date" value="2025-10-04">
+                                <input type="time" id="storage-pickup-time" name="storage_pickup_time" value="14:00">
+                            </div>
+                            <div id="storage-pickup-time-warning" class="time-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue button inside the form container -->
+                <div class="continue-section">
+                    <button class="continue-btn" onclick="continueBooking()">CONTINUE</button>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="destination">Where is your destination? <i class="bi bi-info-circle"></i></label>
-                <div class="dropdown-group">
-                    <select id="destination-category" name="destination_category" onchange="updateDestinationSpecific()">
-                        <option value="">Choose Category</option>
-                        <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
-                        <option value="hotel">Hotel</option>
-                        <option value="shopping-mall">Shopping Mall</option>
-                        <option value="airport">Airport</option>
-                        <option value="other">Other Location</option>
-                    </select>
-                    <select id="destination-specific" name="destination_specific" disabled>
-                        <option value="">Select category first</option>
-                    </select>
-                </div>
-                <div id="destination-address" class="address-input hidden">
-                    <input type="text" id="destination-address-text" name="destination_address" placeholder="Please enter your specific address">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
-                <div class="datetime-group">
-                    <input type="date" id="pickup-date" name="pickup_date" value="2025-10-04">
-                    <input type="time" id="pickup-time" name="pickup_time" value="16:00">
-                </div>
-                <div id="pickup-time-warning" class="time-warning">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                </div>
-            </div>
-        </div>
-
-        <!-- Storage Form -->
-        <div id="storageForm" class="booking-form hidden">
-            <div class="form-group">
-                <label for="storage-location">Storage Location <i class="bi bi-info-circle"></i></label>
-                <select id="storage-location" name="storage_location">
-                    <option value="ease-plaza-aurora">EASE Storage Hub @ Plaza Aurora</option>
-                    <option value="ease-central">EASE Storage Hub @ Central</option>
-                    <option value="ease-waterfront">EASE Storage Hub @ Waterfront</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="storage-dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
-                <div class="datetime-group">
-                    <input type="date" id="storage-dropoff-date" name="storage_dropoff_date" value="2025-10-04">
-                    <input type="time" id="storage-dropoff-time" name="storage_dropoff_time" value="12:00">
-                </div>
-                <div id="storage-dropoff-time-warning" class="time-warning">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="quantity">Quantity <i class="bi bi-info-circle"></i></label>
-                <select id="quantity" name="quantity">
-                    <option value="1">1 piece</option>
-                    <option value="2">2 pieces</option>
-                    <option value="3">3 pieces</option>
-                    <option value="4">4 pieces</option>
-                    <option value="5">5+ pieces</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="storage-pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
-                <div class="datetime-group">
-                    <input type="date" id="storage-pickup-date" name="storage_pickup_date" value="2025-10-04">
-                    <input type="time" id="storage-pickup-time" name="storage_pickup_time" value="14:00">
-                </div>
-                <div id="storage-pickup-time-warning" class="time-warning">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                </div>
-            </div>
-        </div>
-
-        <div class="continue-section">
-            <button class="continue-btn" onclick="continueBooking()">CONTINUE</button>
         </div>
     </main>
     
@@ -377,27 +768,273 @@
             }
         };
 
-        // Initialize date and time restrictions when page loads
+        // SINGLE DOMContentLoaded event listener
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing...');
+            
+            // First, set minimum date and time
             setMinDateTime();
             
-            // Add event listeners for date-time validation - ONLY for delivery
+            // NEW: Check for preferred service from home page
+            const preferredService = sessionStorage.getItem('preferredService');
+            if (preferredService) {
+                console.log('Setting preferred service:', preferredService);
+                showServiceTab(preferredService);
+                // Clear the preference after using it
+                sessionStorage.removeItem('preferredService');
+            }
+            
+            // Check if we're editing and restore data BEFORE adding event listeners
+            const isEditing = sessionStorage.getItem('isEditing');
+            const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
+            
+            if (isEditing === 'true' && bookingData) {
+                console.log('Restoring booking data:', bookingData);
+                restoreBookingData(bookingData);
+                // Clear the editing flag
+                sessionStorage.removeItem('isEditing');
+            }
+            
+            // Add event listeners for date-time validation AFTER restoration
             document.getElementById('dropoff-date').addEventListener('change', validateDropoffDateTime);
             document.getElementById('dropoff-time').addEventListener('change', validateDropoffDateTime);
             document.getElementById('pickup-date').addEventListener('change', validatePickupDateTime);
             document.getElementById('pickup-time').addEventListener('change', validatePickupDateTime);
             
-            // Storage form listeners - NO 2-hour restriction
-            document.getElementById('storage-dropoff-date').addEventListener('change', validateStorageDropoffDateTimeBasic);
-            document.getElementById('storage-dropoff-time').addEventListener('change', validateStorageDropoffDateTimeBasic);
-            document.getElementById('storage-pickup-date').addEventListener('change', validateStoragePickupDateTimeBasic);
-            document.getElementById('storage-pickup-time').addEventListener('change', validateStoragePickupDateTimeBasic);
+            // Storage form listeners - with working hours check
+            document.getElementById('storage-dropoff-date').addEventListener('change', validateStorageDropoffDateTime);
+            document.getElementById('storage-dropoff-time').addEventListener('change', validateStorageDropoffDateTime);
+            document.getElementById('storage-pickup-date').addEventListener('change', validateStoragePickupDateTime);
+            document.getElementById('storage-pickup-time').addEventListener('change', validateStoragePickupDateTime);
+            
+            console.log('Initialization complete');
         });
+
+        // NEW: Function to check if time is within working hours (7 AM to 7 PM)
+        function isWithinWorkingHours(time) {
+            if (!time) return false;
+            
+            const [hours, minutes] = time.split(':').map(Number);
+            const timeInMinutes = hours * 60 + minutes;
+            const startTime = 7 * 60; // 7:00 AM
+            const endTime = 19 * 60; // 7:00 PM
+            
+            return timeInMinutes >= startTime && timeInMinutes <= endTime;
+        }
+
+        // Function to restore booking data when editing
+        function restoreBookingData(data) {
+            console.log('Starting restoration with data:', data);
+            
+            try {
+                // Show the correct service tab first
+                if (data.service === 'delivery') {
+                    // Show delivery service
+                    showServiceTab('delivery');
+                    
+                    // Restore delivery form data
+                    if (data.origin) {
+                        console.log('Restoring origin:', data.origin);
+                        const originCategory = findCategoryForLocation(data.origin);
+                        console.log('Found origin category:', originCategory);
+                        
+                        if (originCategory) {
+                            document.getElementById('origin-category').value = originCategory;
+                            updateOriginSpecific();
+                            
+                            // Set specific location if not 'other'
+                            if (originCategory !== 'other') {
+                                setTimeout(() => {
+                                    const originSpecific = document.getElementById('origin-specific');
+                                    const option = Array.from(originSpecific.options).find(opt => opt.text === data.origin);
+                                    if (option) {
+                                        originSpecific.value = option.value;
+                                        console.log('Origin specific set to:', option.value);
+                                    } else {
+                                        console.log('Origin specific option not found for:', data.origin);
+                                    }
+                                }, 200);
+                            } else {
+                                // Handle 'other' category
+                                setTimeout(() => {
+                                    const addressInput = document.getElementById('origin-address-text');
+                                    if (addressInput) {
+                                        addressInput.value = data.originAddress || '';
+                                        console.log('Origin address set to:', data.originAddress);
+                                    }
+                                }, 200);
+                            }
+                        }
+                    }
+                    
+                    if (data.destination) {
+                        console.log('Restoring destination:', data.destination);
+                        const destinationCategory = findCategoryForLocation(data.destination);
+                        console.log('Found destination category:', destinationCategory);
+                        
+                        if (destinationCategory) {
+                            document.getElementById('destination-category').value = destinationCategory;
+                            updateDestinationSpecific();
+                            
+                            // Set specific location if not 'other'
+                            if (destinationCategory !== 'other') {
+                                setTimeout(() => {
+                                    const destinationSpecific = document.getElementById('destination-specific');
+                                    const option = Array.from(destinationSpecific.options).find(opt => opt.text === data.destination);
+                                    if (option) {
+                                        destinationSpecific.value = option.value;
+                                        console.log('Destination specific set to:', option.value);
+                                    } else {
+                                        console.log('Destination specific option not found for:', data.destination);
+                                    }
+                                }, 200);
+                            } else {
+                                // Handle 'other' category
+                                setTimeout(() => {
+                                    const addressInput = document.getElementById('destination-address-text');
+                                    if (addressInput) {
+                                        addressInput.value = data.destinationAddress || '';
+                                        console.log('Destination address set to:', data.destinationAddress);
+                                    }
+                                }, 200);
+                            }
+                        }
+                    }
+                    
+                    // Restore dates and times
+                    if (data.dropoffDate) {
+                        document.getElementById('dropoff-date').value = data.dropoffDate;
+                        console.log('Dropoff date set to:', data.dropoffDate);
+                    }
+                    if (data.dropoffTime) {
+                        document.getElementById('dropoff-time').value = data.dropoffTime;
+                        console.log('Dropoff time set to:', data.dropoffTime);
+                    }
+                    if (data.pickupDate) {
+                        document.getElementById('pickup-date').value = data.pickupDate;
+                        console.log('Pickup date set to:', data.pickupDate);
+                    }
+                    if (data.pickupTime) {
+                        document.getElementById('pickup-time').value = data.pickupTime;
+                        console.log('Pickup time set to:', data.pickupTime);
+                    }
+                    
+                } else if (data.service === 'storage') {
+                    // Show storage service
+                    showServiceTab('storage');
+                    
+                    // Restore storage form data
+                    if (data.storageLocation) {
+                        console.log('Restoring storage location:', data.storageLocation);
+                        const storageSelect = document.getElementById('storage-location');
+                        const option = Array.from(storageSelect.options).find(opt => opt.text === data.storageLocation);
+                        if (option) {
+                            storageSelect.value = option.value;
+                            console.log('Storage location set to:', option.value);
+                        }
+                    }
+                    
+                    if (data.quantity) {
+                        console.log('Restoring quantity:', data.quantity);
+                        document.getElementById('quantity').value = data.quantity;
+                    }
+                    
+                    // Restore dates and times
+                    if (data.dropoffDate) {
+                        document.getElementById('storage-dropoff-date').value = data.dropoffDate;
+                        console.log('Storage dropoff date set to:', data.dropoffDate);
+                    }
+                    if (data.dropoffTime) {
+                        document.getElementById('storage-dropoff-time').value = data.dropoffTime;
+                        console.log('Storage dropoff time set to:', data.dropoffTime);
+                    }
+                    if (data.pickupDate) {
+                        document.getElementById('storage-pickup-date').value = data.pickupDate;
+                        console.log('Storage pickup date set to:', data.pickupDate);
+                    }
+                    if (data.pickupTime) {
+                        document.getElementById('storage-pickup-time').value = data.pickupTime;
+                        console.log('Storage pickup time set to:', data.pickupTime);
+                    }
+                }
+                
+                console.log('Booking data restored successfully');
+                
+            } catch (error) {
+                console.error('Error restoring booking data:', error);
+            }
+        }
+
+        // Helper function to show service tab without triggering onclick
+        function showServiceTab(serviceType) {
+            console.log('Switching to service:', serviceType);
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Find and activate the correct tab
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                if ((serviceType === 'delivery' && tab.textContent.includes('Delivery')) ||
+                    (serviceType === 'storage' && tab.textContent.includes('Storage'))) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Show/hide forms
+            if (serviceType === 'delivery') {
+                document.getElementById('deliveryForm').classList.remove('hidden');
+                document.getElementById('storageForm').classList.add('hidden');
+            } else {
+                document.getElementById('deliveryForm').classList.add('hidden');
+                document.getElementById('storageForm').classList.remove('hidden');
+            }
+
+            currentService = serviceType;
+            console.log('Current service set to:', currentService);
+        }
+
+        // Helper function to find category for a location
+        function findCategoryForLocation(locationName) {
+            console.log('Finding category for location:', locationName);
+            
+            // Check if it's Ease Storage
+            if (locationName.includes('Ease Storage Hub') || locationName.includes('EASE Storage Hub')) {
+                console.log('Found ease-storage category');
+                return 'ease-storage';
+            }
+            
+            // Check in hotel options
+            const hotelOptions = locationData.hotel?.options || [];
+            if (hotelOptions.some(option => option.text === locationName)) {
+                console.log('Found hotel category');
+                return 'hotel';
+            }
+            
+            // Check in shopping mall options
+            const mallOptions = locationData['shopping-mall']?.options || [];
+            if (mallOptions.some(option => option.text === locationName)) {
+                console.log('Found shopping-mall category');
+                return 'shopping-mall';
+            }
+            
+            // Check in airport options
+            const airportOptions = locationData.airport?.options || [];
+            if (airportOptions.some(option => option.text === locationName)) {
+                console.log('Found airport category');
+                return 'airport';
+            }
+            
+            // If not found in predefined categories, it's likely 'other'
+            console.log('Defaulting to other category');
+            return 'other';
+        }
 
         function setMinDateTime() {
             const now = new Date();
             const currentDate = now.toISOString().split('T')[0];
-            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
             
             // Set minimum date to today for all date inputs
             document.getElementById('dropoff-date').min = currentDate;
@@ -405,26 +1042,76 @@
             document.getElementById('storage-dropoff-date').min = currentDate;
             document.getElementById('storage-pickup-date').min = currentDate;
             
-            // Set default values for DELIVERY (2 hours from now)
-            const futureTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
-            const futureTimeString = futureTime.getHours().toString().padStart(2, '0') + ':' + futureTime.getMinutes().toString().padStart(2, '0');
+            // Set default values for DELIVERY (2.5 hours from now)
+            const deliveryFutureTime = new Date(now.getTime() + 2.5 * 60 * 60 * 1000);
+            let deliveryTimeString = deliveryFutureTime.getHours().toString().padStart(2, '0') + ':' + deliveryFutureTime.getMinutes().toString().padStart(2, '0');
+            let deliveryDateString = currentDate; // Always start with current date
             
-            document.getElementById('dropoff-date').value = currentDate;
-            document.getElementById('dropoff-time').value = futureTimeString;
-            document.getElementById('pickup-date').value = currentDate;
-            document.getElementById('pickup-time').value = new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getHours().toString().padStart(2, '0') + ':' + new Date(futureTime.getTime() + 2 * 60 * 60 * 1000).getMinutes().toString().padStart(2, '0');
+            // Ensure delivery time is within working hours (7 AM to 7 PM)
+            if (deliveryFutureTime.getHours() < 7) {
+                deliveryTimeString = '07:00';
+                // Keep current date, just adjust time
+            } else if (deliveryFutureTime.getHours() >= 19) {
+                // If it's past 7 PM, set to next day at 7 AM
+                const nextDay = new Date(deliveryFutureTime.getTime() + 24 * 60 * 60 * 1000);
+                deliveryDateString = nextDay.toISOString().split('T')[0];
+                deliveryTimeString = '07:00';
+            }
             
-            // Set default values for STORAGE (current time + 30 minutes)
-            const storageTime = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes from now
-            const storageTimeString = storageTime.getHours().toString().padStart(2, '0') + ':' + storageTime.getMinutes().toString().padStart(2, '0');
+            // Set delivery dropoff date and time
+            document.getElementById('dropoff-date').value = deliveryDateString;
+            document.getElementById('dropoff-time').value = deliveryTimeString;
             
-            document.getElementById('storage-dropoff-date').value = currentDate;
+            // Set pickup time (2 hours after dropoff)
+            const pickupTime = new Date(deliveryFutureTime.getTime() + 2 * 60 * 60 * 1000);
+            let pickupTimeString = pickupTime.getHours().toString().padStart(2, '0') + ':' + pickupTime.getMinutes().toString().padStart(2, '0');
+            let pickupDateString = deliveryDateString; // Same date as dropoff initially
+            
+            if (pickupTime.getHours() >= 19) {
+                // If pickup would be past 7 PM, set to next day
+                const nextDay = new Date(pickupTime.getTime() + 24 * 60 * 60 * 1000);
+                pickupDateString = nextDay.toISOString().split('T')[0];
+                pickupTimeString = '07:00';
+            }
+            
+            document.getElementById('pickup-date').value = pickupDateString;
+            document.getElementById('pickup-time').value = pickupTimeString;
+            
+            // Set default values for STORAGE (current date + 30 minutes from now)
+            const storageTime = new Date(now.getTime() + 30 * 60 * 1000);
+            let storageTimeString = storageTime.getHours().toString().padStart(2, '0') + ':' + storageTime.getMinutes().toString().padStart(2, '0');
+            let storageDateString = currentDate; // Always start with current date
+            
+            // Ensure storage time is within working hours
+            if (storageTime.getHours() < 7) {
+                storageTimeString = '07:00';
+                // Keep current date, just adjust time
+            } else if (storageTime.getHours() >= 19) {
+                const nextDay = new Date(storageTime.getTime() + 24 * 60 * 60 * 1000);
+                storageDateString = nextDay.toISOString().split('T')[0];
+                storageTimeString = '07:00';
+            }
+            
+            // Set storage dropoff date and time
+            document.getElementById('storage-dropoff-date').value = storageDateString;
             document.getElementById('storage-dropoff-time').value = storageTimeString;
-            document.getElementById('storage-pickup-date').value = currentDate;
-            document.getElementById('storage-pickup-time').value = new Date(storageTime.getTime() + 2 * 60 * 60 * 1000).getHours().toString().padStart(2, '0') + ':' + new Date(storageTime.getTime() + 2 * 60 * 60 * 1000).getMinutes().toString().padStart(2, '0');
+            
+            // Set storage pickup time (2 hours after dropoff)
+            const storagePickupTime = new Date(storageTime.getTime() + 2 * 60 * 60 * 1000);
+            let storagePickupTimeString = storagePickupTime.getHours().toString().padStart(2, '0') + ':' + storagePickupTime.getMinutes().toString().padStart(2, '0');
+            let storagePickupDateString = storageDateString; // Same date as dropoff initially
+            
+            if (storagePickupTime.getHours() >= 19) {
+                const nextDay = new Date(storagePickupTime.getTime() + 24 * 60 * 60 * 1000);
+                storagePickupDateString = nextDay.toISOString().split('T')[0];
+                storagePickupTimeString = '07:00';
+            }
+            
+            document.getElementById('storage-pickup-date').value = storagePickupDateString;
+            document.getElementById('storage-pickup-time').value = storagePickupTimeString;
         }
 
-        // DELIVERY VALIDATION FUNCTIONS (with 2-hour restriction)
+        // DELIVERY VALIDATION FUNCTIONS (with 2.5-hour restriction and working hours)
         function validateDropoffDateTime() {
             const selectedDate = document.getElementById('dropoff-date').value;
             const selectedTime = document.getElementById('dropoff-time').value;
@@ -433,14 +1120,16 @@
             if (!isDateTimeValid(selectedDate, selectedTime)) {
                 warningDiv.classList.add('show');
                 return false;
+            } else if (!isWithinWorkingHours(selectedTime)) {
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> The selected time must be between 07:00 and 19:00.';
+                warningDiv.classList.add('show');
+                return false;
             } else if (!isAtLeast2HoursFromNow(selectedDate, selectedTime)) {
-                // Update warning message with current time
-                updateWarningMessage(warningDiv);
+                updateDeliveryWarningMessage(warningDiv);
                 warningDiv.classList.add('show');
                 return false;
             } else {
                 warningDiv.classList.remove('show');
-                // Update pickup minimum based on dropoff
                 updatePickupMinimum();
                 return true;
             }
@@ -454,11 +1143,15 @@
             const warningDiv = document.getElementById('pickup-time-warning');
             
             if (!isDateTimeValid(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
+                updateDeliveryWarningMessage(warningDiv);
+                warningDiv.classList.add('show');
+                return false;
+            } else if (!isWithinWorkingHours(selectedTime)) {
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> The selected time must be between 07:00 and 19:00.';
                 warningDiv.classList.add('show');
                 return false;
             } else if (!isAtLeast2HoursFromNow(selectedDate, selectedTime)) {
-                updateWarningMessage(warningDiv);
+                updateDeliveryWarningMessage(warningDiv);
                 warningDiv.classList.add('show');
                 return false;
             } else if (isDateTime1BeforeDateTime2(selectedDate, selectedTime, dropoffDate, dropoffTime)) {
@@ -472,8 +1165,8 @@
             }
         }
 
-        // STORAGE VALIDATION FUNCTIONS (NO 2-hour restriction, only past time check)
-        function validateStorageDropoffDateTimeBasic() {
+        // STORAGE VALIDATION FUNCTIONS (with working hours check)
+        function validateStorageDropoffDateTime() {
             const selectedDate = document.getElementById('storage-dropoff-date').value;
             const selectedTime = document.getElementById('storage-dropoff-time').value;
             const warningDiv = document.getElementById('storage-dropoff-time-warning');
@@ -482,15 +1175,18 @@
                 warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Drop-off date and time cannot be in the past.';
                 warningDiv.classList.add('show');
                 return false;
+            } else if (!isWithinWorkingHours(selectedTime)) {
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> The selected time must be between 07:00 and 19:00.';
+                warningDiv.classList.add('show');
+                return false;
             } else {
                 warningDiv.classList.remove('show');
-                // Update storage pickup minimum based on dropoff
                 updateStoragePickupMinimum();
                 return true;
             }
         }
 
-        function validateStoragePickupDateTimeBasic() {
+        function validateStoragePickupDateTime() {
             const selectedDate = document.getElementById('storage-pickup-date').value;
             const selectedTime = document.getElementById('storage-pickup-time').value;
             const dropoffDate = document.getElementById('storage-dropoff-date').value;
@@ -499,6 +1195,10 @@
             
             if (!isDateTimeValid(selectedDate, selectedTime)) {
                 warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Pick-up date and time cannot be in the past.';
+                warningDiv.classList.add('show');
+                return false;
+            } else if (!isWithinWorkingHours(selectedTime)) {
+                warningDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> The selected time must be between 07:00 and 19:00.';
                 warningDiv.classList.add('show');
                 return false;
             } else if (isDateTime1BeforeDateTime2(selectedDate, selectedTime, dropoffDate, dropoffTime)) {
@@ -512,17 +1212,19 @@
             }
         }
 
+        // NEW: Function to check if time is at least 2.5 hours from now (for delivery)
         function isAtLeast2HoursFromNow(date, time) {
             if (!date || !time) return false;
             
             const selectedDateTime = new Date(date + 'T' + time);
             const now = new Date();
-            const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours for validation
             
             return selectedDateTime >= twoHoursFromNow;
         }
 
-        function updateWarningMessage(warningDiv) {
+        // NEW: Update warning message for delivery (2.5 hours)
+        function updateDeliveryWarningMessage(warningDiv) {
             const now = new Date();
             const currentDateStr = now.toLocaleDateString('en-GB', { 
                 day: '2-digit', 
@@ -561,16 +1263,21 @@
             const dropoffTime = document.getElementById('dropoff-time').value;
             
             if (dropoffDate && dropoffTime) {
-                // Set pickup minimum to dropoff date
                 document.getElementById('pickup-date').min = dropoffDate;
                 
-                // If pickup date is same as dropoff date, ensure pickup time is after dropoff time
                 const pickupDate = document.getElementById('pickup-date').value;
                 if (pickupDate === dropoffDate) {
-                    // Add 1 hour minimum gap
                     const dropoffDateTime = new Date(dropoffDate + 'T' + dropoffTime);
-                    const minPickupTime = new Date(dropoffDateTime.getTime() + 60 * 60 * 1000); // 1 hour later
-                    const minTime = minPickupTime.getHours().toString().padStart(2, '0') + ':' + minPickupTime.getMinutes().toString().padStart(2, '0');
+                    const minPickupTime = new Date(dropoffDateTime.getTime() + 60 * 60 * 1000);
+                    let minTime = minPickupTime.getHours().toString().padStart(2, '0') + ':' + minPickupTime.getMinutes().toString().padStart(2, '0');
+                    
+                    // Ensure pickup time is within working hours
+                    if (minPickupTime.getHours() >= 19) {
+                        minTime = '07:00';
+                        // Set to next day if needed
+                        const nextDay = new Date(minPickupTime.getTime() + 24 * 60 * 60 * 1000);
+                        document.getElementById('pickup-date').value = nextDay.toISOString().split('T')[0];
+                    }
                     
                     if (document.getElementById('pickup-time').value <= dropoffTime) {
                         document.getElementById('pickup-time').value = minTime;
@@ -584,16 +1291,21 @@
             const dropoffTime = document.getElementById('storage-dropoff-time').value;
             
             if (dropoffDate && dropoffTime) {
-                // Set pickup minimum to dropoff date
                 document.getElementById('storage-pickup-date').min = dropoffDate;
                 
-                // If pickup date is same as dropoff date, ensure pickup time is after dropoff time
                 const pickupDate = document.getElementById('storage-pickup-date').value;
                 if (pickupDate === dropoffDate) {
-                    // Add 1 hour minimum gap
                     const dropoffDateTime = new Date(dropoffDate + 'T' + dropoffTime);
-                    const minPickupTime = new Date(dropoffDateTime.getTime() + 60 * 60 * 1000); // 1 hour later
-                    const minTime = minPickupTime.getHours().toString().padStart(2, '0') + ':' + minPickupTime.getMinutes().toString().padStart(2, '0');
+                    const minPickupTime = new Date(dropoffDateTime.getTime() + 60 * 60 * 1000);
+                    let minTime = minPickupTime.getHours().toString().padStart(2, '0') + ':' + minPickupTime.getMinutes().toString().padStart(2, '0');
+                    
+                    // Ensure pickup time is within working hours
+                    if (minPickupTime.getHours() >= 19) {
+                        minTime = '07:00';
+                        // Set to next day if needed
+                        const nextDay = new Date(minPickupTime.getTime() + 24 * 60 * 60 * 1000);
+                        document.getElementById('storage-pickup-date').value = nextDay.toISOString().split('T')[0];
+                    }
                     
                     if (document.getElementById('storage-pickup-time').value <= dropoffTime) {
                         document.getElementById('storage-pickup-time').value = minTime;
@@ -620,12 +1332,10 @@
 
         function updateLocationDropdown(category, specificSelect, addressDiv) {
             if (category === 'other') {
-                // Hide the second dropdown and show address input
                 specificSelect.style.display = 'none';
                 addressDiv.classList.remove('hidden');
                 addressDiv.querySelector('input').setAttribute('required', 'required');
             } else if (category && locationData[category]) {
-                // Show the second dropdown and populate with specific options
                 specificSelect.style.display = 'block';
                 specificSelect.disabled = false;
                 addressDiv.classList.add('hidden');
@@ -634,7 +1344,6 @@
                 
                 const data = locationData[category];
                 
-                // Clear previous options
                 specificSelect.innerHTML = '';
                 
                 if (!data.autoSelect) {
@@ -648,12 +1357,10 @@
                     specificSelect.appendChild(optionElement);
                 });
                 
-                // Auto-select if needed (for Ease Storage and Airport)
                 if (data.autoSelect && data.options.length === 1) {
                     specificSelect.value = data.options[0].value;
                 }
             } else {
-                // Reset to default state - show dropdown but disabled
                 specificSelect.style.display = 'block';
                 specificSelect.disabled = true;
                 specificSelect.innerHTML = '<option value="">Select category first</option>';
@@ -693,9 +1400,8 @@
                 const destinationCategory = document.getElementById('destination-category').value;
                 const destinationSpecific = document.getElementById('destination-specific').value;
                 
-                // Validate date-time first (with 2-hour restriction for delivery)
                 if (!validateDropoffDateTime() || !validatePickupDateTime()) {
-                    return; // Stop if date-time validation fails - warnings will be shown
+                    return;
                 }
                 
                 if (!originCategory) {
@@ -718,9 +1424,8 @@
                     errorMessage = 'Please enter your destination address.';
                 }
             } else {
-                // Validate storage date-time (basic validation only - no 2-hour restriction)
-                if (!validateStorageDropoffDateTimeBasic() || !validateStoragePickupDateTimeBasic()) {
-                    return; // Stop if date-time validation fails - warnings will be shown
+                if (!validateStorageDropoffDateTime() || !validateStoragePickupDateTime()) {
+                    return;
                 }
             }
 
@@ -729,11 +1434,10 @@
                 return;
             }
 
-            // Collect form data and store in session storage for the booking detail page
+            // Collect form data and store in session storage
             let bookingData = {};
             
             if (currentService === 'delivery') {
-                // Get origin data
                 const originCategory = document.getElementById('origin-category').value;
                 let originLocation = '';
                 let originAddress = '';
@@ -746,7 +1450,6 @@
                     originLocation = originSpecific.options[originSpecific.selectedIndex].text;
                 }
                 
-                // Get destination data
                 const destinationCategory = document.getElementById('destination-category').value;
                 let destinationLocation = '';
                 let destinationAddress = '';
@@ -771,7 +1474,6 @@
                     pickupTime: document.getElementById('pickup-time').value
                 };
             } else {
-                // Storage service data
                 const storageLocation = document.getElementById('storage-location');
                 
                 bookingData = {
@@ -785,13 +1487,9 @@
                 };
             }
             
-            // Store booking data in session storage
             sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
-            
-            // Debug: Check if data is stored
             console.log('Booking data stored:', bookingData);
             
-            // Redirect to booking detail page using relative URL
             window.location.href = 'bookingdetail';
         }
     </script>

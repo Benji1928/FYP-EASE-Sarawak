@@ -14,3 +14,4 @@ $routes->get('/bookingdetail', 'Home::bookingdetail');
 $routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
 $routes->post('/saveOrder', 'Home::saveOrder');
 $routes->get('/booking-confirmation', 'Home::bookingConfirmation');
+$routes->post('/checkPromoCode', 'Home::checkPromoCode');
