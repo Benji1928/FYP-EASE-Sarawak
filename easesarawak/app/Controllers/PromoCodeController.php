@@ -1,0 +1,101 @@
+<?php
+namespace App\Controllers;
+
+use App\Models\PromoCodeModel;
+
+class PromoCodeController extends BaseController
+{
+    public function index()
+    {
+        $model = new PromoCodeModel();
+        $promoCodes = $model->where('is_deleted', 0)
+                            ->orderBy('created_date', 'DESC')
+                            ->findAll();
+
+        return view('admin/promo_code', ['promoCodes' => $promoCodes]);
+    }
+
+    public function create()
+    {
+        return view('admin/add_promo');
+    }
+
+    public function store()
+    {
+        $rules = [
+            'code' => 'required|max_length[100]',
+            'discount_percentage' => 'permit_empty|integer|less_than_equal_to[100]',
+            'validation_date' => 'required',
+            'expired_date' => 'required'
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $model = new PromoCodeModel();
+
+        $data = [
+            'code' => $this->request->getPost('code'),
+            'discount_percentage' => $this->request->getPost('discount_percentage') ?: 0,
+            'validation_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('validation_date'))),
+            'expired_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('expired_date'))),
+            'is_deleted' => 0,
+            'created_date' => date('Y-m-d H:i:s')
+        ];
+
+        $model->insert($data);
+
+        return redirect()->to(base_url('/admin/promo_code'))->with('success', 'Promo created successfully');
+    }
+
+    public function edit($id = null)
+    {
+        $model = new PromoCodeModel();
+        $promo = $model->find($id);
+
+        if (! $promo) {
+            return redirect()->to(base_url('/admin/promo_code'))->with('error', 'Promo not found');
+        }
+
+        return view('admin/edit_promo', ['promo' => $promo]);
+    }
+
+    public function update($id = null)
+    {
+        $rules = [
+            'code' => 'required|max_length[100]',
+            'discount_percentage' => 'permit_empty|integer|less_than_equal_to[100]',
+            'validation_date' => 'required',
+            'expired_date' => 'required'
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $model = new PromoCodeModel();
+
+        $data = [
+            'code' => $this->request->getPost('code'),
+            'discount_percentage' => $this->request->getPost('discount_percentage') ?: 0,
+            'validation_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('validation_date'))),
+            'expired_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('expired_date'))),
+            'modified_date' => date('Y-m-d H:i:s')
+        ];
+
+        $model->update($id, $data);
+
+        return redirect()->to(base_url('/admin/promo_code'))->with('success', 'Promo updated successfully');
+    }
+
+    public function delete($id = null)
+    {
+        $model = new PromoCodeModel();
+        $promo = $model->find($id);
+        if ($promo) {
+            $model->update($id, ['is_deleted' => 1, 'modified_date' => date('Y-m-d H:i:s')]);
+        }
+        return redirect()->to(base_url('/admin/promo_code'))->with('success', 'Promo deleted');
+    }
+}

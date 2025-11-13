@@ -9,6 +9,9 @@
         name="viewport" />
     <link rel="icon" type="image/png" href="assets/images/cropped-Ease_PNG_File-09.png">
 
+    <!-- Ensure relative asset paths resolve from the application root -->
+    <base href="<?= base_url('/') ?>">
+
     <!-- Fonts and icons -->
     <script src="assets/js/admin/plugin/webfont/webfont.min.js"></script>
     <link
@@ -164,7 +167,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('/'); ?>">
+                                        <a href="<?= base_url('/admin/promo_code'); ?>">
                                             <span class="sub-item">Promo Code</span>
                                         </a>
                                     </li>

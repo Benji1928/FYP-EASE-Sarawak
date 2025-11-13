@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/footer_style.css">
     <link rel="stylesheet" href="assets/css/navbar_style.css">
+    <link rel="stylesheet" href="assets/css/navbar_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
         .navbar-nav,
@@ -722,6 +724,37 @@
     </main>
     
     <?= $this->include('footer/footer') ?>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // date inputs (format: YYYY-MM-DD)
+        ['dropoff-date','pickup-date','storage-dropoff-date','storage-pickup-date'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (!el) return;
+            var fp = flatpickr(el, {
+                dateFormat: 'Y-m-d',
+                allowInput: true
+            });
+            if (el.value) fp.setDate(el.value, true, 'Y-m-d');
+        });
+ 
+        // time inputs (format: HH:MM 24h)
+        ['dropoff-time','pickup-time','storage-dropoff-time','storage-pickup-time'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (!el) return;
+            var tp = flatpickr(el, {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: 'H:i',
+                time_24hr: true,
+                allowInput: true
+            });
+            if (el.value) tp.setDate(el.value, true, 'H:i');
+        });
+    });
+    </script>
 
     <script>
         let currentService = 'delivery';
