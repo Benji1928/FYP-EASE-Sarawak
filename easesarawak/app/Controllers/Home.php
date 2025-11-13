@@ -104,12 +104,12 @@ class Home extends BaseController
                 ]);
             }
             
-            // Prepare and execute query
-            $stmt = $mysqli->prepare("SELECT * FROM promo_code WHERE code = ? AND is_deleted = 0");
+            // Prepare and execute query - updated for new schema
+            $stmt = $mysqli->prepare("SELECT * FROM Promo WHERE promo_code = ? AND is_active = 1");
             $stmt->bind_param("s", $promoCode);
             $stmt->execute();
             $result = $stmt->get_result();
-            
+
             if ($result->num_rows === 0) {
                 $stmt->close();
                 $mysqli->close();
@@ -119,12 +119,12 @@ class Home extends BaseController
                     'message' => 'Invalid promo code'
                 ]);
             }
-            
+
             $promoData = $result->fetch_assoc();
             $currentDateTime = date('Y-m-d H:i:s');
-            
-            // Check if promo code is active
-            if ($promoData['validation_date'] > $currentDateTime) {
+
+            // Check if promo code is active (start date)
+            if ($promoData['start_date'] > $currentDateTime) {
                 $stmt->close();
                 $mysqli->close();
                 return $this->response->setJSON([
@@ -133,9 +133,9 @@ class Home extends BaseController
                     'message' => 'This promo code is not yet active'
                 ]);
             }
-            
-            // Check if promo code is not expired
-            if ($promoData['expired_date'] < $currentDateTime) {
+
+            // Check if promo code is not expired (end date)
+            if ($promoData['end_date'] < $currentDateTime) {
                 $stmt->close();
                 $mysqli->close();
                 return $this->response->setJSON([
@@ -144,15 +144,35 @@ class Home extends BaseController
                     'message' => 'This promo code has expired'
                 ]);
             }
-            
+
+            // Check usage limit
+            if ($promoData['usage_limit'] !== null && $promoData['times_used'] >= $promoData['usage_limit']) {
+                $stmt->close();
+                $mysqli->close();
+                return $this->response->setJSON([
+                    'success' => true,
+                    'valid' => false,
+                    'message' => 'This promo code has reached its usage limit'
+                ]);
+            }
+
+            // Calculate discount value based on type
+            $discountValue = $promoData['discount_value'];
+            if ($promoData['discount_type'] === 'percentage') {
+                $discount = $discountValue; // percentage value
+            } else {
+                $discount = $discountValue; // fixed amount
+            }
+
             // Promo code is valid
             $stmt->close();
             $mysqli->close();
-            
+
             return $this->response->setJSON([
                 'success' => true,
                 'valid' => true,
-                'discount' => isset($promoData['discount_percentage']) ? $promoData['discount_percentage'] : 20,
+                'discount' => $discount,
+                'discount_type' => $promoData['discount_type'],
                 'message' => 'Promo code applied successfully!'
             ]);
             

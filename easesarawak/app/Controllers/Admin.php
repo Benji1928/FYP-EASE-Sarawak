@@ -33,22 +33,23 @@ class Admin extends BaseController
         $order_model = new Order_model();
         $user_model = new User_model();
 
-        $order = $order_model->where('is_deleted', 0)->countAllResults();
-        $user  = $user_model->where('is_deleted', 0)->countAllResults();
+        $order = $order_model->countAllResults();
+        $user  = $user_model->countAllResults();
         $sales = $order_model
-            ->selectSum('amount')
-            ->where('is_deleted', 0)
+            ->selectSum('total_amount')
             ->get()
             ->getRow()
-            ->amount ?? 0;
-        $totalOrders = $order_model
-            ->where('is_deleted', 0)
-            ->countAllResults();
+            ->total_amount ?? 0;
+        $totalOrders = $order_model->countAllResults();
 
-        // Fetch all pending orders
-        $pending_orders = $order_model
-            ->where('status', 'pending')
-            ->findAll();
+        // Fetch all pending orders with user information
+        $db = \Config\Database::connect();
+        $pending_orders = $db->table('Orders')
+            ->select('Orders.*, Users.first_name, Users.last_name, Users.email, Users.phone')
+            ->join('Users', 'Users.user_id = Orders.user_id', 'left')
+            ->where('Orders.order_status', 'Pending')
+            ->get()
+            ->getResultArray();
 
         $data = [ 'order_count'    => $order,
                   'user_count'     => $user,
@@ -66,24 +67,20 @@ class Admin extends BaseController
 
         // Total Revenue (sum of all order amounts)
         $totalRevenue = $order_model
-            ->selectSum('amount')
-            ->where('is_deleted', 0)
+            ->selectSum('total_amount')
             ->get()
             ->getRow()
-            ->amount ?? 0;
+            ->total_amount ?? 0;
 
         // Total Orders (count)
-        $totalOrders = $order_model
-            ->where('is_deleted', 0)
-            ->countAllResults();
+        $totalOrders = $order_model->countAllResults();
 
         // Revenue Breakdown (Last 6 Months)
         $db = \Config\Database::connect();
-        $builder = $db->table('order');
+        $builder = $db->table('Orders');
 
         // select only aggregated or grouped expressions — no plain columns
-        $builder->select("DATE_FORMAT(MIN(created_date), '%b %Y') AS month, SUM(amount) AS total");
-        $builder->where('is_deleted', 0);
+        $builder->select("DATE_FORMAT(MIN(created_date), '%b %Y') AS month, SUM(total_amount) AS total");
         $builder->where('created_date >=', date('Y-m-01', strtotime('-5 months')));
         $builder->groupBy("YEAR(created_date), MONTH(created_date)");
         $builder->orderBy("YEAR(created_date)", 'ASC');
@@ -95,9 +92,8 @@ class Admin extends BaseController
         $revenues = array_map('floatval', array_column($revenueQuery, 'total'));
 
         // Peak Booking Times (based on created_date hour)
-        $builder2 = $db->table('order');
+        $builder2 = $db->table('Orders');
         $builder2->select("HOUR(created_date) AS hour, COUNT(order_id) AS count");
-        $builder2->where('is_deleted', 0);
         $builder2->groupBy('HOUR(created_date)');
         $builder2->orderBy('hour', 'ASC');
         $timeQuery = $builder2->get()->getResultArray();
@@ -124,22 +120,22 @@ class Admin extends BaseController
         $timeframe = $this->request->getGet('timeframe');
 
         $db = \Config\Database::connect();
-        $builder = $db->table('order');
+        $builder = $db->table('Orders');
 
         if ($service !== 'all') {
             $builder->where('service_type', $service);
         }
 
         if ($timeframe === 'day') {
-            $builder->select('DATE(created_date) as label, SUM(amount) as total');
+            $builder->select('DATE(created_date) as label, SUM(total_amount) as total');
             $builder->groupBy('DATE(created_date)');
             $builder->orderBy('DATE(created_date)', 'ASC');
         } elseif ($timeframe === 'week') {
-            $builder->select('YEARWEEK(created_date, 1) as label, SUM(amount) as total');
+            $builder->select('YEARWEEK(created_date, 1) as label, SUM(total_amount) as total');
             $builder->groupBy('YEARWEEK(created_date, 1)');
             $builder->orderBy('YEARWEEK(created_date, 1)', 'ASC');
         } else { // month
-            $builder->select('YEAR(created_date) as y, MONTH(created_date) as label, SUM(amount) as total');
+            $builder->select('YEAR(created_date) as y, MONTH(created_date) as label, SUM(total_amount) as total');
             $builder->groupBy(['YEAR(created_date)', 'MONTH(created_date)']);
             $builder->orderBy('YEAR(created_date)', 'ASC');
             $builder->orderBy('MONTH(created_date)', 'ASC');
@@ -171,9 +167,15 @@ class Admin extends BaseController
 
     public function order()
     {
-        $order_model = new Order_model();
-        $orders = $order_model->where('is_deleted', 0)->findAll();
-        // print_r($orders);exit;
+        // Fetch orders with user information
+        $db = \Config\Database::connect();
+        $orders = $db->table('Orders')
+            ->select('Orders.*, Users.first_name, Users.last_name, Users.email, Users.phone')
+            ->join('Users', 'Users.user_id = Orders.user_id', 'left')
+            ->orderBy('Orders.created_date', 'DESC')
+            ->get()
+            ->getResultArray();
+
         return view('admin/order', ['orders' => $orders]);
     }
 
@@ -186,11 +188,12 @@ class Admin extends BaseController
         $order = $orderModel->find($order_id);
 
         if ($order) {
-            // Cycle through status: 0 → 1 → 2 → 0
-            $newStatus = ($order['status'] + 1) % 3;
-            $orderModel->update($order_id, ['status' => $newStatus,
-                    'modified_by' => $userId,
-                    'modified_date' => date('Y-m-d H:i:s')]);
+            // Cycle through status: Pending → Confirmed → In_Storage → Out-for-Delivery → Completed → Pending
+            $statusCycle = ['Pending', 'Confirmed', 'In_Storage', 'Out-for-Delivery', 'Completed'];
+            $currentIndex = array_search($order['order_status'], $statusCycle);
+            $newStatus = $statusCycle[($currentIndex + 1) % 5];
+
+            $orderModel->update($order_id, ['order_status' => $newStatus]);
 
             session()->setFlashdata('success', 'Order status updated successfully.');
         } else {
@@ -202,8 +205,12 @@ class Admin extends BaseController
 
     public function user()
     {
-        $user_model = new User_model();
-        $users = $user_model->where('is_deleted', 0)->findAll();
+        // Fetch admin staff members (not customers)
+        $db = \Config\Database::connect();
+        $users = $db->table('Admins')
+            ->orderBy('created_date', 'DESC')
+            ->get()
+            ->getResultArray();
 
         $data = [
             'users' => $users
@@ -256,8 +263,65 @@ class Admin extends BaseController
         $note = $this->request->getPost('note');
 
         $orderModel = new Order_model();
-        $orderModel->update($orderId, ['comment' => $note]);
+        $orderModel->update($orderId, ['special_note' => $note, 'special' => 1]);
 
         return $this->response->setJSON(['status' => 'success']);
     }
+
+    public function exportRevenue()
+{
+    $service   = $this->request->getGet('service') ?? 'all';
+    $timeframe = $this->request->getGet('timeframe') ?? 'month';
+
+    $db = \Config\Database::connect();
+    $builder = $db->table('Orders');
+    $builder->join('Users', 'Users.user_id = Orders.user_id', 'left');
+
+    if ($service !== 'all') {
+        $builder->where('Orders.service_type', $service);
+    }
+
+    // match the chart filters so the CSV mirrors what the user sees
+    if ($timeframe === 'day') {
+        $builder->where('Orders.created_date >=', date('Y-m-d 00:00:00', strtotime('-30 days')));
+    } elseif ($timeframe === 'week') {
+        $builder->where('Orders.created_date >=', date('Y-m-d 00:00:00', strtotime('-12 weeks')));
+    } else {
+        $builder->where('Orders.created_date >=', date('Y-m-01', strtotime('-11 months')));
+    }
+
+    $orders = $builder
+        ->select([
+            'Orders.order_id', 'Orders.service_type', 'Users.first_name', 'Users.last_name',
+            'Users.email', 'Users.phone', 'Orders.total_amount', 'Orders.order_status', 'Orders.created_date'
+        ])
+        ->orderBy('Orders.created_date', 'ASC')
+        ->get()
+        ->getResultArray();
+
+    $handle = fopen('php://temp', 'w');
+    fputcsv($handle, ['Order ID', 'Service Type', 'Customer', 'Email', 'Phone', 'Amount (RM)', 'Status', 'Placed On']);
+
+    foreach ($orders as $order) {
+        fputcsv($handle, [
+            $order['order_id'],
+            $order['service_type'],
+            trim($order['first_name'] . ' ' . $order['last_name']),
+            $order['email'],
+            $order['phone'],
+            number_format((float) $order['total_amount'], 2, '.', ''),
+            $order['order_status'],
+            date('Y-m-d H:i:s', strtotime($order['created_date'])),
+        ]);
+    }
+
+    rewind($handle);
+    $csv = stream_get_contents($handle);
+    fclose($handle);
+
+    return $this->response
+        ->setHeader('Content-Type', 'text/csv')
+        ->setHeader('Content-Disposition', 'attachment; filename="revenue_' . date('Ymd_His') . '.csv"')
+        ->setBody($csv);
+}
 }

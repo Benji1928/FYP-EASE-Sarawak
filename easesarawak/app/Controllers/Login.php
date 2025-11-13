@@ -16,26 +16,44 @@ class Login extends BaseController
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $user = new User_model();
-        $userData = $user->where([
-            'email' => $email,
-            'is_deleted' => 0
-        ])->first();
+        // First check Admins table for staff login
+        $db = \Config\Database::connect();
+        $adminData = $db->table('Admins')
+            ->where('email', $email)
+            ->get()
+            ->getRowArray();
 
-        if ($userData && password_verify($password, $userData['password'])) {
+        if ($adminData && password_verify($password, $adminData['password'])) {
             $session = session();
             $session->set([
-                'user_id' => $userData['user_id'],
-                'username' => $userData['username'],
-                'email'    => $userData['email'],
-                'access'   => 1,
-                'role'     => $userData['role']
+                'user_id'   => $adminData['staff_id'],
+                'username'  => $adminData['staff_name'],
+                'email'     => $adminData['email'],
+                'access'    => 1,
+                'role'      => $adminData['role'] === 'Superadmin' ? '0' : '1'
             ]);
 
             return redirect()->to(base_url('/admin'));
-        } else {
-            return redirect()->back()->with('error', 'Incorrect username or password');
         }
+
+        // If not admin, check Users table (for future customer portal)
+        $user = new User_model();
+        $userData = $user->where('email', $email)->first();
+
+        if ($userData && isset($userData['password']) && password_verify($password, $userData['password'])) {
+            $session = session();
+            $session->set([
+                'user_id'  => $userData['user_id'],
+                'username' => $userData['first_name'] . ' ' . $userData['last_name'],
+                'email'    => $userData['email'],
+                'access'   => 1,
+                'role'     => $userData['role'] ?? '2' // Regular user
+            ]);
+
+            return redirect()->to(base_url('/admin'));
+        }
+
+        return redirect()->back()->with('error', 'Incorrect email or password');
     }
 
 

@@ -41,17 +41,18 @@
                                         <td><?= date('d M Y, h:i A', strtotime($order['created_date'])); ?></td>
                                         <td>
                                             <a href="<?= base_url('/change_status/' . $order['order_id']); ?>"
-                                                class="btn btn-sm 
+                                                class="btn btn-sm
                                                 <?php
-                                                if ($order['status'] == 0) echo 'btn-warning';
-                                                elseif ($order['status'] == 1) echo 'btn-info';
-                                                else echo 'btn-success';
+                                                switch ($order['order_status']) {
+                                                    case 'Pending': echo 'btn-warning'; break;
+                                                    case 'Confirmed': echo 'btn-primary'; break;
+                                                    case 'In_Storage': echo 'btn-info'; break;
+                                                    case 'Out-for-Delivery': echo 'btn-secondary'; break;
+                                                    case 'Completed': echo 'btn-success'; break;
+                                                    default: echo 'btn-secondary';
+                                                }
                                                 ?>">
-                                                <?php
-                                                if ($order['status'] == 0) echo '<i class="fa fa-hourglass-start"></i> Pending';
-                                                elseif ($order['status'] == 1) echo '<i class="fa fa-spinner"></i> In Progress';
-                                                else echo '<i class="fa fa-check"></i> Completed';
-                                                ?>
+                                                <i class="fa fa-circle me-1"></i><?= esc(str_replace('_', ' ', $order['order_status'])); ?>
                                             </a>
                                         </td>
                                         <td class="text-center">
@@ -64,7 +65,7 @@
 
                                                 <button class="btn btn-sm btn-dark btn-add-note"
                                                     data-id="<?= $order['order_id']; ?>"
-                                                    data-note="<?= htmlspecialchars($order['comment'] ?? '', ENT_QUOTES); ?>">
+                                                    data-note="<?= htmlspecialchars($order['special_note'] ?? '', ENT_QUOTES); ?>">
                                                     <i class="fa fa-sticky-note"></i>
                                                 </button>
                                             </div>
@@ -177,9 +178,9 @@
                                             <p><strong>Phone:</strong> ${o.phone}</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <p><strong>ID Number:</strong> ${o.id_num}</p>
-                                            <p><strong>Social:</strong> ${o.social}</p>
-                                            <p><strong>Social Number:</strong> ${o.social_num}</p>
+                                            <p><strong>Nationality:</strong> ${o.nationality || 'N/A'}</p>
+                                            <p><strong>Social:</strong> ${o.social || 'N/A'}</p>
+                                            <p><strong>Social Number:</strong> ${o.social_num || 'N/A'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -200,21 +201,12 @@
                                             <p><strong>Last Modified:</strong> ${o.modified_date || '-'}</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <p><strong>Status:</strong> ${
-                                                o.status == 0
-                                                    ? '<span class="badge bg-warning text-dark">Pending</span>'
-                                                    : o.status == 1
-                                                    ? '<span class="badge bg-info text-dark">In Progress</span>'
-                                                    : '<span class="badge bg-success">Completed</span>'
-                                            }</p>
-                                            <p><strong>Amount:</strong> RM${o.amount}</p>
-                                            <p><strong>Payment Method:</strong> ${o.payment_method}</p>
-                                            <p><strong>Upload:</strong> ${
-                                                o.upload
-                                                    ? `<a href="<?= base_url('uploads/'); ?>${o.upload}" target="_blank" class="text-decoration-none text-primary">View File</a>`
-                                                    : 'No file uploaded'
-                                            }</p>
-                                            <p><strong>Modified By:</strong> ${o.modified_by_username || '-'}</p>
+                                            <p><strong>Status:</strong> <span class="badge bg-primary">${o.order_status || 'N/A'}</span></p>
+                                            <p><strong>Amount:</strong> RM${o.total_amount || '0.00'}</p>
+                                            <p><strong>Payment ID:</strong> ${o.payment_id || 'N/A'}</p>
+                                            <p><strong>Dropoff Time:</strong> ${o.dropoff_time || 'N/A'}</p>
+                                            <p><strong>Pickup Time:</strong> ${o.pickup_time || 'N/A'}</p>
+                                            <p><strong>Modified By:</strong> ${o.modified_by_name || 'System'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -233,10 +225,10 @@
                             <!-- Section 4 -->
                             <div class="card border-0 shadow-sm rounded-3">
                                 <div class="card-header bg-light fw-semibold">
-                                    <i class="fa fa- me-2 text-primary"></i>Comment
+                                    <i class="fa fa-comment me-2 text-primary"></i>Special Note
                                 </div>
                                 <div class="card-body">
-                                    <pre class="bg-light p-3 rounded" style="font-size: 0.9rem; white-space: pre-wrap;">${o.comment || '-'}</pre>
+                                    <pre class="bg-light p-3 rounded" style="font-size: 0.9rem; white-space: pre-wrap;">${o.special_note || 'No special notes'}</pre>
                                 </div>
                             </div>
                         </div>

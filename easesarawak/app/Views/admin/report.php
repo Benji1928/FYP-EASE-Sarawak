@@ -36,6 +36,13 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center">
+                <button id="exportCsv" class="btn btn-sm ms-2">
+                    <i class="fa fa-download"></i> Export CSV
+                </button>
+            </div>    
+        </div>
         <!-- <div class="col-md-4">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
@@ -139,6 +146,15 @@
 
     document.getElementById('timeframe').addEventListener('change', function() {
         loadRevenueData(document.getElementById('serviceType').value, this.value);
+    });
+
+    document.getElementById('exportCsv').addEventListener('click', function () {
+        const service = document.getElementById('serviceType').value;
+        const timeframe = document.getElementById('timeframe').value;
+        const url = new URL('<?= base_url('admin/export-revenue'); ?>', window.location.origin);
+        url.searchParams.set('service', service);
+        url.searchParams.set('timeframe', timeframe);
+        window.location.href = url.toString();
     });
 
     // Load default chart
