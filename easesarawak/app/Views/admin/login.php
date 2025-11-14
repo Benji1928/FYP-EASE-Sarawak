@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EASE SARAWAK | Sign In</title>
-    <link rel="icon" type="image/png" href="assets/images/cropped-Ease_PNG_File-09.png">
+    <link rel="icon" type="image/png" href="<?= base_url('assets/images/cropped-Ease_PNG_File-09.png') ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" rel="stylesheet">
 
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background: url('assets/images/ease_login_background_image.png') no-repeat center center;
+            background: url("<?= base_url('assets/images/ease_login_background_image.png') ?>") no-repeat center center;
             background-size: cover;
             min-height: 100vh;
             margin: 0;

@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use App\Models\User_model;
 
 /**
  * Class BaseController
@@ -46,13 +47,27 @@ abstract class BaseController extends Controller
     /**
      * @return void
      */
+    protected $currentUser;
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
+        // Load current user
+        $userId = session()->get('user_id');
+        if ($userId) {
+            $userModel = new User_model();
+            $this->currentUser = $userModel->where([
+                'user_id'    => $userId,
+                'is_deleted' => 0
+            ])->first();
+        }
+    }
 
-        // E.g.: $this->session = service('session');
+    protected function render($view, $data = [])
+    {
+        $data['user'] = $this->currentUser;
+        return view($view, $data);
     }
 }

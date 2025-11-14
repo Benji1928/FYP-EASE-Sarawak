@@ -128,11 +128,11 @@
                                         </a>
                                     </li>
                                     <?php if (session()->get('role') === '1'): ?>
-                                    <li>
-                                        <a href="<?= base_url('/create_user'); ?>">
-                                            <span class="sub-item">Add User</span>
-                                        </a>
-                                    </li>
+                                        <li>
+                                            <a href="<?= base_url('/create_user'); ?>">
+                                                <span class="sub-item">Add User</span>
+                                            </a>
+                                        </li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
@@ -154,27 +154,27 @@
                             </div>
                         </li>
                         <?php if (session()->get('role') === '1'): ?>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#management">
-                                <i class="fas fa-table"></i>
-                                <p>Management</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="management">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="<?= base_url('/'); ?>">
-                                            <span class="sub-item">Content</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="<?= base_url('/'); ?>">
-                                            <span class="sub-item">Promo Code</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#management">
+                                    <i class="fas fa-table"></i>
+                                    <p>Management</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="management">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="<?= base_url('/'); ?>">
+                                                <span class="sub-item">Content</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url('/'); ?>">
+                                                <span class="sub-item">Promo Code</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         <?php endif; ?>
                         <!-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#tables">
@@ -617,7 +617,7 @@
                                     aria-expanded="false">
                                     <div class="avatar-sm">
                                         <img
-                                            src="<?= base_url('assets/images/user.png') ?>"
+                                            src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
@@ -633,7 +633,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="<?= base_url('assets/images/user.png') ?>"
+                                                        src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
@@ -641,14 +641,14 @@
                                                     <h4><?= esc($session->get('username')) ?></h4>
                                                     <p class="text-muted"><?= esc($session->get('email')) ?></p>
                                                     <a
-                                                        href="profile.html"
+                                                        href="<?= base_url('/profile') ?>"
                                                         class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                                 </div>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">My Profile</a>
+                                            <a class="dropdown-item" href="<?= base_url('/profile') ?>">My Profile</a>
                                             <a class="dropdown-item" href="#">Inbox</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Account Setting</a>

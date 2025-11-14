@@ -30,3 +30,8 @@ $routes->get('/admin/getRevenueData', 'Admin::getRevenueData');
 $routes->get('/edit_user/(:num)', 'Admin::edit/$1');
 $routes->post('/update_user/(:num)', 'Admin::update/$1');
 $routes->get('/delete_user/(:num)', 'Admin::delete/$1');
+$routes->get('/profile', 'Profile::profile');
+$routes->get('/edit_profile/(:num)', 'Profile::edit_profile/$1');
+$routes->post('/update_profile/(:num)', 'Profile::update_profile/$1');
+$routes->get('/change_password', 'Profile::change_password_form');
+$routes->post('/change_password', 'Profile::change_password');
