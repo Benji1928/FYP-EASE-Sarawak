@@ -208,7 +208,7 @@ class Admin extends BaseController
         $data = [
             'users' => $users
         ];
-
+        // print_r($users);exit;
         return view('admin/user', $data);
     }
 
@@ -259,5 +259,59 @@ class Admin extends BaseController
         $orderModel->update($orderId, ['comment' => $note]);
 
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    public function edit($user_id)
+    {
+        $userModel = new User_model();
+        $user = $userModel->find($user_id);
+
+        if (!$user) {
+            return redirect()->to(base_url('admin/user'))->with('error', 'User not found.');
+        }
+        return view('admin/edit_user', ['user' => $user]);
+    }
+
+    public function update($user_id)
+    {
+        $userModel = new User_model();
+
+        $data = [
+            'username' => $this->request->getPost('username'),
+            'email'    => $this->request->getPost('email'),
+            'role'     => $this->request->getPost('role'),
+            'modified_date' => date('Y-m-d H:i:s')
+        ];
+
+        // Optional: add validation
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'username' => 'required|min_length[3]',
+            'email'    => 'required|valid_email',
+            'role'     => 'required|in_list[0,1]',
+        ]);
+
+        if (!$validation->run($data)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $userModel->update($user_id, $data);
+        return redirect()->to(base_url('/user'))->with('message', "User $user_id updated successfully.");
+    }
+
+    public function delete($user_id)
+    {
+        $userModel = new User_model();
+
+        $user = $userModel->find($user_id);
+        if (!$user) {
+            return redirect()->to(base_url('admin/user'))->with('error', 'User not found.');
+        }
+
+        // Soft delete: set is_deleted to 1
+        $userModel->update($user_id, ['is_deleted' => 1,
+                                    'modified_date' => date('Y-m-d H:i:s')]);
+
+        return redirect()->to(base_url('/user'))->with('message', "User $user_id deleted successfully.");
     }
 }

@@ -7,10 +7,11 @@
     <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport" />
-    <link rel="icon" type="image/png" href="assets/images/cropped-Ease_PNG_File-09.png">
+    <link rel="icon" type="image/png" href="<?= base_url('assets/images/cropped-Ease_PNG_File-09.png') ?>">
 
     <!-- Fonts and icons -->
-    <script src="assets/js/admin/plugin/webfont/webfont.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="<?= base_url('assets/js/admin/plugin/webfont/webfont.min.js') ?>"></script>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -35,9 +36,9 @@
     </script> -->
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="assets/css/admin/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/plugins.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/kaiadmin.min.css" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/bootstrap.min.css') ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/plugins.min.css') ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/kaiadmin.min.css') ?>" />
     <style>
         #orderModal .card {
             border-radius: 1rem;
@@ -63,7 +64,7 @@
                 <div class="logo-header" data-background-color="white">
                     <a href="<?= base_url('/admin'); ?>" class="logo">
                         <img
-                            src="assets/images/Ease_PNG_File-01-1.png"
+                            src="<?= base_url('assets/images/Ease_PNG_File-01-1.png') ?>"
                             alt="navbar brand"
                             class="navbar-brand"
                             height="65" />
@@ -126,11 +127,13 @@
                                             <span class="sub-item">User Management</span>
                                         </a>
                                     </li>
+                                    <?php if (session()->get('role') === '1'): ?>
                                     <li>
                                         <a href="<?= base_url('/create_user'); ?>">
                                             <span class="sub-item">Add User</span>
                                         </a>
                                     </li>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                         </li>
@@ -150,6 +153,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <?php if (session()->get('role') === '1'): ?>
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#management">
                                 <i class="fas fa-table"></i>
@@ -171,6 +175,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <?php endif; ?>
                         <!-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#tables">
                                 <i class="fas fa-table"></i>
@@ -309,13 +314,13 @@
             <div class="main-header">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
-                    <div class="logo-header" data-background-color="dark">
+                    <div class="logo-header" data-background-color="white">
                         <a href="index.html" class="logo">
                             <img
-                                src="assets/img/kaiadmin/logo_light.svg"
+                                src="<?= base_url('assets/images/Ease_PNG_File-01-1.png') ?>"
                                 alt="navbar brand"
                                 class="navbar-brand"
-                                height="20" />
+                                height="60" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -335,7 +340,7 @@
                 <nav
                     class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
+                        <!-- <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -348,7 +353,7 @@
                                     placeholder="Search ..."
                                     class="form-control" />
                             </div>
-                        </nav>
+                        </nav> -->
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                             <li
@@ -502,7 +507,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/profile2.jpg"
+                                                            src="<?= base_url('assets/img/profile2.jpg') ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -612,7 +617,7 @@
                                     aria-expanded="false">
                                     <div class="avatar-sm">
                                         <img
-                                            src="assets/images/user.png"
+                                            src="<?= base_url('assets/images/user.png') ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
@@ -628,7 +633,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="assets/images/user.png"
+                                                        src="<?= base_url('assets/images/user.png') ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
