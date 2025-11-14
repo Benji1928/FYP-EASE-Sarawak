@@ -27,4 +27,6 @@ $routes->match(['get', 'post'], '/create_user', 'Admin::create_user');
 $routes->get('/order/getDetails/(:num)', 'Admin::getDetails/$1');
 $routes->post('/save_note', 'Admin::save_note');
 $routes->get('/admin/getRevenueData', 'Admin::getRevenueData');
-
+$routes->get('/edit_user/(:num)', 'Admin::edit/$1');
+$routes->post('/update_user/(:num)', 'Admin::update/$1');
+$routes->get('/delete_user/(:num)', 'Admin::delete/$1');
