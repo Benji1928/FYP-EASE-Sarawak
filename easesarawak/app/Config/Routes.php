@@ -25,6 +25,10 @@ $routes->post('/checkPromoCode', 'Home::checkPromoCode');
 $routes->get('/login', 'Login::index');
 $routes->post('/login_submit', 'Login::submit');
 $routes->get('/logout', 'Login::logout');
+$routes->get('forgot_password', 'AuthController::forgotPasswordForm');
+$routes->post('forgot_password', 'AuthController::forgotPassword');
+$routes->get('reset_password/(:any)', 'AuthController::resetPasswordForm/$1');
+$routes->post('reset_password/(:any)', 'AuthController::resetPassword/$1');
 
 // Admin Portal routes
 $routes->get('/admin', 'Admin::index');
@@ -39,3 +43,10 @@ $routes->get('/admin/getRevenueData', 'Admin::getRevenueData');
 $routes->get('/edit_user/(:num)', 'Admin::edit/$1');
 $routes->post('/update_user/(:num)', 'Admin::update/$1');
 $routes->get('/delete_user/(:num)', 'Admin::delete/$1');
+$routes->get('/profile', 'Profile::profile');
+$routes->get('/edit_profile/(:num)', 'Profile::edit_profile/$1');
+$routes->post('/update_profile/(:num)', 'Profile::update_profile/$1');
+$routes->get('/change_password', 'Profile::change_password_form');
+$routes->post('/change_password', 'Profile::change_password');
+
+

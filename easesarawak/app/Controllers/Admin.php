@@ -57,7 +57,7 @@ class Admin extends BaseController
                   'pending_orders' => $pending_orders
                 ];
 
-        return view('admin/dashboard', $data);
+        return $this->render('admin/dashboard', $data);
     }
 
     public function report()
@@ -115,7 +115,7 @@ class Admin extends BaseController
             'hourCounts'   => $hourCounts,
         ];
 
-        return view('admin/report', $data);
+        return $this->render('admin/report', $data);
     }
 
     public function getRevenueData()
@@ -174,7 +174,7 @@ class Admin extends BaseController
         $order_model = new Order_model();
         $orders = $order_model->where('is_deleted', 0)->findAll();
         // print_r($orders);exit;
-        return view('admin/order', ['orders' => $orders]);
+        return $this->render('admin/order', ['orders' => $orders]);
     }
 
     public function change_status($order_id)
@@ -209,7 +209,7 @@ class Admin extends BaseController
             'users' => $users
         ];
         // print_r($users);exit;
-        return view('admin/user', $data);
+        return $this->render('admin/user', $data);
     }
 
     public function create_user()
@@ -229,7 +229,7 @@ class Admin extends BaseController
             return redirect()->to(base_url('/user'))->with('success', 'User created successfully!');
         }
 
-        return view('admin/create_user');
+        return $this->render('admin/create_user');
     }
 
     public function getDetails($order_id)
@@ -269,7 +269,7 @@ class Admin extends BaseController
         if (!$user) {
             return redirect()->to(base_url('admin/user'))->with('error', 'User not found.');
         }
-        return view('admin/edit_user', ['user' => $user]);
+        return $this->render('admin/edit_user', ['user' => $user]);
     }
 
     public function update($user_id)
