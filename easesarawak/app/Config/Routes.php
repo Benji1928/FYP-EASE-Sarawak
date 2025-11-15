@@ -11,6 +11,15 @@ $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/policy', 'Home::policy');
 $routes->get('/terms-and-conditions', 'Home::tnc');
+$routes->get('/booking', 'Home::booking');
+$routes->get('/bookingdetail', 'Home::bookingdetail');
+$routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
+$routes->post('/saveOrder', 'Home::saveOrder');
+$routes->get('/booking-confirmation', 'Home::bookingConfirmation');
+$routes->get('/payment', 'Home::payment');
+$routes->post('card-payment/intent', 'CardPayment::createIntent');
+$routes->post('card-payment/store',  'CardPayment::store');
+$routes->post('/checkPromoCode', 'Home::checkPromoCode');
 
 // Login routes
 $routes->get('/login', 'Login::index');
@@ -40,11 +49,4 @@ $routes->post('/update_profile/(:num)', 'Profile::update_profile/$1');
 $routes->get('/change_password', 'Profile::change_password_form');
 $routes->post('/change_password', 'Profile::change_password');
 
-// app/Config/Routes.php
-$routes->get('test-email', function () {
-    $email = \Config\Services::email();
-    $email->setTo('limziyang2003@gmail.com');
-    $email->setSubject('Test');
-    $email->setMessage('It works!');
-    return $email->send() ? 'Sent!' : $email->printDebugger();
-});
+
