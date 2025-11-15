@@ -1,6 +1,6 @@
 <footer class="footer">
     <div class="footer-logo">
-        <img src="assets/images/Ease_PNG_File-01.png" alt="EASE SARAWAK Logo">
+        <img src="<?= base_url('assets/images/Ease_PNG_File-01.png') ?>" alt="EASE SARAWAK Logo">
     </div>
 
     <hr>
