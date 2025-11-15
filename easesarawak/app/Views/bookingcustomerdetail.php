@@ -270,6 +270,10 @@
         </form>
 
         <div class="action-buttons">
+            <button><a href="payment" class="btn btn-submit">Payment</a></button>
+        </div>
+
+        <div class="action-buttons">
             <a href="bookingdetail" class="btn btn-back">
                 <i class="bi bi-arrow-left"></i> Back
             </a>

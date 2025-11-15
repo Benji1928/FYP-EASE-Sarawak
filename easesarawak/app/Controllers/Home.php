@@ -44,6 +44,8 @@ class Home extends BaseController
         
         return view('booking_confirmation', $data);
     }
+
+    public function payment() { return view('payment'); }
     
     public function saveOrder()
     {

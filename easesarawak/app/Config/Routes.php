@@ -14,3 +14,6 @@ $routes->get('/bookingdetail', 'Home::bookingdetail');
 $routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
 $routes->post('/saveOrder', 'Home::saveOrder');
 $routes->get('/booking-confirmation', 'Home::bookingConfirmation');
+$routes->get('/payment', 'Home::payment');
+$routes->post('card-payment/intent', 'CardPayment::createIntent');
+$routes->post('card-payment/store',  'CardPayment::store');
