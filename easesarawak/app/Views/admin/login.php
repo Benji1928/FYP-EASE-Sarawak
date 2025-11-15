@@ -71,6 +71,9 @@
         </div>
 
         <div class="card-body p-4">
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+            <?php endif; ?>
             <?php if (session()->getFlashdata('error')): ?>
                 <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
             <?php endif; ?>
@@ -88,8 +91,19 @@
                     <label for="floatingPassword">Password</label>
                 </div>
 
-                <button class="btn btn-dark w-100 py-2" type="submit">Login</button>
+                <!-- Remember Me -->
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="remember" value="1" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                        Remember me
+                    </label>
+                </div>
+
+                <button class="btn btn-dark w-100 py-2 mt-2" type="submit">Login</button>
             </form>
+            <p class="text-center" style="margin-top: 15px; color: #000;">
+                <a href="<?= base_url('forgot_password') ?>" class="text-muted">Forgot Password?</a>
+            </p>
         </div>
     </div>
 

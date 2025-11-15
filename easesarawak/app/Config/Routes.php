@@ -16,6 +16,10 @@ $routes->get('/terms-and-conditions', 'Home::tnc');
 $routes->get('/login', 'Login::index');
 $routes->post('/login_submit', 'Login::submit');
 $routes->get('/logout', 'Login::logout');
+$routes->get('forgot_password', 'AuthController::forgotPasswordForm');
+$routes->post('forgot_password', 'AuthController::forgotPassword');
+$routes->get('reset_password/(:any)', 'AuthController::resetPasswordForm/$1');
+$routes->post('reset_password/(:any)', 'AuthController::resetPassword/$1');
 
 // Admin Portal routes
 $routes->get('/admin', 'Admin::index');
@@ -35,3 +39,12 @@ $routes->get('/edit_profile/(:num)', 'Profile::edit_profile/$1');
 $routes->post('/update_profile/(:num)', 'Profile::update_profile/$1');
 $routes->get('/change_password', 'Profile::change_password_form');
 $routes->post('/change_password', 'Profile::change_password');
+
+// app/Config/Routes.php
+$routes->get('test-email', function () {
+    $email = \Config\Services::email();
+    $email->setTo('limziyang2003@gmail.com');
+    $email->setSubject('Test');
+    $email->setMessage('It works!');
+    return $email->send() ? 'Sent!' : $email->printDebugger();
+});

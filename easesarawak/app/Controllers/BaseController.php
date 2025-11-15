@@ -63,6 +63,24 @@ abstract class BaseController extends Controller
                 'is_deleted' => 0
             ])->first();
         }
+
+        // Remember Me functionality
+        if (session()->get('access') !== 1) {
+            $token = cookie('remember_me');
+            if ($token) {
+                $userModel = new User_model();
+                $user = $userModel->where('remember_token', $token)->first();
+                if ($user) {
+                    session()->set([
+                        'user_id' => $user['user_id'],
+                        'username'=> $user['username'],
+                        'email'   => $user['email'],
+                        'access'  => 1,
+                        'role'    => $user['role']
+                    ]);
+                }
+            }
+        }
     }
 
     protected function render($view, $data = [])
