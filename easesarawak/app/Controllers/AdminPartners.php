@@ -20,7 +20,7 @@ class AdminPartners extends BaseAdminController
             'pager' => $this->partnerModel->pager,
         ];
 
-        return view('admin/partners/index', $data);
+        return view('admin/management/partners', $data);
     }
 
     // Create partner form
@@ -71,7 +71,12 @@ class AdminPartners extends BaseAdminController
     // Edit partner form
     public function edit($id)
     {
-        $partner = $this->partnerModel->find($id);
+        // Use query builder to get array directly
+        $db = \Config\Database::connect();
+        $partner = $db->table('Partners')
+            ->where('partner_id', $id)
+            ->get()
+            ->getRowArray();
 
         if (!$partner) {
             return $this->errorMessage('Partner not found', 'admin/partners');
@@ -97,7 +102,19 @@ class AdminPartners extends BaseAdminController
         ]);
 
         if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+            // Get partner data for the view when validation fails
+            $db = \Config\Database::connect();
+            $partner = $db->table('Partners')
+                ->where('partner_id', $id)
+                ->get()
+                ->getRowArray();
+            
+            $data = [
+                'title' => 'Edit Partner',
+                'partner' => $partner,
+            ];
+            
+            return view('admin/partners/edit', $data)->with('errors', $validation->getErrors());
         }
 
         $data = [

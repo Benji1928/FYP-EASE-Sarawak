@@ -16,20 +16,35 @@ class AdminOrders extends BaseAdminController
     {
         $db = \Config\Database::connect();
 
-        $orders = $db->table('Orders o')
-            ->select('o.*, u.first_name, u.last_name, u.email, p.name as partner_name')
+        // Get total count for pagination
+        $builder = $db->table('Orders o')
             ->join('Users u', 'u.user_id = o.user_id')
-            ->join('Partners p', 'p.partner_id = o.partner_id', 'left')
+            ->join('Partners p', 'p.partner_id = o.partner_id', 'left');
+
+        $total = $builder->countAllResults(false); // false keeps the builder state
+
+        // Get paginated results
+        $perPage = 20;
+        $page = $this->request->getVar('page') ?? 1;
+
+        $orders = $builder
+            ->select('o.*, u.first_name, u.last_name, u.email, p.partner_name as partner_name')
             ->orderBy('o.created_date', 'DESC')
-            ->paginate(20);
+            ->limit($perPage, ($page - 1) * $perPage)
+            ->get()
+            ->getResultArray();
+
+        // Create pager
+        $pager = \Config\Services::pager();
+        $pager->store('default', $page, $perPage, $total);
 
         $data = [
             'title' => 'Manage Orders',
             'orders' => $orders,
-            'pager' => $db->table('Orders')->pager,
+            'pager' => $pager,
         ];
 
-        return view('admin/orders/index', $data);
+        return view('admin/orders/order', $data);
     }
 
     // View order details
@@ -38,14 +53,16 @@ class AdminOrders extends BaseAdminController
         $db = \Config\Database::connect();
 
         $order = $db->table('Orders o')
-            ->select('o.*, u.*, p.name as partner_name,
-                      pl.name as pickup_location, dl.name as dropoff_location,
-                      pm.amount as payment_amount, pm.status as payment_status, pm.method as payment_method')
+            ->select('o.*, u.*, p.partner_name,
+                      pl.location_name as pickup_location, dl.location_name as dropoff_location,
+                      pm.amount as payment_amount, pm.status as payment_status, pm.method as payment_method,
+                      a.staff_name as modified_by_name')
             ->join('Users u', 'u.user_id = o.user_id')
             ->join('Partners p', 'p.partner_id = o.partner_id', 'left')
             ->join('Locations pl', 'pl.location_id = o.pickup_location_id', 'left')
             ->join('Locations dl', 'dl.location_id = o.dropoff_location_id')
             ->join('Payments pm', 'pm.payment_id = o.payment_id', 'left')
+            ->join('Admins a', 'a.staff_id = o.modified_by', 'left')
             ->where('o.order_id', $id)
             ->get()
             ->getRow();
@@ -62,16 +79,15 @@ class AdminOrders extends BaseAdminController
 
         // Get delivery info
         $delivery = $db->table('Delivery d')
-            ->select('d.*, a.staff_name as driver_name, v.license_plate')
+            ->select('d.*, a.staff_name as driver_name')
             ->join('Admins a', 'a.staff_id = d.driver_id', 'left')
-            ->join('Vehicles v', 'v.vehicle_id = d.vehicle_id', 'left')
             ->where('d.order_id', $id)
             ->get()
             ->getRow();
 
         // Get storage tracking
         $storageTracking = $db->table('Storage_Tracking st')
-            ->select('st.*, l.name as location_name')
+            ->select('st.*, l.location_name')
             ->join('Locations l', 'l.location_id = st.location_id', 'left')
             ->where('st.order_id', $id)
             ->get()
@@ -96,7 +112,10 @@ class AdminOrders extends BaseAdminController
         $validStatuses = ['Pending', 'Confirmed', 'In_Storage', 'Out-for-Delivery', 'Completed', 'Cancelled'];
 
         if (!in_array($newStatus, $validStatuses)) {
-            return $this->errorMessage('Invalid status', 'admin/orders/view/' . $id);
+            if ($this->request->isAJAX()) {
+                return $this->jsonResponse(['success' => false, 'message' => 'Invalid status'], 400);
+            }
+            return $this->errorMessage('Invalid status', 'admin/orders');
         }
 
         $data = ['order_status' => $newStatus];
@@ -108,9 +127,15 @@ class AdminOrders extends BaseAdminController
         }
 
         if ($this->orderModel->update($id, $data)) {
-            return $this->successMessage('Order status updated successfully', 'admin/orders/view/' . $id);
+            if ($this->request->isAJAX()) {
+                return $this->jsonResponse(['success' => true, 'message' => 'Order status updated successfully']);
+            }
+            return $this->successMessage('Order status updated successfully', 'admin/orders');
         }
 
-        return $this->errorMessage('Failed to update order status', 'admin/orders/view/' . $id);
+        if ($this->request->isAJAX()) {
+            return $this->jsonResponse(['success' => false, 'message' => 'Failed to update order status'], 500);
+        }
+        return $this->errorMessage('Failed to update order status', 'admin/orders');
     }
 }

@@ -19,14 +19,14 @@ class AdminPromo extends BaseAdminController
             'promos' => $this->promoModel->findAll(),
         ];
 
-        return view('admin/promo/index', $data);
+        return view('admin/management/promo', $data);
     }
 
     // Create promo form
     public function create()
     {
         $data = ['title' => 'Create Promo Code'];
-        return view('admin/promo/create', $data);
+        return view('admin/management/promo/create', $data);
     }
 
     // Store new promo

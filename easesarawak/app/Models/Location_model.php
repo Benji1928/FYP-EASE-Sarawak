@@ -7,10 +7,9 @@ class Location_model extends Model
     protected $table = 'Locations';
     protected $primaryKey = 'location_id';
     protected $allowedFields = [
-        'name', 'category', 'address', 'total_capacity',
+        'location_name', 'category', 'address', 'total_capacity',
         'current_occupancy', 'is_active'
     ];
-    protected $useTimestamps = true;
+    protected $useTimestamps = false; // No updated_date column in database, only created_date
     protected $createdField = 'created_date';
 }
-?>s

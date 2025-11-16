@@ -14,12 +14,25 @@ class AdminLocations extends BaseAdminController
     // List all locations
     public function index()
     {
+        // Use query builder to get arrays and map location_name to name
+        $db = \Config\Database::connect();
+        $locations = $db->table('Locations')
+            ->get()
+            ->getResultArray();
+        
+        // Map location_name to name for views
+        foreach ($locations as &$location) {
+            if (isset($location['location_name'])) {
+                $location['name'] = $location['location_name'];
+            }
+        }
+        
         $data = [
             'title' => 'Manage Locations',
-            'locations' => $this->locationModel->findAll(),
+            'locations' => $locations,
         ];
 
-        return view('admin/locations/index', $data);
+        return view('admin/management/locations', $data);
     }
 
     // Create location form
@@ -45,7 +58,7 @@ class AdminLocations extends BaseAdminController
         }
 
         $data = [
-            'name' => $this->request->getPost('name'),
+            'location_name' => $this->request->getPost('name'),
             'category' => $this->request->getPost('category'),
             'address' => $this->request->getPost('address'),
             'total_capacity' => $this->request->getPost('total_capacity'),
@@ -62,10 +75,20 @@ class AdminLocations extends BaseAdminController
     // Edit location form
     public function edit($id)
     {
-        $location = $this->locationModel->find($id);
+        // Use query builder to get array directly
+        $db = \Config\Database::connect();
+        $location = $db->table('Locations')
+            ->where('location_id', $id)
+            ->get()
+            ->getRowArray();
 
         if (!$location) {
             return $this->errorMessage('Location not found', 'admin/locations');
+        }
+
+        // Map location_name to name for views
+        if (isset($location['location_name'])) {
+            $location['name'] = $location['location_name'];
         }
 
         $data = [
@@ -88,11 +111,28 @@ class AdminLocations extends BaseAdminController
         ]);
 
         if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+            // Get location data for the view when validation fails
+            $db = \Config\Database::connect();
+            $location = $db->table('Locations')
+                ->where('location_id', $id)
+                ->get()
+                ->getRowArray();
+            
+            // Map location_name to name for views
+            if (isset($location['location_name'])) {
+                $location['name'] = $location['location_name'];
+            }
+            
+            $data = [
+                'title' => 'Edit Location',
+                'location' => $location,
+            ];
+            
+            return view('admin/locations/edit', $data)->with('errors', $validation->getErrors());
         }
 
         $data = [
-            'name' => $this->request->getPost('name'),
+            'location_name' => $this->request->getPost('name'),
             'category' => $this->request->getPost('category'),
             'address' => $this->request->getPost('address'),
             'total_capacity' => $this->request->getPost('total_capacity'),
@@ -123,13 +163,21 @@ class AdminLocations extends BaseAdminController
     // View location storage status
     public function storage($id)
     {
-        $location = $this->locationModel->find($id);
+        // Use query builder to get array directly
+        $db = \Config\Database::connect();
+        $location = $db->table('Locations')
+            ->where('location_id', $id)
+            ->get()
+            ->getRowArray();
 
         if (!$location) {
             return $this->errorMessage('Location not found', 'admin/locations');
         }
 
-        $db = \Config\Database::connect();
+        // Map location_name to name for views
+        if (isset($location['location_name'])) {
+            $location['name'] = $location['location_name'];
+        }
 
         // Get current storage items at this location
         $storageItems = $db->table('Storage_Tracking st')

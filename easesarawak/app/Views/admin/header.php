@@ -7,10 +7,10 @@
     <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport" />
-    <link rel="icon" type="image/png" href="assets/images/cropped-Ease_PNG_File-09.png">
+    <link rel="icon" type="image/png" href="<?= base_url('assets/images/cropped-Ease_PNG_File-09.png'); ?>">
 
     <!-- Fonts and icons -->
-    <script src="assets/js/admin/plugin/webfont/webfont.min.js"></script>
+    <script src="<?= base_url('assets/js/admin/plugin/webfont/webfont.min.js'); ?>"></script>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -26,7 +26,7 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["assets/css/admin/fonts.min.css"],
+                urls: ["<?= base_url('assets/css/admin/fonts.min.css'); ?>"],
             },
             active: function() {
                 sessionStorage.fonts = true;
@@ -35,9 +35,9 @@
     </script> -->
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="assets/css/admin/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/plugins.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/kaiadmin.min.css" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/bootstrap.min.css'); ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/plugins.min.css'); ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/kaiadmin.min.css'); ?>" />
     <style>
         #orderModal .card {
             border-radius: 1rem;
@@ -63,7 +63,7 @@
                 <div class="logo-header" data-background-color="white">
                     <a href="<?= base_url('/admin'); ?>" class="logo">
                         <img
-                            src="assets/images/Ease_PNG_File-01-1.png"
+                            src="<?= base_url('assets/images/Ease_PNG_File-01-1.png'); ?>"
                             alt="navbar brand"
                             class="navbar-brand"
                             height="65" />
@@ -95,7 +95,7 @@
                             <span class="sidebar-mini-icon">
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
-                            <h4 class="text-section">Tabs</h4>
+                            <h4 class="text-section">Management</h4>
                         </li>
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#base">
@@ -106,8 +106,13 @@
                             <div class="collapse" id="base">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('/order'); ?>">
-                                            <span class="sub-item">Order Management</span>
+                                        <a href="<?= base_url('admin/orders'); ?>">
+                                            <span class="sub-item">All Orders</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/dashboard/orders'); ?>">
+                                            <span class="sub-item">Orders Dashboard</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -122,13 +127,13 @@
                             <div class="collapse" id="sidebarLayouts">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('/user'); ?>">
-                                            <span class="sub-item">User Management</span>
+                                        <a href="<?= base_url('admin/users'); ?>">
+                                            <span class="sub-item">Customers</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('/create_user'); ?>">
-                                            <span class="sub-item">Add User</span>
+                                        <a href="<?= base_url('admin/staff'); ?>">
+                                            <span class="sub-item">Staff</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -136,15 +141,30 @@
                         </li>
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#forms">
-                                <i class="fas fa-pen-square"></i>
-                                <p>Reports</p>
+                                <i class="fas fa-chart-bar"></i>
+                                <p>Analytics</p>
                                 <span class="caret"></span>
                             </a>
                             <div class="collapse" id="forms">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('/report'); ?>">
-                                            <span class="sub-item">Report</span>
+                                        <a href="<?= base_url('admin/analytics'); ?>">
+                                            <span class="sub-item">Revenue Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/dashboard/operations'); ?>">
+                                            <span class="sub-item">Operations Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/analytics/customers'); ?>">
+                                            <span class="sub-item">Customer Analytics</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/analytics/revenue'); ?>">
+                                            <span class="sub-item">Revenue Analytics</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -159,146 +179,23 @@
                             <div class="collapse" id="management">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('/'); ?>">
-                                            <span class="sub-item">Content</span>
+                                        <a href="<?= base_url('admin/partners'); ?>">
+                                            <span class="sub-item">Partners</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('/'); ?>">
-                                            <span class="sub-item">Promo Code</span>
+                                        <a href="<?= base_url('admin/locations'); ?>">
+                                            <span class="sub-item">Locations</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/promo'); ?>">
+                                            <span class="sub-item">Promo Codes</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#tables">
-                                <i class="fas fa-table"></i>
-                                <p>History</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="tables">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="tables/tables.html">
-                                            <span class="sub-item">Basic Table</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="tables/datatables.html">
-                                            <span class="sub-item">Datatables</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> -->
-                        <!-- <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#maps">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p>Maps</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="maps">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="maps/googlemaps.html">
-                                            <span class="sub-item">Google Maps</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="maps/jsvectormap.html">
-                                            <span class="sub-item">Jsvectormap</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#charts">
-                                <i class="far fa-chart-bar"></i>
-                                <p>Charts</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="charts">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="charts/charts.html">
-                                            <span class="sub-item">Chart Js</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="charts/sparkline.html">
-                                            <span class="sub-item">Sparkline</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="widgets.html">
-                                <i class="fas fa-desktop"></i>
-                                <p>Widgets</p>
-                                <span class="badge badge-success">4</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../../documentation/index.html">
-                                <i class="fas fa-file"></i>
-                                <p>Documentation</p>
-                                <span class="badge badge-secondary">1</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#submenu">
-                                <i class="fas fa-bars"></i>
-                                <p>Menu Levels</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="submenu">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a data-bs-toggle="collapse" href="#subnav1">
-                                            <span class="sub-item">Level 1</span>
-                                            <span class="caret"></span>
-                                        </a>
-                                        <div class="collapse" id="subnav1">
-                                            <ul class="nav nav-collapse subnav">
-                                                <li>
-                                                    <a href="#">
-                                                        <span class="sub-item">Level 2</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">
-                                                        <span class="sub-item">Level 2</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a data-bs-toggle="collapse" href="#subnav2">
-                                            <span class="sub-item">Level 1</span>
-                                            <span class="caret"></span>
-                                        </a>
-                                        <div class="collapse" id="subnav2">
-                                            <ul class="nav nav-collapse subnav">
-                                                <li>
-                                                    <a href="#">
-                                                        <span class="sub-item">Level 2</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="sub-item">Level 1</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -310,9 +207,9 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="index.html" class="logo">
+                        <a href="<?= base_url('/admin'); ?>" class="logo">
                             <img
-                                src="assets/img/kaiadmin/logo_light.svg"
+                                src="<?= base_url('assets/images/Ease_PNG_File-01-1.png'); ?>"
                                 alt="navbar brand"
                                 class="navbar-brand"
                                 height="20" />
@@ -400,7 +297,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/jm_denis.jpg"
+                                                            src="<?= base_url('assets/images/user.png'); ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -412,7 +309,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/chadengle.jpg"
+                                                            src="<?= base_url('assets/images/user.png'); ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -424,7 +321,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/mlane.jpg"
+                                                            src="<?= base_url('assets/images/user.png'); ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -438,7 +335,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/talha.jpg"
+                                                            src="<?= base_url('assets/images/user.png'); ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -502,7 +399,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/profile2.jpg"
+                                                            src="<?= base_url('assets/images/user.png'); ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -612,7 +509,7 @@
                                     aria-expanded="false">
                                     <div class="avatar-sm">
                                         <img
-                                            src="assets/images/user.png"
+                                            src="<?= base_url('assets/images/user.png'); ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
@@ -628,7 +525,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="assets/images/user.png"
+                                                        src="<?= base_url('assets/images/user.png'); ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>

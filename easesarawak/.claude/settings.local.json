@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php spark:*)"
+      "Bash(php spark:*)",
+      "Bash(php -r:*)",
+      "Bash(php -l:*)",
+      "Bash(for file in Admin.php AdminLocations.php AdminPartners.php AdminPromo.php AdminAnalytics.php)",
+      "Bash(do sed -i 's/namespace App\\\\Controllers;/namespace App\\\\Controllers\\\\AdminControllers;/' \"$file\")",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\Order_model;
 use App\Models\User_model;
+use App\Services\AdminDashboardService;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -11,6 +13,20 @@ use Psr\Log\LoggerInterface;
 class Admin extends BaseController
 {
     public $data = [];
+    /**
+     * @var AdminDashboardService|null
+     */
+    protected $dashboardService;
+
+    protected function dashboardService(): AdminDashboardService
+    {
+        if ($this->dashboardService === null) {
+            $this->dashboardService = new AdminDashboardService();
+        }
+
+        return $this->dashboardService;
+    }
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Do Not Edit This Line
@@ -51,12 +67,23 @@ class Admin extends BaseController
             ->get()
             ->getResultArray();
 
-        $data = [ 'order_count'    => $order,
-                  'user_count'     => $user,
-                  'sales'          => $sales,
-                  'orders'         => $totalOrders,
-                  'pending_orders' => $pending_orders
-                ];
+        $dashboardService = $this->dashboardService();
+
+        $data = [
+            'order_count' => $order,
+            'user_count' => $user,
+            'sales' => $sales,
+            'orders' => $totalOrders,
+            'pending_orders' => $pending_orders,
+            'stats' => $dashboardService->getDashboardStats(),
+            'recent_orders' => $dashboardService->getRecentOrders(),
+            'revenue_chart' => $dashboardService->getRevenueChartData(),
+            'top_customers' => $dashboardService->getTopCustomers(),
+            'recent_incidents' => $dashboardService->getRecentIncidents(),
+            'staff_performance' => $dashboardService->getStaffPerformance(),
+            'booking_channels' => $dashboardService->getBookingChannelStats(),
+            'customer_types' => $dashboardService->getCustomerTypeStats(),
+        ];
 
         return view('admin/dashboard', $data);
     }
@@ -216,7 +243,7 @@ class Admin extends BaseController
             'users' => $users
         ];
 
-        return view('admin/user', $data);
+        return view('admin/users/staff', $data);
     }
 
     public function create_user()
@@ -233,10 +260,10 @@ class Admin extends BaseController
             ];
 
             $userModel->insert($data);
-            return redirect()->to(base_url('/user'))->with('success', 'User created successfully!');
+            return redirect()->to(base_url('admin/staff'))->with('success', 'Staff created successfully!');
         }
 
-        return view('admin/create_user');
+        return view('admin/users/create_user');
     }
 
     public function getDetails($order_id)
@@ -269,7 +296,7 @@ class Admin extends BaseController
     }
 
     public function exportRevenue()
-{
+    {
     $service   = $this->request->getGet('service') ?? 'all';
     $timeframe = $this->request->getGet('timeframe') ?? 'month';
 
@@ -323,5 +350,41 @@ class Admin extends BaseController
         ->setHeader('Content-Type', 'text/csv')
         ->setHeader('Content-Disposition', 'attachment; filename="revenue_' . date('Ymd_His') . '.csv"')
         ->setBody($csv);
-}
+    }
+
+    public function locations()
+    {
+        $db = \Config\Database::connect();
+
+        // Fetch all locations with their details
+        $locations = $db->table('Locations')
+            ->select('location_id, name as location_name, category, address, city, state, total_capacity, current_occupancy')
+            ->orderBy('location_id', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $data = [
+            'locations' => $locations
+        ];
+
+        return view('admin/locations/index', $data);
+    }
+
+    public function partners()
+    {
+        $db = \Config\Database::connect();
+
+        // Fetch all partners with their details
+        $partners = $db->table('Partners')
+            ->select('partner_id, name as partner_name, type, contact_person, contact_email, contact_phone, commission_rate, is_active, created_date')
+            ->orderBy('partner_id', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $data = [
+            'partners' => $partners
+        ];
+
+        return view('admin/partners/index', $data);
+    }
 }

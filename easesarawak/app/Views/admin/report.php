@@ -1,20 +1,28 @@
+<!-- Old Report Page -->
 <?= $this->include('admin/header'); ?>
 
-<div class="container-fluid mt-4">
-    <div class="page-header">
-        <h3 class="fw-bold mb-3">Analytics & Reports</h3>
-        <ul class="breadcrumbs mb-3">
-            <li class="nav-home">
-                <a href="<?= base_url('/admin/dashboard'); ?>">
-                    <i class="fa fa-home"></i>
-                </a>
-            </li>
-            <li class="separator">
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li class="nav-item">Reports</li>
-        </ul>
-    </div>
+<div class="container">
+    <div class="page-inner">
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Analytics & Reports</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="<?= base_url('admin'); ?>">
+                        <i class="fa fa-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('admin/analytics'); ?>">Analytics</a>
+                </li>
+                <li class="separator">
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="nav-item">Reports</li>
+            </ul>
+        </div>
 
     <!-- Overview Cards -->
     <div class="row">
@@ -94,6 +102,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

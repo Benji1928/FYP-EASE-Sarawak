@@ -16,7 +16,7 @@ class create_locations extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'name' => [
+            'location_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],

@@ -16,7 +16,7 @@ class create_partners extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'name' => [
+            'partner_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],

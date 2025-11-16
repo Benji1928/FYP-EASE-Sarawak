@@ -20,7 +20,7 @@ class AdminUsers extends BaseAdminController
             'pager' => $this->userModel->pager,
         ];
 
-        return view('admin/users/index', $data);
+        return view('admin/users/users', $data);
     }
 
     // View user details

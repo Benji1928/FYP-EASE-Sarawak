@@ -20,11 +20,14 @@ class BaseAdminController extends Controller
 
         $this->session = \Config\Services::session();
 
-        // Check if user is logged in as admin
-        if (!$this->session->get('isAdminLoggedIn')) {
-            // Redirect to admin login if not authenticated
-            if (!($request instanceof CLIRequest) && !str_contains($request->getUri()->getPath(), 'admin/login')) {
-                header('Location: ' . base_url('admin/login'));
+        // Check if user is logged in as admin (using same auth as Admin controller)
+        $access = $this->session->get('access');
+        $role = $this->session->get('role');
+
+        if (empty($access) || ($role !== '1' && $role !== '0')) {
+            // Redirect to login if not authenticated
+            if (!($request instanceof CLIRequest)) {
+                header('Location: ' . base_url('login'));
                 exit();
             }
         }
