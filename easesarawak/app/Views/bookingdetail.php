@@ -49,6 +49,11 @@
             margin-bottom: 2rem;
             margin-top: 2rem;
             grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 2rem;
         }
 
         .booking-detail-header h1 {
@@ -437,8 +442,22 @@
     
     <main class="booking-detail-container">
         <div class="booking-detail-header">
-            <h1>Booking Details</h1>
-            <p>Please review your booking information</p>
+            <!-- Left Content -->
+            <div class="left-content">      
+                <div class="booking-tagline">
+                    <h1>TRAVEL SMART WITH EASE</h1>
+                    <p>Whether you need secure storage or prompt delivery, we provide reliable and convenient solutions to ensure your journey is as smooth as possible.</p>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="right-content">
+                <img src="<?= base_url('assets/images/bookingpage.png') ?>" alt="Booking Service" class="booking-image">
+            </div>
+            <div class="bottom-content">
+                <h1>Booking Details</h1>
+                <p>Please review your booking information</p>
+            </div>
         </div>
 
         <div class="left-column">

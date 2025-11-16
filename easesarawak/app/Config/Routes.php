@@ -7,11 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // Intro-Landing Page routes
-$routes->get('/', 'Home::index');
+//$routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/policy', 'Home::policy');
 $routes->get('/terms-and-conditions', 'Home::tnc');
-$routes->get('/booking', 'Home::booking');
+//$routes->get('/booking', 'Home::booking');
 $routes->get('/bookingdetail', 'Home::bookingdetail');
 $routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
 $routes->post('/saveOrder', 'Home::saveOrder');
@@ -39,3 +39,10 @@ $routes->post('/admin/promo_code/store', 'PromoCodeController::store');
 $routes->get('/admin/promo_code/edit/(:num)', 'PromoCodeController::edit/$1');
 $routes->post('/admin/promo_code/update/(:num)', 'PromoCodeController::update/$1');
 $routes->get('/admin/promo_code/delete/(:num)', 'PromoCodeController::delete/$1');
+$routes->get('/admin/content_management', 'ContentManagementController::index');
+$routes->post('/admin/content_management/store', 'ContentManagementController::store');
+$routes->post('/admin/content_management/set_active/(:num)', 'ContentManagementController::set_active/$1');
+$routes->get('/booking', 'ContentManagementController::booking');
+$routes->get('/', 'ContentManagementController::main');
+$routes->post('/admin/content_management/delete/(:num)', 'ContentManagementController::delete/$1');
+$routes->post('/admin/content_management/set_inactive/(:num)', 'ContentManagementController::set_inactive/$1');

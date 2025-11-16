@@ -162,7 +162,7 @@
                             <div class="collapse" id="management">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('/'); ?>">
+                                        <a href="<?= base_url('/admin/content_management'); ?>">
                                             <span class="sub-item">Content</span>
                                         </a>
                                     </li>

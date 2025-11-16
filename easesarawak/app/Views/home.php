@@ -11,6 +11,17 @@
     <link rel="stylesheet" href="assets/css/navbar_style.css">
 
     <style>
+
+        .custom-content-block {
+            color: #000000ff;
+            text-shadow: 0 2px 8px rgba(255, 247, 0, 0.25)
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            padding: 2rem;
+            background-size: cover;
+            background-position: center;
+        }
+
         @font-face {
             font-family: 'BebasKai';
             src: url('assets/BebasKai.ttf') format('truetype');
@@ -35,6 +46,7 @@
         body {
             font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
             line-height: 1.6;
+            padding-top: 160px; /* Adjust this value to match your navbar height */
         }
 
         /* Hero section */
@@ -736,6 +748,10 @@
         @media (max-width: 768px) {
             .navbar {
                 flex-wrap: wrap;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 1000;
             }
 
             .navbar .menu {
@@ -778,11 +794,37 @@
                 flex-direction: column;
             }
         }
+
+        @media (max-width: 700px) {
+            .custom-content-block {
+                flex-direction: column !important;
+                text-align: center;
+            }
+            .custom-content-block img {
+                border-radius: 12px 12px 0 0 !important;
+                width: 100% !important;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 
 <body>
     <?= $this->include('navbar/navbar') ?>
+
+    <?php if (!empty($mainContent)): ?>
+        <div class="custom-content-block" style="margin-top:0px; margin-bottom:2rem; border-radius:12px; overflow:hidden; display:flex; align-items:center; background:#fff;">
+            <?php if (!empty($mainContent['image'])): ?>
+                <img src="<?= base_url('uploads/'.$mainContent['image']) ?>" alt="" style="width:400px; height:auto; display:block; flex-shrink:0; border-radius:12px 0 0 12px;">
+            <?php endif; ?>
+            <div style="padding:1.5rem; flex:1;">
+                <h2><?= esc($mainContent['title']) ?></h2>
+                <div><?= $mainContent['content'] ?></div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <!-- Hero -->
     <section class="hero">
         <div class="hero-overlay"></div>

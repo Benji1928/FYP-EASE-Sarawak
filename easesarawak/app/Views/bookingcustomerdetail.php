@@ -41,9 +41,13 @@
         }
 
         .customer-detail-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
             text-align: center;
             margin-bottom: 2rem;
-            margin-top: 2rem;
+            margin-top: 5rem;
         }
 
         .customer-detail-header h1 {
@@ -210,8 +214,22 @@
     
     <main class="customer-detail-container">
         <div class="customer-detail-header">
-            <h1>Customer Details</h1>
-            <p>Please provide your contact information</p>
+            <!-- Left Content -->
+            <div class="left-content">      
+                <div class="booking-tagline">
+                    <h1>TRAVEL SMART WITH EASE</h1>
+                    <p>Whether you need secure storage or prompt delivery, we provide reliable and convenient solutions to ensure your journey is as smooth as possible.</p>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="right-content">
+                <img src="<?= base_url('assets/images/bookingpage.png') ?>" alt="Booking Service" class="booking-image">
+            </div>
+            <div class="bottom-content">
+                <h1>Customer Details</h1>
+                <p>Please provide your contact information</p>
+            </div>
         </div>
 
         <form id="customerForm">

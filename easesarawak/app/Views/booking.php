@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
+
+        .custom-content-block {
+            color: #e60000ff;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            padding: 0;
+            min-height: 0;
+            height: auto;
+        }
+
         .navbar-nav,
         .navbar .btn {
             margin-right: 60px !important;
@@ -176,8 +187,9 @@
         .form-columns {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-bottom: 3rem;
+            column-gap: 3.5rem;
+            row-gap: 0.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-column {
@@ -188,6 +200,13 @@
 
         .form-group {
             margin-bottom: 0;
+        }
+
+        .form-columns > .form-group:nth-child(3),
+        .form-columns > .form-group:nth-child(4) {
+            border-top: 1px solid #e6e6e6;
+            padding-top: 1rem;
+            margin-top: 1rem;
         }
 
         .form-group label {
@@ -217,6 +236,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+            align-items: center;
+            min-height: 44px;
         }
 
         .datetime-group {
@@ -268,10 +289,13 @@
 
         /* Continue button */
         .continue-section {
-            text-align: center;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.5rem;
             margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 1px solid #eee; 
+            border-top: 1px solid #eee;
         }
 
         .continue-btn {
@@ -291,8 +315,8 @@
         }
 
         .service-description-section {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid #eee;
         }
 
@@ -529,12 +553,37 @@
                 font-size: 0.9rem;
             }
         }
+
+        @media (max-width: 700px) {
+            .custom-content-block {
+                flex-direction: column !important;
+                text-align: center;
+            }
+            .custom-content-block img {
+                border-radius: 12px 12px 0 0 !important;
+                width: 100% !important;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 <body>
     <?= $this->include('navbar/navbar') ?>
-    
     <main class="booking-container">
+
+        <?php if (!empty($bookingContent)): ?>
+            <div class="custom-content-block" style="margin-top:80px; margin-bottom:2rem; border-radius:12px; overflow:hidden; display:flex; align-items:center; background:#fff;">
+                <?php if (!empty($bookingContent['image'])): ?>
+                    <img src="<?= base_url('uploads/'.$bookingContent['image']) ?>" alt="" style="width:400px; height:auto; display:block; flex-shrink:0; border-radius:12px 0 0 12px;">
+                <?php endif; ?>
+                <div style="padding:1.5rem; flex:1;">
+                    <h2><?= esc($bookingContent['title']) ?></h2>
+                    <div><?= $bookingContent['content'] ?></div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <!-- Header Section -->
         <div class="header-section">
             <!-- Left Content -->
@@ -573,78 +622,69 @@
                     </div>
                 </div>
                 <div class="form-columns">
-                    <!-- Left Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="origin">Where is your origin? <i class="bi bi-info-circle"></i></label>
-                            <div class="dropdown-group">
-                                <select id="origin-category" name="origin_category" onchange="updateOriginSpecific()">
-                                    <option value="">Choose Category</option>
-                                    <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
-                                    <option value="hotel">Hotel</option>
-                                    <option value="shopping-mall">Shopping Mall</option>
-                                    <option value="airport">Airport</option>
-                                    <option value="other">Other Location</option>
-                                </select>
-                                <select id="origin-specific" name="origin_specific" disabled>
-                                    <option value="">Select category first</option>
-                                </select>
-                            </div>
-                            <div id="origin-address" class="address-input hidden">
-                                <input type="text" id="origin-address-text" name="origin_address" placeholder="Please enter your specific address">
-                            </div>
+                    <!-- Top row: Origin | Destination -->
+                    <div class="form-group">
+                        <label for="origin">Where is your origin? <i class="bi bi-info-circle"></i></label>
+                        <div class="dropdown-group">
+                            <select id="origin-category" name="origin_category" onchange="updateOriginSpecific()">
+                                <option value="">Choose Category</option>
+                                <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="shopping-mall">Shopping Mall</option>
+                                <option value="airport">Airport</option>
+                                <option value="other">Other Location</option>
+                            </select>
+                            <select id="origin-specific" name="origin_specific" disabled>
+                                <option value="">Select category first</option>
+                            </select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
-                            <div class="datetime-group">
-                                <input type="date" id="dropoff-date" name="dropoff_date" value="2025-10-04">
-                                <input type="time" id="dropoff-time" name="dropoff_time" value="14:00">
-                            </div>
-                            <div id="dropoff-time-warning" class="time-warning">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                            </div>
+                        <div id="origin-address" class="address-input hidden">
+                            <input type="text" id="origin-address-text" name="origin_address" placeholder="Please enter your specific address">
                         </div>
                     </div>
-
-                    <!-- Right Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="destination">Where is your destination? <i class="bi bi-info-circle"></i></label>
-                            <div class="dropdown-group">
-                                <select id="destination-category" name="destination_category" onchange="updateDestinationSpecific()">
-                                    <option value="">Choose Category</option>
-                                    <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
-                                    <option value="hotel">Hotel</option>
-                                    <option value="shopping-mall">Shopping Mall</option>
-                                    <option value="airport">Airport</option>
-                                    <option value="other">Other Location</option>
-                                </select>
-                                <select id="destination-specific" name="destination_specific" disabled>
-                                    <option value="">Select category first</option>
-                                </select>
-                            </div>
-                            <div id="destination-address" class="address-input hidden">
-                                <input type="text" id="destination-address-text" name="destination_address" placeholder="Please enter your specific address">
-                            </div>
+                    <div class="form-group">
+                        <label for="destination">Where is your destination? <i class="bi bi-info-circle"></i></label>
+                        <div class="dropdown-group">
+                            <select id="destination-category" name="destination_category" onchange="updateDestinationSpecific()">
+                                <option value="">Choose Category</option>
+                                <option value="ease-storage">Ease Storage Hub @ Plaza Aurora</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="shopping-mall">Shopping Mall</option>
+                                <option value="airport">Airport</option>
+                                <option value="other">Other Location</option>
+                            </select>
+                            <select id="destination-specific" name="destination_specific" disabled>
+                                <option value="">Select category first</option>
+                            </select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
-                            <div class="datetime-group">
-                                <input type="date" id="pickup-date" name="pickup_date" value="2025-10-04">
-                                <input type="time" id="pickup-time" name="pickup_time" value="16:00">
-                            </div>
-                            <div id="pickup-time-warning" class="time-warning">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                            </div>
+                        <div id="destination-address" class="address-input hidden">
+                            <input type="text" id="destination-address-text" name="destination_address" placeholder="Please enter your specific address">
+                        </div>
+                    </div>
+                    <!-- Bottom row: Drop-off | Pick-up -->
+                    <div class="form-group">
+                        <label for="dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
+                        <div class="datetime-group">
+                            <input type="date" id="dropoff-date" name="dropoff_date" value="2025-10-04">
+                            <input type="time" id="dropoff-time" name="dropoff_time" value="14:00">
+                        </div>
+                        <div id="dropoff-time-warning" class="time-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
+                        <div class="datetime-group">
+                            <input type="date" id="pickup-date" name="pickup_date" value="2025-10-04">
+                            <input type="time" id="pickup-time" name="pickup_time" value="16:00">
+                        </div>
+                        <div id="pickup-time-warning" class="time-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
                         </div>
                     </div>
                 </div>
-
-                <!-- Continue button inside the form container -->
                 <div class="continue-section">
                     <button class="continue-btn" onclick="continueBooking()">CONTINUE</button>
                 </div>
@@ -664,58 +704,49 @@
                     </div>
                 </div>
                 <div class="form-columns">
-                    <!-- Left Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="storage-location">Storage Location <i class="bi bi-info-circle"></i></label>
-                            <select id="storage-location" name="storage_location">
-                                <option value="ease-plaza-aurora">EASE Storage Hub @ Plaza Aurora</option>
-                            </select>
+                    <!-- Top row: Storage Location | Luggage Quantity -->
+                    <div class="form-group">
+                        <label for="storage-location">Storage Location <i class="bi bi-info-circle"></i></label>
+                        <select id="storage-location" name="storage_location">
+                            <option value="ease-plaza-aurora">EASE Storage Hub @ Plaza Aurora</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Luggage Quantity <i class="bi bi-info-circle"></i></label>
+                        <select id="quantity" name="quantity">
+                            <option value="1">1 piece</option>
+                            <option value="2">2 pieces</option>
+                            <option value="3">3 pieces</option>
+                            <option value="4">4 pieces</option>
+                            <option value="5">5 pieces</option>
+                            <option value="6">6 pieces</option>
+                            <option value="7">7 pieces</option>
+                        </select>
+                    </div>
+                    <!-- Bottom row: Drop-off | Pick-up -->
+                    <div class="form-group">
+                        <label for="storage-dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
+                        <div class="datetime-group">
+                            <input type="date" id="storage-dropoff-date" name="storage_dropoff_date" value="2025-10-04">
+                            <input type="time" id="storage-dropoff-time" name="storage_dropoff_time" value="12:00">
                         </div>
-
-                        <div class="form-group">
-                            <label for="storage-dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
-                            <div class="datetime-group">
-                                <input type="date" id="storage-dropoff-date" name="storage_dropoff_date" value="2025-10-04">
-                                <input type="time" id="storage-dropoff-time" name="storage_dropoff_time" value="12:00">
-                            </div>
-                            <div id="storage-dropoff-time-warning" class="time-warning">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                            </div>
+                        <div id="storage-dropoff-time-warning" class="time-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
                         </div>
                     </div>
-
-                    <!-- Right Column -->
-                    <div class="form-column">
-                        <div class="form-group">
-                            <label for="quantity">Luggage Quantity <i class="bi bi-info-circle"></i></label>
-                            <select id="quantity" name="quantity">
-                                <option value="1">1 piece</option>
-                                <option value="2">2 pieces</option>
-                                <option value="3">3 pieces</option>
-                                <option value="4">4 pieces</option>
-                                <option value="5">5 pieces</option>
-                                <option value="6">6 pieces</option>
-                                <option value="7">7 pieces</option>
-                            </select>
+                    <div class="form-group">
+                        <label for="storage-pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
+                        <div class="datetime-group">
+                            <input type="date" id="storage-pickup-date" name="storage_pickup_date" value="2025-10-04">
+                            <input type="time" id="storage-pickup-time" name="storage_pickup_time" value="14:00">
                         </div>
-
-                        <div class="form-group">
-                            <label for="storage-pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
-                            <div class="datetime-group">
-                                <input type="date" id="storage-pickup-date" name="storage_pickup_date" value="2025-10-04">
-                                <input type="time" id="storage-pickup-time" name="storage_pickup_time" value="14:00">
-                            </div>
-                            <div id="storage-pickup-time-warning" class="time-warning">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
-                            </div>
+                        <div id="storage-pickup-time-warning" class="time-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Please select a time that is at least 2 hours from current time which is 05 Oct 2025 Time: 16:00.
                         </div>
                     </div>
                 </div>
-
-                <!-- Continue button inside the form container -->
                 <div class="continue-section">
                     <button class="continue-btn" onclick="continueBooking()">CONTINUE</button>
                 </div>
