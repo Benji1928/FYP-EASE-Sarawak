@@ -260,4 +260,19 @@ class Admin extends BaseController
 
         return $this->response->setJSON(['status' => 'success']);
     }
+    
+    public function service_management()
+    {
+        $model = new \App\Models\ServiceManagementModel();
+        $services = $model->findAll();
+        return view('admin/service_management', ['services' => $services]);
+    }
+
+    public function update_service_price($id)
+    {
+        $model = new \App\Models\ServiceManagementModel();
+        $base_price = $this->request->getPost('base_price');
+        $model->update($id, ['base_price' => $base_price]);
+        return redirect()->to('/admin/service_management')->with('success', 'Base price updated!');
+    }
 }

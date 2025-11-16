@@ -494,10 +494,20 @@
         let appliedPromoCode = '';
         let promoDiscount = 0;
         let basePrice = 24;
+        const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
+        const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
             const contentDiv = document.getElementById('booking-details-content');
+
+            if (bookingData) {
+                if (bookingData.service === 'delivery') {
+                    basePrice = DELIVERY_BASE_PRICE;
+                } else {
+                    basePrice = STORAGE_BASE_PRICE;
+                }
+            }
             
             if (!bookingData) {
                 contentDiv.innerHTML = `

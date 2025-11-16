@@ -68,7 +68,7 @@ class ContentManagementController extends BaseController
     // Show main page with content under navbar
     public function main()
     {
-        $model = new ContentManagementModel();
+        $model = new \App\Models\ContentManagementModel();
         $mainContent = $model->where('type', 'main')->where('is_active', 1)->orderBy('created_at', 'DESC')->first();
         return view('home', ['mainContent' => $mainContent]);
     }
@@ -76,8 +76,8 @@ class ContentManagementController extends BaseController
     // Show booking page with content under navbar
     public function booking()
     {
-        $model = new ContentManagementModel();
-        $bookingContent = $model->where('type', 'booking')->where('is_active', 1)->orderBy('created_at', 'DESC')->first();
+        $model = new \App\Models\ContentManagementModel();
+        $bookingContent = $model->where('type', 'booking')->where('is_active', 1)->first();
         return view('booking', ['bookingContent' => $bookingContent]);
     }
 

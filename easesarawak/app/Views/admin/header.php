@@ -167,6 +167,11 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="<?= base_url('/admin/service_management'); ?>">
+                                            <span class="sub-item">Service</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="<?= base_url('/admin/promo_code'); ?>">
                                             <span class="sub-item">Promo Code</span>
                                         </a>

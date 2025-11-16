@@ -7,7 +7,13 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('home');
+        $serviceModel = new \App\Models\ServiceManagementModel();
+        $deliveryPrice = $serviceModel->where('service_type', 'delivery')->first()['base_price'] ?? 24;
+        $storagePrice = $serviceModel->where('service_type', 'storage')->first()['base_price'] ?? 18;
+        return view('home', [
+            'deliveryPrice' => $deliveryPrice,
+            'storagePrice' => $storagePrice,
+        ]);
     }
 
     public function about(): string
@@ -32,7 +38,13 @@ class Home extends BaseController
     
     public function bookingdetail(): string
     {
-        return view('bookingdetail');
+        $serviceModel = new \App\Models\ServiceManagementModel();
+        $deliveryPrice = $serviceModel->where('service_type', 'delivery')->first()['base_price'] ?? 24;
+        $storagePrice = $serviceModel->where('service_type', 'storage')->first()['base_price'] ?? 18;
+        return view('bookingdetail', [
+            'deliveryPrice' => $deliveryPrice,
+            'storagePrice' => $storagePrice,
+        ]);
     }
     
     public function bookingcustomerdetail(): string
