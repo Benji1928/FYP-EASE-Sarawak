@@ -55,7 +55,7 @@ class Login extends BaseController
                 );
                 $this->response->setCookie($cookie);
             } else {
-                delete_cookie('remember_me');
+                $this->response->deleteCookie('remember_me');
             }
 
             return redirect()->to(base_url('/admin'));

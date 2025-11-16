@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Order_model;
+use App\Models\PaymentModel;
 use App\Models\User_model;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -32,6 +33,7 @@ class Admin extends BaseController
     {
         $order_model = new Order_model();
         $user_model = new User_model();
+        $transaction_model = new PaymentModel();
 
         $order = $order_model->where('is_deleted', 0)->countAllResults();
         $user  = $user_model->where('is_deleted', 0)->countAllResults();
@@ -50,11 +52,14 @@ class Admin extends BaseController
             ->where('status', 'pending')
             ->findAll();
 
+        $transaction = $transaction_model->orderBy('created_at', 'DESC')->findAll();
+
         $data = [ 'order_count'    => $order,
                   'user_count'     => $user,
                   'sales'          => $sales,
                   'orders'         => $totalOrders,
-                  'pending_orders' => $pending_orders
+                  'pending_orders' => $pending_orders,
+                  'transactions'   => $transaction
                 ];
 
         return $this->render('admin/dashboard', $data);
