@@ -66,7 +66,7 @@ class AdminLocations extends BaseAdminController
         ];
 
         if ($this->locationModel->insert($data)) {
-            return $this->successMessage('Location created successfully', 'admin/locations');
+            return $this->successMessage('Location created successfully', 'locations');
         }
 
         return $this->errorMessage('Failed to create location', 'admin/locations/create');
@@ -83,7 +83,7 @@ class AdminLocations extends BaseAdminController
             ->getRowArray();
 
         if (!$location) {
-            return $this->errorMessage('Location not found', 'admin/locations');
+            return $this->errorMessage('Location not found', 'locations');
         }
 
         // Map location_name to name for views
@@ -140,7 +140,7 @@ class AdminLocations extends BaseAdminController
         ];
 
         if ($this->locationModel->update($id, $data)) {
-            return $this->successMessage('Location updated successfully', 'admin/locations');
+            return $this->successMessage('Location updated successfully', 'locations');
         }
 
         return $this->errorMessage('Failed to update location', 'admin/locations/edit/' . $id);
@@ -150,14 +150,14 @@ class AdminLocations extends BaseAdminController
     public function delete($id)
     {
         if (!$this->hasRole('Superadmin')) {
-            return $this->errorMessage('Unauthorized action', 'admin/locations');
+            return $this->errorMessage('Unauthorized action', 'locations');
         }
 
         if ($this->locationModel->delete($id)) {
-            return $this->successMessage('Location deleted successfully', 'admin/locations');
+            return $this->successMessage('Location deleted successfully', 'locations');
         }
 
-        return $this->errorMessage('Failed to delete location', 'admin/locations');
+        return $this->errorMessage('Failed to delete location', 'locations');
     }
 
     // View location storage status
@@ -171,7 +171,7 @@ class AdminLocations extends BaseAdminController
             ->getRowArray();
 
         if (!$location) {
-            return $this->errorMessage('Location not found', 'admin/locations');
+            return $this->errorMessage('Location not found', 'locations');
         }
 
         // Map location_name to name for views

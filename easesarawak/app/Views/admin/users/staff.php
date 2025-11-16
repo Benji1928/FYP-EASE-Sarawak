@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><i class="fas fa-users me-2"></i>Staff</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -132,7 +132,7 @@
                                                 <td><?= esc(ucfirst(str_replace('_', ' ', $user['employment_type']))) ?></td>
                                                 <td><?= date('d M Y', strtotime($user['created_date'])) ?></td>
                                                 <td class="text-center">
-                                                    <a href="<?= base_url('admin/user/edit/' . $user['staff_id']); ?>" class="btn btn-sm btn-primary">
+                                                    <a href="<?= base_url('user/edit/' . $user['staff_id']); ?>" class="btn btn-sm btn-primary">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
                                                 </td>

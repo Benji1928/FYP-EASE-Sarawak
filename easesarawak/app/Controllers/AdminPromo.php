@@ -58,7 +58,7 @@ class AdminPromo extends BaseAdminController
         ];
 
         if ($this->promoModel->insert($data)) {
-            return $this->successMessage('Promo code created successfully', 'admin/promo');
+            return $this->successMessage('Promo code created successfully', 'promo');
         }
 
         return $this->errorMessage('Failed to create promo code', 'admin/promo/create');
@@ -70,7 +70,7 @@ class AdminPromo extends BaseAdminController
         $promo = $this->promoModel->find($code);
 
         if (!$promo) {
-            return $this->errorMessage('Promo code not found', 'admin/promo');
+            return $this->errorMessage('Promo code not found', 'promo');
         }
 
         $data = [
@@ -105,7 +105,7 @@ class AdminPromo extends BaseAdminController
         ];
 
         if ($this->promoModel->update($code, $data)) {
-            return $this->successMessage('Promo code updated successfully', 'admin/promo');
+            return $this->successMessage('Promo code updated successfully', 'promo');
         }
 
         return $this->errorMessage('Failed to update promo code', 'admin/promo/edit/' . $code);
@@ -115,13 +115,13 @@ class AdminPromo extends BaseAdminController
     public function delete($code)
     {
         if (!$this->hasRole('Superadmin')) {
-            return $this->errorMessage('Unauthorized action', 'admin/promo');
+            return $this->errorMessage('Unauthorized action', 'promo');
         }
 
         if ($this->promoModel->delete($code)) {
-            return $this->successMessage('Promo code deleted successfully', 'admin/promo');
+            return $this->successMessage('Promo code deleted successfully', 'promo');
         }
 
-        return $this->errorMessage('Failed to delete promo code', 'admin/promo');
+        return $this->errorMessage('Failed to delete promo code', 'promo');
     }
 }

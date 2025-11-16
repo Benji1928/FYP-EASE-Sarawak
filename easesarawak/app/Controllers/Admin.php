@@ -260,7 +260,7 @@ class Admin extends BaseController
             ];
 
             $userModel->insert($data);
-            return redirect()->to(base_url('admin/staff'))->with('success', 'Staff created successfully!');
+            return redirect()->to(base_url('staff'))->with('success', 'Staff created successfully!');
         }
 
         return view('admin/users/create_user');

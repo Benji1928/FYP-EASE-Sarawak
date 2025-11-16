@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Edit Partner'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/partners'); ?>">Partners</a>
+                    <a href="<?= base_url('partners'); ?>">Partners</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -45,7 +45,7 @@
                                 Partner data not found. Please go back and try again.
                             </div>
                         <?php else: ?>
-                        <form action="<?= base_url('admin/partners/update/' . (is_array($partner) ? $partner['partner_id'] : $partner->partner_id)); ?>" method="post">
+                        <form action="<?= base_url('partners/update/' . (is_array($partner) ? $partner['partner_id'] : $partner->partner_id)); ?>" method="post">
                             <?= csrf_field(); ?>
 
                             <div class="row">
@@ -165,10 +165,10 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Update Partner
                                 </button>
-                                <a href="<?= base_url('admin/partners'); ?>" class="btn btn-secondary">
+                                <a href="<?= base_url('partners'); ?>" class="btn btn-secondary">
                                     <i class="fa fa-times"></i> Cancel
                                 </a>
-                                <a href="<?= base_url('admin/partners/performance/' . (is_array($partner) ? $partner['partner_id'] : $partner->partner_id)); ?>"
+                                <a href="<?= base_url('partners/performance/' . (is_array($partner) ? $partner['partner_id'] : $partner->partner_id)); ?>"
                                    class="btn btn-info">
                                     <i class="fa fa-chart-line"></i> View Performance
                                 </a>

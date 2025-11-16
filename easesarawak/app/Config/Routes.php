@@ -28,11 +28,10 @@ $routes->get('/logout', 'Login::logout');
 // ========================================
 
 // Main Admin Dashboard
-$routes->get('/admin', 'AdminDashboard::index');
-$routes->get('/admin/dashboard', 'AdminDashboard::index');
+$routes->get('/dashboard', 'AdminDashboard::index');
 
 // Dashboard Sections
-$routes->group('admin/dashboard', function ($routes) {
+$routes->group('dashboard', function ($routes) {
     $routes->get('overview', 'AdminDashboard::overview');
     $routes->get('orders', 'AdminDashboard::orders');
     $routes->get('customers', 'AdminDashboard::customers');
@@ -42,7 +41,7 @@ $routes->group('admin/dashboard', function ($routes) {
 // ========================================
 // ORDERS MANAGEMENT
 // ========================================
-$routes->group('admin/orders', function ($routes) {
+$routes->group('orders', function ($routes) {
     $routes->get('/', 'AdminOrders::index');
     $routes->get('view/(:num)', 'AdminOrders::view/$1');
     $routes->post('update-status/(:num)', 'AdminOrders::updateStatus/$1');
@@ -51,7 +50,7 @@ $routes->group('admin/orders', function ($routes) {
 // ========================================
 // USERS/CUSTOMERS MANAGEMENT
 // ========================================
-$routes->group('admin/users', function ($routes) {
+$routes->group('users', function ($routes) {
     $routes->get('/', 'AdminUsers::index');
     $routes->get('view/(:num)', 'AdminUsers::view/$1');
     $routes->get('search', 'AdminUsers::search');
@@ -60,7 +59,7 @@ $routes->group('admin/users', function ($routes) {
 // ========================================
 // STAFF MANAGEMENT (Legacy - from Admin controller)
 // ========================================
-$routes->group('admin/staff', function ($routes) {
+$routes->group('staff', function ($routes) {
     $routes->get('/', 'Admin::user');
     $routes->match(['get', 'post'], 'create', 'Admin::create_user');
     $routes->get('edit/(:num)', 'Admin::edit_user/$1');
@@ -69,7 +68,7 @@ $routes->group('admin/staff', function ($routes) {
 // ========================================
 // PARTNERS MANAGEMENT
 // ========================================
-$routes->group('admin/partners', function ($routes) {
+$routes->group('partners', function ($routes) {
     $routes->get('/', 'AdminPartners::index');
     $routes->get('create', 'AdminPartners::create');
     $routes->post('store', 'AdminPartners::store');
@@ -82,7 +81,7 @@ $routes->group('admin/partners', function ($routes) {
 // ========================================
 // LOCATIONS MANAGEMENT
 // ========================================
-$routes->group('admin/locations', function ($routes) {
+$routes->group('locations', function ($routes) {
     $routes->get('/', 'AdminLocations::index');
     $routes->get('create', 'AdminLocations::create');
     $routes->post('store', 'AdminLocations::store');
@@ -95,7 +94,7 @@ $routes->group('admin/locations', function ($routes) {
 // ========================================
 // PROMO CODES MANAGEMENT
 // ========================================
-$routes->group('admin/promo', function ($routes) {
+$routes->group('promo', function ($routes) {
     $routes->get('/', 'AdminPromo::index');
     $routes->get('create', 'AdminPromo::create');
     $routes->post('store', 'AdminPromo::store');
@@ -107,7 +106,7 @@ $routes->group('admin/promo', function ($routes) {
 // ========================================
 // ANALYTICS & REPORTS
 // ========================================
-$routes->group('admin/analytics', function ($routes) {
+$routes->group('analytics', function ($routes) {
     $routes->get('/', 'Admin::report');
     $routes->get('revenue', 'AdminAnalytics::revenue');
     $routes->get('customers', 'AdminAnalytics::customers');
@@ -120,7 +119,7 @@ $routes->group('admin/analytics', function ($routes) {
 // ========================================
 // AJAX ENDPOINTS & API
 // ========================================
-$routes->group('admin/api', function ($routes) {
+$routes->group('api', function ($routes) {
     // Order AJAX endpoints
     $routes->get('order/details/(:num)', 'Admin::getDetails/$1');
     $routes->post('order/save-note', 'Admin::save_note');
@@ -132,7 +131,7 @@ $routes->group('admin/api', function ($routes) {
 // ========================================
 // DATA EXPORTS
 // ========================================
-$routes->group('admin/export', function ($routes) {
+$routes->group('export', function ($routes) {
     $routes->get('revenue', 'Admin::exportRevenue');
 });
 

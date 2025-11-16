@@ -11,7 +11,7 @@
                         <h3 class="fw-bold mb-3">Operations Report & Analytics</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
-                                <a href="<?= base_url('/admin'); ?>">
+                                <a href="<?= base_url('/dashboard'); ?>">
                                     <i class="fa fa-home"></i>
                                 </a>
                             </li>
@@ -37,7 +37,7 @@
                                         <h5 class="mb-0">Export Operations Analytics</h5>
                                         <small class="text-muted">Download detailed datasets for auditing or sharing.</small>
                                     </div>
-                                    <form method="get" action="<?= base_url('admin/analytics/export/operations'); ?>" class="row g-3">
+                                    <form method="get" action="<?= base_url('analytics/export/operations'); ?>" class="row g-3">
                                         <div class="col-md-4">
                                             <label class="form-label">Dataset</label>
                                             <select name="section" class="form-control">

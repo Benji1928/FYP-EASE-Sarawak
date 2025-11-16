@@ -33,7 +33,7 @@
         </div>
 
         <button type="submit" class="btn" style="background: #f2be00;"><i class="fas fa-save me-2"></i>Create User</button>
-        <a href="<?= base_url('admin/user'); ?>" class="btn btn-dark ms-2">Cancel</a>
+        <a href="<?= base_url('user'); ?>" class="btn btn-dark ms-2">Cancel</a>
     </form>
 </div>
 

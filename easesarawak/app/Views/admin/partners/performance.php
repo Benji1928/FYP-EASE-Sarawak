@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Partner Performance'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/partners'); ?>">Partners</a>
+                    <a href="<?= base_url('partners'); ?>">Partners</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -66,10 +66,10 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <a href="<?= base_url('admin/partners/edit/' . $partner['partner_id']); ?>" class="btn btn-primary btn-sm">
+                                <a href="<?= base_url('partners/edit/' . $partner['partner_id']); ?>" class="btn btn-primary btn-sm">
                                     <i class="fa fa-edit"></i> Edit Partner
                                 </a>
-                                <a href="<?= base_url('admin/partners'); ?>" class="btn btn-secondary btn-sm">
+                                <a href="<?= base_url('partners'); ?>" class="btn btn-secondary btn-sm">
                                     <i class="fa fa-arrow-left"></i> Back to Partners
                                 </a>
                             </div>
@@ -196,7 +196,7 @@
                                                 <td><?= esc($order->service_type ?? 'N/A'); ?></td>
                                                 <td>
                                                     <?php if (isset($order->user_id)): ?>
-                                                        <a href="<?= base_url('admin/users/view/' . $order->user_id); ?>">
+                                                        <a href="<?= base_url('users/view/' . $order->user_id); ?>">
                                                             User #<?= $order->user_id; ?>
                                                         </a>
                                                     <?php else: ?>
@@ -220,7 +220,7 @@
                                                 </td>
                                                 <td><?= date('M d, Y', strtotime($order->created_date)); ?></td>
                                                 <td class="text-center">
-                                                    <a href="<?= base_url('admin/orders/view/' . $order->order_id); ?>"
+                                                    <a href="<?= base_url('orders/view/' . $order->order_id); ?>"
                                                        class="btn btn-sm btn-info">
                                                         <i class="fa fa-eye"></i> View
                                                     </a>

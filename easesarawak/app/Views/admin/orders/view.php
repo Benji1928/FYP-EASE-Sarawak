@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3">Order Details</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('/admin'); ?>">
+                    <a href="<?= base_url('/dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/orders'); ?>">Orders</a>
+                    <a href="<?= base_url('orders'); ?>">Orders</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -356,7 +356,7 @@
                             <h4 class="card-title">Update Order Status</h4>
                         </div>
                         <div class="card-body">
-                            <form method="post" action="<?= base_url('admin/orders/updateStatus/' . $order->order_id); ?>">
+                            <form method="post" action="<?= base_url('orders/updateStatus/' . $order->order_id); ?>">
                                 <?= csrf_field(); ?>
                                 <div class="form-group">
                                     <label for="order_status">Order Status</label>
@@ -389,7 +389,7 @@
                         <h4 class="card-title">Actions</h4>
                     </div>
                     <div class="card-body">
-                        <a href="<?= base_url('admin/orders'); ?>" class="btn btn-secondary btn-block mb-2">
+                        <a href="<?= base_url('orders'); ?>" class="btn btn-secondary btn-block mb-2">
                             <i class="fa fa-arrow-left"></i> Back to Orders
                         </a>
                         <button class="btn btn-warning btn-block mb-2 btn-add-note"

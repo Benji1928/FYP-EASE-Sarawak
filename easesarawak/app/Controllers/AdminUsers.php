@@ -29,7 +29,7 @@ class AdminUsers extends BaseAdminController
         $user = $this->userModel->find($id);
 
         if (!$user) {
-            return $this->errorMessage('User not found', 'admin/users');
+            return $this->errorMessage('User not found', 'users');
         }
 
         $db = \Config\Database::connect();

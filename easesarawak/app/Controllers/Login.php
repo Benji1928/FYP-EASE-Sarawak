@@ -33,7 +33,7 @@ class Login extends BaseController
                 'role'      => $adminData['role'] === 'Superadmin' ? '0' : '1'
             ]);
 
-            return redirect()->to(base_url('/admin'));
+            return redirect()->to(base_url('/dashboard'));
         }
 
         // If not admin, check Users table (for future customer portal)
@@ -50,7 +50,7 @@ class Login extends BaseController
                 'role'     => $userData['role'] ?? '2' // Regular user
             ]);
 
-            return redirect()->to(base_url('/admin'));
+            return redirect()->to(base_url('/dashboard'));
         }
 
         return redirect()->back()->with('error', 'Incorrect email or password');

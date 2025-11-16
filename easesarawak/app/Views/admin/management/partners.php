@@ -6,7 +6,7 @@
                         <h3 class="fw-bold mb-3">Partners Management</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
-                                <a href="<?= base_url('/admin'); ?>">
+                                <a href="<?= base_url('/dashboard'); ?>">
                                     <i class="fa fa-home"></i>
                                 </a>
                             </li>
@@ -29,7 +29,7 @@
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
                                         <h4 class="card-title">Partner List</h4>
-                                        <a href="<?= base_url('admin/partners/create'); ?>" class="btn btn-primary btn-round ms-auto">
+                                        <a href="<?= base_url('partners/create'); ?>" class="btn btn-primary btn-round ms-auto">
                                             <i class="fa fa-plus"></i> Add Partner
                                         </a>
                                     </div>
@@ -66,10 +66,10 @@
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td class="text-center">
-                                                                <a href="<?= base_url('admin/partners/edit/' . $partner['partner_id']); ?>" class="btn btn-sm btn-warning">
+                                                                <a href="<?= base_url('partners/edit/' . $partner['partner_id']); ?>" class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-edit"></i> Edit
                                                                 </a>
-                                                                <a href="<?= base_url('admin/partners/performance/' . $partner['partner_id']); ?>" class="btn btn-sm btn-info">
+                                                                <a href="<?= base_url('partners/performance/' . $partner['partner_id']); ?>" class="btn btn-sm btn-info">
                                                                     <i class="fa fa-chart-line"></i> Performance
                                                                 </a>
                                                             </td>

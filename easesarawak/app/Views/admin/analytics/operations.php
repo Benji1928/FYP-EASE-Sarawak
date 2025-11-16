@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Operations Analytics'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -28,7 +28,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="get" action="<?= base_url('admin/analytics/operations'); ?>">
+                        <form method="get" action="<?= base_url('analytics/operations'); ?>">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -66,7 +66,7 @@
                             <h5 class="mb-0">Export Operations Data</h5>
                             <small class="text-muted">Apply the current date filters, pick a dataset, and download</small>
                         </div>
-                        <form method="get" action="<?= base_url('admin/analytics/export/operations'); ?>" class="row g-3 align-items-end">
+                        <form method="get" action="<?= base_url('analytics/export/operations'); ?>" class="row g-3 align-items-end">
                             <input type="hidden" name="start_date" value="<?= esc($start_date); ?>">
                             <input type="hidden" name="end_date" value="<?= esc($end_date); ?>">
                             <div class="col-md-4">

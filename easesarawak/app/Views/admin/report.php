@@ -6,7 +6,7 @@
     $reportEndDate = $reportEndDate ?? date('Y-m-d');
     $analyticsExportConfig = [
         'revenue' => [
-            'action' => base_url('admin/analytics/export/revenue'),
+            'action' => base_url('analytics/export/revenue'),
             'sections' => [
                 'daily' => 'Daily Totals',
                 'channel' => 'By Channel',
@@ -14,7 +14,7 @@
             ],
         ],
         'customers' => [
-            'action' => base_url('admin/analytics/export/customers'),
+            'action' => base_url('analytics/export/customers'),
             'sections' => [
                 'lifetime' => 'Top Customers',
                 'segments' => 'Customer Segments',
@@ -22,7 +22,7 @@
             ],
         ],
         'operations' => [
-            'action' => base_url('admin/analytics/export/operations'),
+            'action' => base_url('analytics/export/operations'),
             'sections' => [
                 'daily' => 'Daily Summary',
                 'delivery' => 'Delivery Performance',
@@ -38,7 +38,7 @@
             <h3 class="fw-bold mb-3">Analytics & Reports</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -46,7 +46,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/analytics'); ?>">Analytics</a>
+                    <a href="<?= base_url('analytics'); ?>">Analytics</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -80,7 +80,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Export Analytics</h5>
                     <p class="text-muted small">Download any analytics dataset in CSV, PDF, or JSON.</p>
-                    <form id="analyticsExportForm" method="get" action="<?= base_url('admin/analytics/export/revenue'); ?>">
+                    <form id="analyticsExportForm" method="get" action="<?= base_url('analytics/export/revenue'); ?>">
                         <div class="mb-2">
                             <label class="form-label">Dataset Type</label>
                             <select id="analyticsExportType" name="type" class="form-select form-select-sm">
@@ -181,7 +181,7 @@
 
     // Initial render
     function loadRevenueData(serviceType = 'all', timeframe = 'month') {
-        fetch(`<?= base_url('admin/getRevenueData'); ?>?service=${serviceType}&timeframe=${timeframe}`)
+        fetch(`<?= base_url('getRevenueData'); ?>?service=${serviceType}&timeframe=${timeframe}`)
             .then(response => response.json())
             .then(data => {
                 const ctx = document.getElementById('revenueChart').getContext('2d');

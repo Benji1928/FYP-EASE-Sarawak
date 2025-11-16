@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Edit Location'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/locations'); ?>">Locations</a>
+                    <a href="<?= base_url('locations'); ?>">Locations</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -45,7 +45,7 @@
                                 Location data not found. Please go back and try again.
                             </div>
                         <?php else: ?>
-                        <form action="<?= base_url('admin/locations/update/' . (is_array($location) ? ($location['location_id'] ?? '') : ($location->location_id ?? ''))); ?>" method="post">
+                        <form action="<?= base_url('locations/update/' . (is_array($location) ? ($location['location_id'] ?? '') : ($location->location_id ?? ''))); ?>" method="post">
                             <?= csrf_field(); ?>
 
                             <div class="row">
@@ -159,14 +159,14 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Update Location
                                 </button>
-                                <a href="<?= base_url('admin/locations'); ?>" class="btn btn-secondary">
+                                <a href="<?= base_url('locations'); ?>" class="btn btn-secondary">
                                     <i class="fa fa-times"></i> Cancel
                                 </a>
-                                <?php 
+                                <?php
                                 $totalCapacity = is_array($location) ? ($location['total_capacity'] ?? 0) : ($location->total_capacity ?? 0);
                                 $locId = is_array($location) ? ($location['location_id'] ?? '') : ($location->location_id ?? '');
                                 if ($totalCapacity > 0): ?>
-                                    <a href="<?= base_url('admin/locations/storage/' . $locId); ?>"
+                                    <a href="<?= base_url('locations/storage/' . $locId); ?>"
                                        class="btn btn-info">
                                         <i class="fa fa-boxes"></i> View Storage
                                     </a>

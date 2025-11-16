@@ -6,7 +6,7 @@
                         <h3 class="fw-bold mb-3">Orders Management</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
-                                <a href="<?= base_url('/admin'); ?>">
+                                <a href="<?= base_url('/dashboard'); ?>">
                                     <i class="fa fa-home"></i>
                                 </a>
                             </li>
@@ -74,7 +74,7 @@
                                                             </td>
                                                             <td><strong>RM <?= number_format($order['total_amount'], 2); ?></strong></td>
                                                             <td class="text-center">
-                                                                <a href="<?= base_url('admin/orders/view/' . $order['order_id']); ?>" class="btn btn-sm btn-info">
+                                                                <a href="<?= base_url('orders/view/' . $order['order_id']); ?>" class="btn btn-sm btn-info">
                                                                     <i class="fa fa-eye"></i> View
                                                                 </a>
                                                                 <button class="btn btn-sm btn-warning btn-add-note"
@@ -353,7 +353,7 @@
         selectElement.disabled = true;
 
         // Make AJAX request
-        fetch('<?= base_url("admin/orders/update-status/"); ?>' + orderId, {
+        fetch('<?= base_url("orders/update-status/"); ?>' + orderId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

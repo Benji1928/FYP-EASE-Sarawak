@@ -62,10 +62,10 @@ class AdminPartners extends BaseAdminController
         ];
 
         if ($this->partnerModel->insert($data)) {
-            return $this->successMessage('Partner created successfully', 'admin/partners');
+            return $this->successMessage('Partner created successfully', 'partners');
         }
 
-        return $this->errorMessage('Failed to create partner', 'admin/partners/create');
+        return $this->errorMessage('Failed to create partner', 'partners/create');
     }
 
     // Edit partner form
@@ -79,7 +79,7 @@ class AdminPartners extends BaseAdminController
             ->getRowArray();
 
         if (!$partner) {
-            return $this->errorMessage('Partner not found', 'admin/partners');
+            return $this->errorMessage('Partner not found', 'partners');
         }
 
         $data = [
@@ -132,24 +132,24 @@ class AdminPartners extends BaseAdminController
         ];
 
         if ($this->partnerModel->update($id, $data)) {
-            return $this->successMessage('Partner updated successfully', 'admin/partners');
+            return $this->successMessage('Partner updated successfully', 'partners');
         }
 
-        return $this->errorMessage('Failed to update partner', 'admin/partners/edit/' . $id);
+        return $this->errorMessage('Failed to update partner', 'partners/edit/' . $id);
     }
 
     // Delete partner
     public function delete($id)
     {
         if (!$this->hasRole('Superadmin')) {
-            return $this->errorMessage('Unauthorized action', 'admin/partners');
+            return $this->errorMessage('Unauthorized action', 'partners');
         }
 
         if ($this->partnerModel->delete($id)) {
-            return $this->successMessage('Partner deleted successfully', 'admin/partners');
+            return $this->successMessage('Partner deleted successfully', 'partners');
         }
 
-        return $this->errorMessage('Failed to delete partner', 'admin/partners');
+        return $this->errorMessage('Failed to delete partner', 'partners');
     }
 
     // View partner performance
@@ -158,7 +158,7 @@ class AdminPartners extends BaseAdminController
         $partner = $this->partnerModel->find($id);
 
         if (!$partner) {
-            return $this->errorMessage('Partner not found', 'admin/partners');
+            return $this->errorMessage('Partner not found', 'partners');
         }
 
         $db = \Config\Database::connect();

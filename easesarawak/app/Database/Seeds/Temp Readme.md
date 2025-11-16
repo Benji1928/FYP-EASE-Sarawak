@@ -1,1 +1,0 @@
-Run php spark migrate and php spark db:seed user_seeder, php spark db:seed order_seeder (or php spark db:seed database_seeder) to apply the schema and data.

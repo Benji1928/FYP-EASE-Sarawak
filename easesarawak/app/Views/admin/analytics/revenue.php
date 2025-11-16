@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Revenue Analytics'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/analytics'); ?>">Analytics</a>
+                    <a href="<?= base_url('analytics'); ?>">Analytics</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -28,7 +28,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="get" action="<?= base_url('admin/analytics/revenue'); ?>">
+                        <form method="get" action="<?= base_url('analytics/revenue'); ?>">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -66,7 +66,7 @@
                             <h5 class="mb-0">Export Revenue Data</h5>
                             <small class="text-muted">Download CSV, PDF, or JSON for any dataset below</small>
                         </div>
-                        <form method="get" action="<?= base_url('admin/analytics/export/revenue'); ?>" class="row g-3 align-items-end">
+                        <form method="get" action="<?= base_url('analytics/export/revenue'); ?>" class="row g-3 align-items-end">
                             <input type="hidden" name="start_date" value="<?= esc($start_date); ?>">
                             <input type="hidden" name="end_date" value="<?= esc($end_date); ?>">
                             <div class="col-md-4">

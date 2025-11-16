@@ -22,7 +22,7 @@
         <h3 class="mb-0">Promo Codes</h3>
         <div>
             <button id="btnNew" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#promoModal">New Promo</button>
-            <a class="btn btn-outline-secondary" href="<?= isset($backUrl) ? esc($backUrl) : base_url('/admin') ?>">Back</a>
+            <a class="btn btn-outline-secondary" href="<?= isset($backUrl) ? esc($backUrl) : base_url('/dashboard') ?>">Back</a>
         </div>
     </div>
 
@@ -159,7 +159,7 @@
 
 <script>
 (function () {
-    const base = '<?= base_url('/admin/promo') ?>';
+    const base = '<?= base_url('/promo') ?>';
 
     function showAlert(msg, type = 'success', timeout = 4000) {
         const id = 'a' + Date.now();

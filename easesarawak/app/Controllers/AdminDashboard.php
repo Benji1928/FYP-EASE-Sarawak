@@ -50,7 +50,7 @@ class AdminDashboard extends BaseAdminController
             'revenue_chart' => $service->getRevenueChartData(),
         ];
 
-        return view('admin/orders_dashboard', $data);
+        return view('admin/orders/orders_dashboard', $data);
     }
 
     public function customers()

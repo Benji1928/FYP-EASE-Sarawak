@@ -61,7 +61,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="white">
-                    <a href="<?= base_url('/admin'); ?>" class="logo">
+                    <a href="<?= base_url('/dashboard'); ?>" class="logo">
                         <img
                             src="<?= base_url('assets/images/Ease_PNG_File-01-1.png'); ?>"
                             alt="navbar brand"
@@ -86,7 +86,7 @@
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
                         <li class="nav-item">
-                            <a href="<?= base_url('/admin'); ?>">
+                            <a href="<?= base_url('/dashboard'); ?>">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -106,12 +106,12 @@
                             <div class="collapse" id="base">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('admin/orders'); ?>">
+                                        <a href="<?= base_url('orders'); ?>">
                                             <span class="sub-item">All Orders</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/dashboard/orders'); ?>">
+                                        <a href="<?= base_url('dashboard/orders'); ?>">
                                             <span class="sub-item">Orders Dashboard</span>
                                         </a>
                                     </li>
@@ -127,12 +127,12 @@
                             <div class="collapse" id="sidebarLayouts">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('admin/users'); ?>">
+                                        <a href="<?= base_url('users'); ?>">
                                             <span class="sub-item">Customers</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/staff'); ?>">
+                                        <a href="<?= base_url('staff'); ?>">
                                             <span class="sub-item">Staff</span>
                                         </a>
                                     </li>
@@ -148,22 +148,22 @@
                             <div class="collapse" id="forms">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('admin/analytics'); ?>">
+                                        <a href="<?= base_url('analytics'); ?>">
                                             <span class="sub-item">Revenue Report</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/dashboard/operations'); ?>">
+                                        <a href="<?= base_url('dashboard/operations'); ?>">
                                             <span class="sub-item">Operations Report</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/analytics/customers'); ?>">
+                                        <a href="<?= base_url('analytics/customers'); ?>">
                                             <span class="sub-item">Customer Analytics</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/analytics/revenue'); ?>">
+                                        <a href="<?= base_url('analytics/revenue'); ?>">
                                             <span class="sub-item">Revenue Analytics</span>
                                         </a>
                                     </li>
@@ -179,17 +179,17 @@
                             <div class="collapse" id="management">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="<?= base_url('admin/partners'); ?>">
+                                        <a href="<?= base_url('partners'); ?>">
                                             <span class="sub-item">Partners</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/locations'); ?>">
+                                        <a href="<?= base_url('locations'); ?>">
                                             <span class="sub-item">Locations</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= base_url('admin/promo'); ?>">
+                                        <a href="<?= base_url('promo'); ?>">
                                             <span class="sub-item">Promo Codes</span>
                                         </a>
                                     </li>
@@ -207,7 +207,7 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="<?= base_url('/admin'); ?>" class="logo">
+                        <a href="<?= base_url('/dashboard'); ?>" class="logo">
                             <img
                                 src="<?= base_url('assets/images/Ease_PNG_File-01-1.png'); ?>"
                                 alt="navbar brand"

@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Add New Partner'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/partners'); ?>">Partners</a>
+                    <a href="<?= base_url('partners'); ?>">Partners</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -40,7 +40,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <form action="<?= base_url('admin/partners/store'); ?>" method="post">
+                        <form action="<?= base_url('partners/store'); ?>" method="post">
                             <?= csrf_field(); ?>
 
                             <div class="row">
@@ -160,7 +160,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Create Partner
                                 </button>
-                                <a href="<?= base_url('admin/partners'); ?>" class="btn btn-secondary">
+                                <a href="<?= base_url('partners'); ?>" class="btn btn-secondary">
                                     <i class="fa fa-times"></i> Cancel
                                 </a>
                             </div>

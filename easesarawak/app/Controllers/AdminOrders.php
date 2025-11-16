@@ -68,7 +68,7 @@ class AdminOrders extends BaseAdminController
             ->getRow();
 
         if (!$order) {
-            return $this->errorMessage('Order not found', 'admin/orders');
+            return $this->errorMessage('Order not found', 'orders');
         }
 
         // Get luggage items
@@ -115,7 +115,7 @@ class AdminOrders extends BaseAdminController
             if ($this->request->isAJAX()) {
                 return $this->jsonResponse(['success' => false, 'message' => 'Invalid status'], 400);
             }
-            return $this->errorMessage('Invalid status', 'admin/orders');
+            return $this->errorMessage('Invalid status', 'orders');
         }
 
         $data = ['order_status' => $newStatus];
@@ -130,12 +130,12 @@ class AdminOrders extends BaseAdminController
             if ($this->request->isAJAX()) {
                 return $this->jsonResponse(['success' => true, 'message' => 'Order status updated successfully']);
             }
-            return $this->successMessage('Order status updated successfully', 'admin/orders');
+            return $this->successMessage('Order status updated successfully', 'orders');
         }
 
         if ($this->request->isAJAX()) {
             return $this->jsonResponse(['success' => false, 'message' => 'Failed to update order status'], 500);
         }
-        return $this->errorMessage('Failed to update order status', 'admin/orders');
+        return $this->errorMessage('Failed to update order status', 'orders');
     }
 }

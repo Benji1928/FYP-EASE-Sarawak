@@ -6,7 +6,7 @@
                         <h3 class="fw-bold mb-3">Users Management</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
-                                <a href="<?= base_url('/admin'); ?>">
+                                <a href="<?= base_url('/dashboard'); ?>">
                                     <i class="fa fa-home"></i>
                                 </a>
                             </li>
@@ -67,7 +67,7 @@
                                                             </td>
                                                             <td><?= date('M d, Y', strtotime($user['created_date'])); ?></td>
                                                             <td class="text-center">
-                                                                <a href="<?= base_url('admin/users/view/' . $user['user_id']); ?>" class="btn btn-sm btn-info">
+                                                                <a href="<?= base_url('users/view/' . $user['user_id']); ?>" class="btn btn-sm btn-info">
                                                                     <i class="fa fa-eye"></i> View
                                                                 </a>
                                                             </td>

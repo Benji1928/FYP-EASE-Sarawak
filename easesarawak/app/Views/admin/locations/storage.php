@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Location Storage Status'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -14,7 +14,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('admin/locations'); ?>">Locations</a>
+                    <a href="<?= base_url('locations'); ?>">Locations</a>
                 </li>
                 <li class="separator">
                     <i class="fa fa-angle-right"></i>
@@ -94,11 +94,11 @@
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <?php $locId = is_array($location) ? ($location['location_id'] ?? '') : ($location->location_id ?? ''); ?>
-                                <a href="<?= base_url('admin/locations/edit/' . $locId); ?>"
+                                <a href="<?= base_url('locations/edit/' . $locId); ?>"
                                    class="btn btn-primary btn-sm">
                                     <i class="fa fa-edit"></i> Edit Location
                                 </a>
-                                <a href="<?= base_url('admin/locations'); ?>" class="btn btn-secondary btn-sm">
+                                <a href="<?= base_url('locations'); ?>" class="btn btn-secondary btn-sm">
                                     <i class="fa fa-arrow-left"></i> Back to Locations
                                 </a>
                             </div>
@@ -138,7 +138,7 @@
                                             <tr>
                                                 <td><strong>#ST-<?= esc($item->tracking_id ?? 'N/A'); ?></strong></td>
                                                 <td>
-                                                    <a href="<?= base_url('admin/orders/view/' . $item->order_id); ?>">
+                                                    <a href="<?= base_url('orders/view/' . $item->order_id); ?>">
                                                         #<?= esc($item->order_id); ?>
                                                     </a>
                                                 </td>
@@ -168,7 +168,7 @@
                                                     <span class="badge badge-warning">In Storage</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="<?= base_url('admin/orders/view/' . $item->order_id); ?>"
+                                                    <a href="<?= base_url('orders/view/' . $item->order_id); ?>"
                                                        class="btn btn-sm btn-info">
                                                         <i class="fa fa-eye"></i> View
                                                     </a>

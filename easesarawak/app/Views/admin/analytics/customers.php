@@ -6,7 +6,7 @@
             <h3 class="fw-bold mb-3"><?= esc($title ?? 'Customer Analytics'); ?></h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="<?= base_url('admin'); ?>">
+                    <a href="<?= base_url('dashboard'); ?>">
                         <i class="fa fa-home"></i>
                     </a>
                 </li>
@@ -32,7 +32,7 @@
                             <h5 class="mb-0">Export Customer Insights</h5>
                             <small class="text-muted">Choose a dataset and download it in your preferred format</small>
                         </div>
-                        <form method="get" action="<?= base_url('admin/analytics/export/customers'); ?>" class="row g-3 align-items-end">
+                        <form method="get" action="<?= base_url('analytics/export/customers'); ?>" class="row g-3 align-items-end">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-label">Dataset</label>
@@ -137,7 +137,7 @@
                                             <tr>
                                                 <td><?= $index + 1; ?></td>
                                                 <td>
-                                                    <a href="<?= base_url('admin/users/view/' . $customer->user_id); ?>">
+                                                    <a href="<?= base_url('users/view/' . $customer->user_id); ?>">
                                                         <?= esc($customer->first_name . ' ' . $customer->last_name); ?>
                                                     </a>
                                                 </td>
