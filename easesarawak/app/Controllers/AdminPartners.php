@@ -36,7 +36,7 @@ class AdminPartners extends BaseAdminController
         $validation = \Config\Services::validation();
 
         $validation->setRules([
-            'name' => 'required|min_length[3]|max_length[255]',
+            'partner_name' => 'required|min_length[3]|max_length[255]',
             'type' => 'required|in_list[Hotel,Airbnb,TourAgency,Event,Airline,Travel_Agency,Other]',
             'commission_rate' => 'required|decimal',
             'contact_email' => 'permit_empty|valid_email',
@@ -48,7 +48,7 @@ class AdminPartners extends BaseAdminController
         }
 
         $data = [
-            'name' => $this->request->getPost('name'),
+            'partner_name' => $this->request->getPost('partner_name'),
             'type' => $this->request->getPost('type'),
             'commission_rate' => $this->request->getPost('commission_rate'),
             'contact_person' => $this->request->getPost('contact_person'),
@@ -96,7 +96,7 @@ class AdminPartners extends BaseAdminController
         $validation = \Config\Services::validation();
 
         $validation->setRules([
-            'name' => 'required|min_length[3]|max_length[255]',
+            'partner_name' => 'required|min_length[3]|max_length[255]',
             'type' => 'required',
             'commission_rate' => 'required|decimal',
         ]);
@@ -118,7 +118,7 @@ class AdminPartners extends BaseAdminController
         }
 
         $data = [
-            'name' => $this->request->getPost('name'),
+            'partner_name' => $this->request->getPost('partner_name'),
             'type' => $this->request->getPost('type'),
             'commission_rate' => $this->request->getPost('commission_rate'),
             'contact_person' => $this->request->getPost('contact_person'),

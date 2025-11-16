@@ -46,9 +46,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="name">Partner Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                               value="<?= old('name'); ?>" placeholder="Enter partner name" required>
+                                        <label for="partner_name">Partner Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="partner_name" name="partner_name"
+                                               value="<?= old('partner_name'); ?>" placeholder="Enter partner name" required>
                                     </div>
                                 </div>
 

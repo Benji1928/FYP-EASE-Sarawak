@@ -57,7 +57,15 @@
                                                             <td><?= ucfirst(esc($location['category'])); ?></td>
                                                             <td>
                                                                 <?= esc($location['address']); ?><br>
-                                                                <small class="text-muted"><?= esc($location['city'] ?? ''); ?>, <?= esc($location['state'] ?? ''); ?></small>
+                                                                <small class="text-muted">
+                                                                    <?php
+                                                                    $cityState = array_filter([
+                                                                        $location['city'] ?? '',
+                                                                        $location['state'] ?? ''
+                                                                    ]);
+                                                                    echo esc(implode(', ', $cityState));
+                                                                    ?>
+                                                                </small>
                                                             </td>
                                                             <td><?= number_format($location['total_capacity'] ?? 0); ?></td>
                                                             <td>
