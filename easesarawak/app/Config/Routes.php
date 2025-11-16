@@ -113,6 +113,8 @@ $routes->group('admin/analytics', function ($routes) {
     $routes->get('customers', 'AdminAnalytics::customers');
     $routes->get('operations', 'AdminAnalytics::operations');
     $routes->get('external-data', 'AdminAnalytics::externalData');
+    $routes->get('export', 'AdminAnalytics::export');
+    $routes->get('export/(:segment)', 'AdminAnalytics::export/$1');
 });
 
 // ========================================

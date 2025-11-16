@@ -23,6 +23,50 @@
             </ul>
         </div>
 
+        <!-- Export Controls -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+                            <h5 class="mb-0">Export Customer Insights</h5>
+                            <small class="text-muted">Choose a dataset and download it in your preferred format</small>
+                        </div>
+                        <form method="get" action="<?= base_url('admin/analytics/export/customers'); ?>" class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Dataset</label>
+                                    <select name="section" class="form-control">
+                                        <option value="lifetime">Top Customers</option>
+                                        <option value="segments">Customer Segments</option>
+                                        <option value="acquisition">Acquisition Trend</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Format</label>
+                                    <select name="format" class="form-control">
+                                        <option value="csv">CSV</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="json">JSON</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="fa fa-download"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Customer Segmentation -->
         <div class="row mb-4">
             <div class="col-md-12">

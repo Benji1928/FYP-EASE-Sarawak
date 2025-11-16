@@ -57,6 +57,52 @@
             </div>
         </div>
 
+        <!-- Export Controls -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+                            <h5 class="mb-0">Export Operations Data</h5>
+                            <small class="text-muted">Apply the current date filters, pick a dataset, and download</small>
+                        </div>
+                        <form method="get" action="<?= base_url('admin/analytics/export/operations'); ?>" class="row g-3 align-items-end">
+                            <input type="hidden" name="start_date" value="<?= esc($start_date); ?>">
+                            <input type="hidden" name="end_date" value="<?= esc($end_date); ?>">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Dataset</label>
+                                    <select name="section" class="form-control">
+                                        <option value="daily">Daily Summary</option>
+                                        <option value="delivery">Delivery Performance</option>
+                                        <option value="storage">Storage Occupancy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Format</label>
+                                    <select name="format" class="form-control">
+                                        <option value="csv">CSV</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="json">JSON</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="fa fa-download"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Storage Occupancy -->
         <div class="row">
             <div class="col-md-12">

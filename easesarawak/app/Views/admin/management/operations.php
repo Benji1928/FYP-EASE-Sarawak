@@ -1,5 +1,10 @@
 <?= $this->include('admin/header'); ?>
 
+<?php
+    $operationsExportStart = $operationsExportStart ?? date('Y-m-01');
+    $operationsExportEnd = $operationsExportEnd ?? date('Y-m-d');
+?>
+
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
@@ -21,6 +26,51 @@
                             </li>
                             <li class="nav-item">Operations Report</li>
                         </ul>
+                    </div>
+
+                    <!-- Export Controls -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card card-round">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
+                                        <h5 class="mb-0">Export Operations Analytics</h5>
+                                        <small class="text-muted">Download detailed datasets for auditing or sharing.</small>
+                                    </div>
+                                    <form method="get" action="<?= base_url('admin/analytics/export/operations'); ?>" class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Dataset</label>
+                                            <select name="section" class="form-control">
+                                                <option value="daily">Daily Summary</option>
+                                                <option value="delivery">Delivery Performance</option>
+                                                <option value="storage">Storage Occupancy</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Format</label>
+                                            <select name="format" class="form-control">
+                                                <option value="csv">CSV</option>
+                                                <option value="pdf">PDF</option>
+                                                <option value="json">JSON</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" name="start_date" value="<?= esc($operationsExportStart); ?>" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" name="end_date" value="<?= esc($operationsExportEnd); ?>" class="form-control">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-outline-primary">
+                                                <i class="fa fa-download"></i> Export Data
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Operational Overview Stats -->
