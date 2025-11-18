@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/footer_style.css">
     <link rel="stylesheet" href="assets/css/navbar_style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOEej3q--uJLfUydFQ1T2vlr3HJC35atQ"></script>
 
     <style>
         .navbar-nav,
@@ -49,6 +50,11 @@
             margin-bottom: 2rem;
             margin-top: 2rem;
             grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 2rem;
         }
 
         .booking-detail-header h1 {
@@ -210,30 +216,33 @@
 
         .quantity-controls {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.3rem;
         }
 
-        .quantity-btn {
+        .quantity-btn-vertical {
             background: #007bff;
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: background 0.3s ease;
+            margin: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
 
-        .quantity-btn:hover {
+        .quantity-btn-vertical:hover {
             background: #0056b3;
         }
 
-        .quantity-btn:disabled {
+        .quantity-btn-vertical:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
@@ -437,8 +446,22 @@
     
     <main class="booking-detail-container">
         <div class="booking-detail-header">
-            <h1>Booking Details</h1>
-            <p>Please review your booking information</p>
+            <!-- Left Content -->
+            <div class="left-content">      
+                <div class="booking-tagline">
+                    <h1>TRAVEL SMART WITH EASE</h1>
+                    <p>Whether you need secure storage or prompt delivery, we provide reliable and convenient solutions to ensure your journey is as smooth as possible.</p>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="right-content">
+                <img src="<?= base_url('assets/images/bookingpage.png') ?>" alt="Booking Service" class="booking-image">
+            </div>
+            <div class="bottom-content">
+                <h1>Booking Details</h1>
+                <p>Please review your booking information</p>
+            </div>
         </div>
 
         <div class="left-column">
@@ -475,10 +498,20 @@
         let appliedPromoCode = '';
         let promoDiscount = 0;
         let basePrice = 24;
+        const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
+        const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
             const contentDiv = document.getElementById('booking-details-content');
+
+            if (bookingData) {
+                if (bookingData.service === 'delivery') {
+                    basePrice = DELIVERY_BASE_PRICE;
+                } else {
+                    basePrice = STORAGE_BASE_PRICE;
+                }
+            }
             
             if (!bookingData) {
                 contentDiv.innerHTML = `
@@ -577,19 +610,25 @@
                         <h3><i class="bi bi-box"></i> Luggage Quantity & Promo</h3>
                         
                         <div class="detail-row">
-                            <div class="detail-label">
-                                <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
-                                Luggage Quantity:
+                            <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
+                            <div class="detail-label" style="flex: 2; flex-direction: column; align-items: flex-start; display: flex;">
+                                <div style="font-weight:bold; font-size:1.1rem;">Max Weight and Dimension</div>
+                                <div style="font-weight:normal; font-size:1rem; margin-top:4px;">
+                                    23kg per item 180cm in total<br>
+                                    dimensions (Length + Width + Height)
+                                </div>
                             </div>
-                            <div class="detail-value">
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="updateQuantity(-1)" id="decreaseBtn">
-                                        <i class="bi bi-dash"></i>
-                                    </button>
+                            <div class="detail-value" style="flex: 1; margin-left: auto;">
+                                <div class="quantity-controls" style="display: flex; flex-direction: row; align-items: center; gap: 1rem;">
                                     <div class="quantity-display" id="quantityDisplay">${currentQuantity}</div>
-                                    <button class="quantity-btn" onclick="updateQuantity(1)" id="increaseBtn">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
+                                    <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                        <button class="quantity-btn-vertical" onclick="updateQuantity(1)" id="increaseBtn">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                        <button class="quantity-btn-vertical" onclick="updateQuantity(-1)" id="decreaseBtn">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -661,11 +700,24 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div id="storageMap" style="width:100%;height:300px;margin-top:1rem;border-radius:8px;"></div>
+                        <div style="background:#f5f5dc;border:1px solid #ddd;border-radius:8px;padding:1rem;margin-top:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:1rem;">
+                            <strong>Address</strong><br>
+                            No.118, Level 1, Plaza Aurora, Jln McDougall, Plaza Aurora, 93000 Kuching, Sarawak, Malaysia
+                        </div>
                     <!-- Promo Section ONLY - NO quantity for storage -->
                     <div class="detail-section">
                         <h3><i class="bi bi-tag"></i> Promo Code</h3>
-                        
+                        <div class="detail-row">
+                            <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
+                            <div class="detail-label" style="flex: 2; flex-direction: column; align-items: flex-start; display: flex;">
+                                <div style="font-weight:bold; font-size:1.1rem;">Max Weight and Dimension</div>
+                                <div style="font-weight:normal; font-size:1rem; margin-top:4px;">
+                                    23kg per item 180cm in total<br>
+                                    dimensions (Length + Width + Height)
+                                </div>
+                            </div>
+                        </div>
                         <div class="detail-row">
                             <div class="detail-label">Promo Code:</div>
                             <div class="detail-value" style="flex: 3;">
@@ -694,6 +746,10 @@
 
             html += '</div>';
             contentDiv.innerHTML = html;
+
+            if (bookingData.service === 'storage') {
+                showStorageMap(1.556622, 110.344510);
+            }
             
             // Only update quantity display for delivery service
             if (bookingData.service === 'delivery') {
@@ -969,6 +1025,19 @@
                 alert('No booking data found. Please go back and complete your booking.');
                 window.location.href = 'booking';
             }
+        }
+
+        function showStorageMap(lat, lng) {
+            const mapDiv = document.getElementById('storageMap');
+            if (!mapDiv) return;
+            const map = new google.maps.Map(mapDiv, {
+                center: { lat: lat, lng: lng },
+                zoom: 16
+            });
+            new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map
+            });
         }
     </script>
 </body>
