@@ -163,8 +163,8 @@
                                 <div class="collapse" id="management">
                                     <ul class="nav nav-collapse">
                                         <li>
-                                            <a href="<?= base_url('/'); ?>">
-                                                <span class="sub-item">Content</span>
+                                            <a href="<?= base_url('/admin/service_management'); ?>">
+                                                <span class="sub-item">Service Management</span>
                                             </a>
                                         </li>
                                         <li>
@@ -615,13 +615,13 @@
                                     data-bs-toggle="dropdown"
                                     href="#"
                                     aria-expanded="false">
+                                    <?php $session = session(); ?>
                                     <div class="avatar-sm">
-                                        <img
-                                            src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
+                                        <img 
+                                            src="<?= esc($session->get('profile_picture') ? base_url($session->get('profile_picture')) : base_url('assets/images/user.png')) ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
-                                    <?php $session = session(); ?>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
                                         <span class="fw-bold"><?= esc($session->get('username')) ?></span>
@@ -633,7 +633,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
+                                                        src="<?= esc($session->get('profile_picture') ? base_url($session->get('profile_picture')) : base_url('assets/images/user.png')) ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
