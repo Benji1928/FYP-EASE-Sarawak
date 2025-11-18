@@ -54,12 +54,18 @@ class Admin extends BaseController
 
         $transaction = $transaction_model->orderBy('created_at', 'DESC')->findAll();
 
+        $customer = $order_model->select('first_name, created_date')
+            ->orderBy('created_date', 'DESC')
+            ->limit(5)
+            ->findAll();
+
         $data = [ 'order_count'    => $order,
                   'user_count'     => $user,
                   'sales'          => $sales,
                   'orders'         => $totalOrders,
                   'pending_orders' => $pending_orders,
-                  'transactions'   => $transaction
+                  'transactions'   => $transaction,
+                  'new_customers'      => $customer
                 ];
 
         return $this->render('admin/dashboard', $data);

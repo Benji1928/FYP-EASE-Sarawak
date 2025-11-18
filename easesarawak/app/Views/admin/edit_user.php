@@ -34,8 +34,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i>Update</button>
-                <a href="<?= base_url('/user') ?>" class="btn btn-secondary ms-2">Cancel</a>
+                <button type="submit" class="btn btn-update"><i class="fa fa-save me-1"></i>Update</button>
+                <a href="<?= base_url('/user') ?>" class="btn btn-cancel ms-2">Cancel</a>
             </form>
         </div>
     </div>
