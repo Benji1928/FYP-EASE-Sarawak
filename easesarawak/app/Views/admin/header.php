@@ -615,13 +615,13 @@
                                     data-bs-toggle="dropdown"
                                     href="#"
                                     aria-expanded="false">
-                                    <?php $session = session(); ?>
                                     <div class="avatar-sm">
-                                        <img 
-                                            src="<?= esc($session->get('profile_picture') ? base_url($session->get('profile_picture')) : base_url('assets/images/user.png')) ?>"
+                                        <img
+                                            src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
+                                    <?php $session = session(); ?>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
                                         <span class="fw-bold"><?= esc($session->get('username')) ?></span>
@@ -633,7 +633,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="<?= esc($session->get('profile_picture') ? base_url($session->get('profile_picture')) : base_url('assets/images/user.png')) ?>"
+                                                        src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
