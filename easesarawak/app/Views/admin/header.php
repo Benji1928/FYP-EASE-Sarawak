@@ -52,6 +52,145 @@
         #orderModal p {
             margin-bottom: 0.4rem;
         }
+
+        .badge-superadmin {
+            background: #900707ff;
+            color: white;
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+
+        .badge-admin {
+            background: #5B532C;
+            color: white;
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+
+        .badge-pending {
+            background-color: #f2be00;
+            color: #000;
+            font-size: 1rem;
+            padding: 6px 12px;
+            font-weight: 600;
+        }
+
+        .badge-completed {
+            background-color: #ABE7B2;
+            color: #000;
+            font-size: 1rem;
+            padding: 6px 12px;
+            font-weight: 600;
+        }
+
+        .btn-update {
+            background-color: #f2be00;
+            color: #000;
+        }
+
+        .btn-update:hover {
+            background-color: #e6ac00;
+            color: #000;
+        }
+
+        .btn-cancel {
+            background-color: #5B532C;
+            color: #fff;
+        }
+
+        .btn-cancel:hover {
+            background-color: #47421f;
+            color: #fff;
+        }
+
+        .avatar-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Color sets */
+        .bg-a {
+            background-color: #5B532C !important;
+        }
+
+        .bg-b {
+            background-color: #47421f !important;
+        }
+
+        .bg-c {
+            background-color: #51cf66 !important;
+        }
+
+        .bg-d {
+            background-color: #845ef7 !important;
+        }
+
+        .bg-e {
+            background-color: #ffa94d !important;
+        }
+
+        .icon-visitor {
+            background-color: #f2be00 !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-admin {
+            background-color: #900707ff !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-sales {
+            background-color: #84994F !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-order {
+            background-color: #A18D6D !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .btn-pending {
+            background-color: #A72703;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-pending:hover {
+            background-color: #921f03;
+            color: #fff;
+        }
+
+        .btn-progress {
+            background-color: #5B532C;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-progress:hover {
+            background-color: #47421f;
+            color: #fff;
+        }
+
+        .btn-completed {
+            background-color: #63A361;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-completed:hover {
+            background-color: #4d844d;
+            color: #fff;
+        }
     </style>
 </head>
 
