@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Order_model;
+use App\Models\PaymentModel;
 use App\Models\User_model;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -32,6 +33,7 @@ class Admin extends BaseController
     {
         $order_model = new Order_model();
         $user_model = new User_model();
+        $transaction_model = new PaymentModel();
 
         $order = $order_model->where('is_deleted', 0)->countAllResults();
         $user  = $user_model->where('is_deleted', 0)->countAllResults();
@@ -50,14 +52,23 @@ class Admin extends BaseController
             ->where('status', 'pending')
             ->findAll();
 
+        $transaction = $transaction_model->orderBy('created_at', 'DESC')->findAll();
+
+        $customer = $order_model->select('first_name, created_date')
+            ->orderBy('created_date', 'DESC')
+            ->limit(5)
+            ->findAll();
+
         $data = [ 'order_count'    => $order,
                   'user_count'     => $user,
                   'sales'          => $sales,
                   'orders'         => $totalOrders,
-                  'pending_orders' => $pending_orders
+                  'pending_orders' => $pending_orders,
+                  'transactions'   => $transaction,
+                  'new_customers'      => $customer
                 ];
 
-        return view('admin/dashboard', $data);
+        return $this->render('admin/dashboard', $data);
     }
 
     public function report()
@@ -115,7 +126,7 @@ class Admin extends BaseController
             'hourCounts'   => $hourCounts,
         ];
 
-        return view('admin/report', $data);
+        return $this->render('admin/report', $data);
     }
 
     public function getRevenueData()
@@ -174,7 +185,7 @@ class Admin extends BaseController
         $order_model = new Order_model();
         $orders = $order_model->where('is_deleted', 0)->findAll();
         // print_r($orders);exit;
-        return view('admin/order', ['orders' => $orders]);
+        return $this->render('admin/order', ['orders' => $orders]);
     }
 
     public function change_status($order_id)
@@ -208,8 +219,8 @@ class Admin extends BaseController
         $data = [
             'users' => $users
         ];
-
-        return view('admin/user', $data);
+        // print_r($users);exit;
+        return $this->render('admin/user', $data);
     }
 
     public function create_user()
@@ -229,7 +240,7 @@ class Admin extends BaseController
             return redirect()->to(base_url('/user'))->with('success', 'User created successfully!');
         }
 
-        return view('admin/create_user');
+        return $this->render('admin/create_user');
     }
 
     public function getDetails($order_id)
@@ -259,5 +270,74 @@ class Admin extends BaseController
         $orderModel->update($orderId, ['comment' => $note]);
 
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    public function edit($user_id)
+    {
+        $userModel = new User_model();
+        $user = $userModel->find($user_id);
+
+        if (!$user) {
+            return redirect()->to(base_url('admin/user'))->with('error', 'User not found.');
+        }
+        return $this->render('admin/edit_user', ['user' => $user]);
+    }
+
+    public function update($user_id)
+    {
+        $userModel = new User_model();
+
+        $data = [
+            'username' => $this->request->getPost('username'),
+            'email'    => $this->request->getPost('email'),
+            'role'     => $this->request->getPost('role'),
+            'modified_date' => date('Y-m-d H:i:s')
+        ];
+
+        // Optional: add validation
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'username' => 'required|min_length[3]',
+            'email'    => 'required|valid_email',
+            'role'     => 'required|in_list[0,1]',
+        ]);
+
+        if (!$validation->run($data)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $userModel->update($user_id, $data);
+        return redirect()->to(base_url('/user'))->with('message', "User $user_id updated successfully.");
+    }
+
+    public function delete($user_id)
+    {
+        $userModel = new User_model();
+
+        $user = $userModel->find($user_id);
+        if (!$user) {
+            return redirect()->to(base_url('admin/user'))->with('error', 'User not found.');
+        }
+
+        // Soft delete: set is_deleted to 1
+        $userModel->update($user_id, ['is_deleted' => 1,
+                                    'modified_date' => date('Y-m-d H:i:s')]);
+
+        return redirect()->to(base_url('/user'))->with('message', "User $user_id deleted successfully.");
+    }
+    
+    public function service_management()
+    {
+        $model = new \App\Models\ServiceManagementModel();
+        $services = $model->findAll();
+        return view('admin/service_management', ['services' => $services]);
+    }
+
+    public function update_service_price($id)
+    {
+        $model = new \App\Models\ServiceManagementModel();
+        $base_price = $this->request->getPost('base_price');
+        $model->update($id, ['base_price' => $base_price]);
+        return redirect()->to('/admin/service_management')->with('success', 'Base price updated!');
     }
 }

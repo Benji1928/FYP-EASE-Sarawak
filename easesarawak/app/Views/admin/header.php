@@ -7,13 +7,14 @@
     <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport" />
-    <link rel="icon" type="image/png" href="assets/images/cropped-Ease_PNG_File-09.png">
+    <link rel="icon" type="image/png" href="<?= base_url('assets/images/cropped-Ease_PNG_File-09.png') ?>">
 
     <!-- Ensure relative asset paths resolve from the application root -->
     <base href="<?= base_url('/') ?>">
 
     <!-- Fonts and icons -->
-    <script src="assets/js/admin/plugin/webfont/webfont.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="<?= base_url('assets/js/admin/plugin/webfont/webfont.min.js') ?>"></script>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -38,9 +39,9 @@
     </script> -->
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="assets/css/admin/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/plugins.min.css" />
-    <link rel="stylesheet" href="assets/css/admin/kaiadmin.min.css" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/bootstrap.min.css') ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/plugins.min.css') ?>" />
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/kaiadmin.min.css') ?>" />
     <style>
         #orderModal .card {
             border-radius: 1rem;
@@ -54,6 +55,145 @@
         #orderModal p {
             margin-bottom: 0.4rem;
         }
+
+        .badge-superadmin {
+            background: #900707ff;
+            color: white;
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+
+        .badge-admin {
+            background: #5B532C;
+            color: white;
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+
+        .badge-pending {
+            background-color: #f2be00;
+            color: #000;
+            font-size: 1rem;
+            padding: 6px 12px;
+            font-weight: 600;
+        }
+
+        .badge-completed {
+            background-color: #ABE7B2;
+            color: #000;
+            font-size: 1rem;
+            padding: 6px 12px;
+            font-weight: 600;
+        }
+
+        .btn-update {
+            background-color: #f2be00;
+            color: #000;
+        }
+
+        .btn-update:hover {
+            background-color: #e6ac00;
+            color: #000;
+        }
+
+        .btn-cancel {
+            background-color: #5B532C;
+            color: #fff;
+        }
+
+        .btn-cancel:hover {
+            background-color: #47421f;
+            color: #fff;
+        }
+
+        .avatar-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Color sets */
+        .bg-a {
+            background-color: #5B532C !important;
+        }
+
+        .bg-b {
+            background-color: #47421f !important;
+        }
+
+        .bg-c {
+            background-color: #51cf66 !important;
+        }
+
+        .bg-d {
+            background-color: #845ef7 !important;
+        }
+
+        .bg-e {
+            background-color: #ffa94d !important;
+        }
+
+        .icon-visitor {
+            background-color: #f2be00 !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-admin {
+            background-color: #900707ff !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-sales {
+            background-color: #84994F !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .icon-order {
+            background-color: #A18D6D !important;
+            color: #fff !important;
+            border-radius: 10px;
+        }
+
+        .btn-pending {
+            background-color: #A72703;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-pending:hover {
+            background-color: #921f03;
+            color: #fff;
+        }
+
+        .btn-progress {
+            background-color: #5B532C;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-progress:hover {
+            background-color: #47421f;
+            color: #fff;
+        }
+
+        .btn-completed {
+            background-color: #63A361;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn-completed:hover {
+            background-color: #4d844d;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -66,7 +206,7 @@
                 <div class="logo-header" data-background-color="white">
                     <a href="<?= base_url('/admin'); ?>" class="logo">
                         <img
-                            src="assets/images/Ease_PNG_File-01-1.png"
+                            src="<?= base_url('assets/images/Ease_PNG_File-01-1.png') ?>"
                             alt="navbar brand"
                             class="navbar-brand"
                             height="65" />
@@ -129,11 +269,13 @@
                                             <span class="sub-item">User Management</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="<?= base_url('/create_user'); ?>">
-                                            <span class="sub-item">Add User</span>
-                                        </a>
-                                    </li>
+                                    <?php if (session()->get('role') === '1'): ?>
+                                        <li>
+                                            <a href="<?= base_url('/create_user'); ?>">
+                                                <span class="sub-item">Add User</span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                         </li>
@@ -153,6 +295,7 @@
                                 </ul>
                             </div>
                         </li>
+
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#management">
                                 <i class="fas fa-table"></i>
@@ -174,6 +317,31 @@
                                 </ul>
                             </div>
                         </li>
+
+                        <?php if (session()->get('role') === '1'): ?>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#management">
+                                    <i class="fas fa-table"></i>
+                                    <p>Management</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="management">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="<?= base_url('/admin/service_management'); ?>">
+                                                <span class="sub-item">Service Management</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url('/'); ?>">
+                                                <span class="sub-item">Promo Code</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php endif; ?>
+
                         <!-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#tables">
                                 <i class="fas fa-table"></i>
@@ -312,13 +480,13 @@
             <div class="main-header">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
-                    <div class="logo-header" data-background-color="dark">
+                    <div class="logo-header" data-background-color="white">
                         <a href="index.html" class="logo">
                             <img
-                                src="assets/img/kaiadmin/logo_light.svg"
+                                src="<?= base_url('assets/images/Ease_PNG_File-01-1.png') ?>"
                                 alt="navbar brand"
                                 class="navbar-brand"
-                                height="20" />
+                                height="60" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -338,7 +506,7 @@
                 <nav
                     class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
+                        <!-- <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -351,7 +519,7 @@
                                     placeholder="Search ..."
                                     class="form-control" />
                             </div>
-                        </nav>
+                        </nav> -->
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                             <li
@@ -505,7 +673,7 @@
                                                 <a href="#">
                                                     <div class="notif-img">
                                                         <img
-                                                            src="assets/img/profile2.jpg"
+                                                            src="<?= base_url('assets/img/profile2.jpg') ?>"
                                                             alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
@@ -542,7 +710,7 @@
                                     <i class="fas fa-layer-group"></i>
                                 </a>
                                 <div class="dropdown-menu quick-actions animated fadeIn">
-                                    <div class="quick-actions-header">
+                                    <div class="quick-actions-header" style="background: #A72703; color: #fff;">
                                         <span class="title mb-1">Quick Actions</span>
                                         <span class="subtitle op-7">Shortcuts</span>
                                     </div>
@@ -550,24 +718,24 @@
                                         <div class="quick-actions-items">
                                             <div class="row m-0">
                                                 <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div class="avatar-item bg-danger rounded-circle">
                                                             <i class="far fa-calendar-alt"></i>
                                                         </div>
                                                         <span class="text">Calendar</span>
                                                     </div>
                                                 </a>
-                                                <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                <a class="col-6 col-md-4 p-0" href="<?= base_url('/') ?>">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div
                                                             class="avatar-item bg-warning rounded-circle">
                                                             <i class="fas fa-map"></i>
                                                         </div>
-                                                        <span class="text">Maps</span>
+                                                        <span class="text">Booking Page</span>
                                                     </div>
                                                 </a>
                                                 <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div class="avatar-item bg-info rounded-circle">
                                                             <i class="fas fa-file-excel"></i>
                                                         </div>
@@ -575,7 +743,7 @@
                                                     </div>
                                                 </a>
                                                 <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div
                                                             class="avatar-item bg-success rounded-circle">
                                                             <i class="fas fa-envelope"></i>
@@ -584,7 +752,7 @@
                                                     </div>
                                                 </a>
                                                 <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div
                                                             class="avatar-item bg-primary rounded-circle">
                                                             <i class="fas fa-file-invoice-dollar"></i>
@@ -593,7 +761,7 @@
                                                     </div>
                                                 </a>
                                                 <a class="col-6 col-md-4 p-0" href="#">
-                                                    <div class="quick-actions-item">
+                                                    <div class="quick-actions-item" style="color: #000;">
                                                         <div
                                                             class="avatar-item bg-secondary rounded-circle">
                                                             <i class="fas fa-credit-card"></i>
@@ -615,7 +783,7 @@
                                     aria-expanded="false">
                                     <div class="avatar-sm">
                                         <img
-                                            src="assets/images/user.png"
+                                            src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                             alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
@@ -631,7 +799,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img
-                                                        src="assets/images/user.png"
+                                                        src="<?= esc($user['profile_picture'] ? base_url($user['profile_picture']) : base_url('assets/images/user.png')) ?>"
                                                         alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
@@ -639,18 +807,19 @@
                                                     <h4><?= esc($session->get('username')) ?></h4>
                                                     <p class="text-muted"><?= esc($session->get('email')) ?></p>
                                                     <a
-                                                        href="profile.html"
-                                                        class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                        href="<?= base_url('/profile') ?>"
+                                                        class="btn btn-xs btn-sm"
+                                                        style="background: #84994F; color: white;">View Profile</a>
                                                 </div>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">My Profile</a>
-                                            <a class="dropdown-item" href="#">Inbox</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Account Setting</a>
-                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="<?= base_url('/profile') ?>">My Profile</a>
+                                            <!-- <a class="dropdown-item" href="#">Inbox</a> -->
+                                            <!-- <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Account Setting</a> -->
+                                            <!-- <div class="dropdown-divider"></div> -->
                                             <a class="dropdown-item" href="<?= base_url('/logout') ?>">Logout</a>
                                         </li>
                                     </div>

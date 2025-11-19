@@ -16,12 +16,19 @@ $routes->get('/bookingdetail', 'Home::bookingdetail');
 $routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
 $routes->post('/saveOrder', 'Home::saveOrder');
 $routes->get('/booking-confirmation', 'Home::bookingConfirmation');
+$routes->get('/payment', 'Home::payment');
+$routes->post('card-payment/intent', 'CardPayment::createIntent');
+$routes->post('card-payment/store',  'CardPayment::store');
 $routes->post('/checkPromoCode', 'Home::checkPromoCode');
 
 // Login routes
 $routes->get('/login', 'Login::index');
 $routes->post('/login_submit', 'Login::submit');
 $routes->get('/logout', 'Login::logout');
+$routes->get('forgot_password', 'AuthController::forgotPasswordForm');
+$routes->post('forgot_password', 'AuthController::forgotPassword');
+$routes->get('reset_password/(:any)', 'AuthController::resetPasswordForm/$1');
+$routes->post('reset_password/(:any)', 'AuthController::resetPassword/$1');
 
 // Admin Portal routes
 $routes->get('/admin', 'Admin::index');
@@ -39,3 +46,15 @@ $routes->post('/admin/promo_code/store', 'PromoCodeController::store');
 $routes->get('/admin/promo_code/edit/(:num)', 'PromoCodeController::edit/$1');
 $routes->post('/admin/promo_code/update/(:num)', 'PromoCodeController::update/$1');
 $routes->get('/admin/promo_code/delete/(:num)', 'PromoCodeController::delete/$1');
+$routes->get('/edit_user/(:num)', 'Admin::edit/$1');
+$routes->post('/update_user/(:num)', 'Admin::update/$1');
+$routes->get('/delete_user/(:num)', 'Admin::delete/$1');
+$routes->get('/profile', 'Profile::profile');
+$routes->get('/edit_profile/(:num)', 'Profile::edit_profile/$1');
+$routes->post('/update_profile/(:num)', 'Profile::update_profile/$1');
+$routes->get('/change_password', 'Profile::change_password_form');
+$routes->post('/change_password', 'Profile::change_password');
+$routes->get('/admin/service_management', 'Admin::service_management');
+$routes->post('/admin/service_management/update/(:num)', 'Admin::update_service_price/$1');
+
+

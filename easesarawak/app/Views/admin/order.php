@@ -35,22 +35,22 @@
                                 <?php foreach ($orders as $order): ?>
                                     <tr>
                                         <td><?= esc($order['order_id']); ?></td>
-                                        <td><?= esc($order['service_type']); ?></td>
+                                        <td><?= strtoupper(esc($order['service_type'])); ?></td>
                                         <td><?= esc($order['first_name']); ?> <?= esc($order['last_name']); ?></td>
                                         <td><?= esc($order['phone']); ?></td>
                                         <td><?= date('d M Y, h:i A', strtotime($order['created_date'])); ?></td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="<?= base_url('/change_status/' . $order['order_id']); ?>"
-                                                class="btn btn-sm 
+                                                class="btn btn-sm
                                                 <?php
-                                                if ($order['status'] == 0) echo 'btn-warning';
-                                                elseif ($order['status'] == 1) echo 'btn-info';
-                                                else echo 'btn-success';
+                                                if ($order['status'] == 0) echo 'btn-pending';
+                                                elseif ($order['status'] == 1) echo 'btn-progress';
+                                                else echo 'btn-completed';
                                                 ?>">
                                                 <?php
-                                                if ($order['status'] == 0) echo '<i class="fa fa-hourglass-start"></i> Pending';
-                                                elseif ($order['status'] == 1) echo '<i class="fa fa-spinner"></i> In Progress';
-                                                else echo '<i class="fa fa-check"></i> Completed';
+                                                if ($order['status'] == 0) echo '<i class="fa fa-hourglass-start"></i>';
+                                                elseif ($order['status'] == 1) echo '<i class="fa fa-spinner"></i>';
+                                                else echo '<i class="fa fa-check"></i>';
                                                 ?>
                                             </a>
                                         </td>
@@ -126,8 +126,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="saveNoteBtn" class="btn btn-softblue">Save</button>
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="saveNoteBtn" class="btn btn-update">Save</button>
             </div>
         </div>
     </div>
