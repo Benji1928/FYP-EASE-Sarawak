@@ -5,6 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// Intro-Landing Page routes
 $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/policy', 'Home::policy');
