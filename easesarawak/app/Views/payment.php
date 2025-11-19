@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -235,7 +237,8 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ payment_intent_id: paymentIntent.id })
       });
-
+      const receiptEmail = document.getElementById('customerEmail')?.value || "";
+  
     if (!storeRes.ok) {
         const text = await storeRes.text();
         console.error('store error', storeRes.status, text);
@@ -248,9 +251,32 @@
     return;
       }
 
+    if (receiptEmail) {
+    try {
+      const receiptForm = new FormData();
+      receiptForm.append('email', receiptEmail);
+      receiptForm.append('amount_cents', amountCents);             // 例子：7000
+      receiptForm.append('currency', 'myr');
+      receiptForm.append('status', paymentIntent.status);
+      receiptForm.append('payment_intent_id', paymentIntent.id);
+
+    const receiptRes = await fetch("<?= site_url('send-receipt') ?>", {
+      method: "POST",
+      body: receiptForm
+    });
+
+    if (!receiptRes.ok) {
+      const t = await receiptRes.text();
+      console.error('send-receipt failed', receiptRes.status, t);
+    }
+  } catch (e) {
+    console.error('send-receipt error', e);
+  }
+}
+
       alert('Payment processed successfully!');
-      // 回到 bookingcustomerdetail
-      window.location.href = '<?= base_url('bookingcustomerdetail') ?>';
+      // after payment success page
+      window.location.href = '<?= base_url('booking_confirmation') ?>';
 
     } catch (err) {
       console.error(err);
@@ -258,6 +284,8 @@
     }
   });
 </script>
+
+<input type="hidden" id="customerEmail" value="<?= esc($receiptEmail ?? '') ?>">
 
 
     <?= $this->include('footer/footer') ?>
