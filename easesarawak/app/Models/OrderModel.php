@@ -109,29 +109,22 @@ class OrderModel extends Model
         if (!isset($data['data']['status'])) {
             $data['data']['status'] = 0;
         }
-        
         if (!isset($data['data']['amount'])) {
             $data['data']['amount'] = 0;
         }
-        
         if (!isset($data['data']['is_deleted'])) {
             $data['data']['is_deleted'] = 0;
         }
-        
         if (!isset($data['data']['upload'])) {
             $data['data']['upload'] = '';
         }
-        
         if (!isset($data['data']['promo_code'])) {
             $data['data']['promo_code'] = '';
         }
-        
         if (!isset($data['data']['payment_method'])) {
             $data['data']['payment_method'] = 'pending';
         }
-        
         $data['data']['created_date'] = date('Y-m-d H:i:s');
-        
         return $data;
     }
 
@@ -154,7 +147,6 @@ class OrderModel extends Model
             'wechat' => 2,
             'line' => 3
         ];
-        
         return isset($socialTypes[strtolower($socialType)]) ? $socialTypes[strtolower($socialType)] : 0;
     }
 
@@ -164,21 +156,14 @@ class OrderModel extends Model
     private function handleFileUpload($file)
     {
         $uploadedFilePath = '';
-        
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Create upload directory if it doesn't exist
             $uploadDir = 'assets/upload/';
             $uploadPath = FCPATH . $uploadDir;
-            
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
                 log_message('info', 'Created upload directory: ' . $uploadPath);
             }
-            
-            // Generate unique filename
             $fileName = uniqid() . '_' . time() . '.' . $file->getClientExtension();
-            
-            // Move file to upload directory
             if ($file->move($uploadPath, $fileName)) {
                 $uploadedFilePath = $uploadDir . $fileName;
                 log_message('info', 'File uploaded successfully: ' . $uploadedFilePath);
@@ -188,7 +173,6 @@ class OrderModel extends Model
         } else if ($file && !$file->isValid()) {
             log_message('error', 'Invalid file upload: ' . $file->getErrorString());
         }
-        
         return $uploadedFilePath;
     }
 
@@ -215,8 +199,6 @@ class OrderModel extends Model
             'Promo Discount' => !empty($bookingData['promoDiscount']) ? $bookingData['promoDiscount'] . '%' : 'Null',
             'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null'
         ];
-        
-        // If it's storage service, modify the structure
         if ($bookingData['service'] === 'storage') {
             $orderDetails = [
                 'Service Type' => 'Storage',
@@ -234,7 +216,6 @@ class OrderModel extends Model
                 'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null'
             ];
         }
-
         return json_encode($orderDetails, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
@@ -245,6 +226,7 @@ class OrderModel extends Model
     {
         try {
             log_message('info', 'OrderModel: processAndSaveOrder called');
+
             
             // Use direct MySQLi connection like the original working saveOrder function
             $mysqli = new \mysqli('localhost', 'root', 'J]77rDCDqJZudIiz', 'easesarawak', 3306);
@@ -260,9 +242,9 @@ class OrderModel extends Model
             // Get booking data
             $bookingDataJson = $request->getPost('bookingData');
             log_message('info', 'OrderModel: Received booking data JSON: ' . $bookingDataJson);
-            
+
             $bookingData = json_decode($bookingDataJson, true);
-            
+
             if (!$bookingData) {
                 log_message('error', 'OrderModel: Failed to decode booking data JSON');
                 return [
@@ -270,7 +252,7 @@ class OrderModel extends Model
                     'message' => 'Invalid booking data'
                 ];
             }
-            
+
             // Get customer data
             $firstName = $request->getPost('firstName');
             $lastName = $request->getPost('lastName');
@@ -286,13 +268,13 @@ class OrderModel extends Model
 
             log_message('info', 'OrderModel: Customer data - Name: ' . $firstName . ' ' . $lastName . ', Email: ' . $email);
             log_message('info', 'OrderModel: Special luggage: ' . $specialLuggage . ', Note: ' . $specialLuggageNote);
-            
+
             // Handle file upload
             $uploadedFilePath = $this->handleFileUpload($request->getFile('documentUpload'));
-            
+
             // Format order details JSON
             $orderDetailsJson = $this->formatOrderDetailsJson($bookingData);
-            
+
             // Handle special luggage logic
             if ($specialLuggage === '1' && !empty($specialLuggageNote)) {
                 $special = 1;
@@ -303,8 +285,8 @@ class OrderModel extends Model
                 $specialNote = null;
                 log_message('info', 'OrderModel: No special luggage');
             }
-            
-            // Map social contact type (same as original code)
+
+            // Map social contact type
             $social = '0'; // default
             switch (strtolower($socialContactType)) {
                 case 'whatsapp':
@@ -317,71 +299,41 @@ class OrderModel extends Model
                     $social = '3';
                     break;
                 default:
-                    $social = '0'; // Unknown/Other
+                    $social = '0';
                     break;
             }
-            
-            // Prepare insert statement (exactly like original)
-            $sql = "INSERT INTO `order` (
-                service_type, first_name, last_name, id_num, email, phone, 
-                social, social_num, upload, special, special_note, 
-                order_details_json, promo_code, status, amount, payment_method, 
-                is_deleted, created_date
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
-            $stmt = $mysqli->prepare($sql);
-            
-            if (!$stmt) {
-                log_message('error', 'OrderModel: Failed to prepare statement: ' . $mysqli->error);
-                $mysqli->close();
-                return [
-                    'success' => false,
-                    'message' => 'Failed to prepare database statement: ' . $mysqli->error
-                ];
-            }
-            
-            // Prepare values (exactly like original)
-            $serviceType = $bookingData['service'];
-            $idNum = $identificationNumber;
-            $phoneClean = $phone;  // Keep original phone with country code
-            $socialNumClean = $socialContactValue;  // Keep original social contact with country code
-            $upload = $uploadedFilePath; // Store complete file path
-            $promoCode = $bookingData['promoCode'] ?? '';
-            $status = 0;
-            $amount = $bookingData['totalPrice'];
-            $paymentMethod = 'pending';
-            $isDeleted = 0;
-            $createdDate = date('Y-m-d H:i:s');
-            
-            $stmt->bind_param(
-                "sssssssssisssissis",  // Same bind types as original
-                $serviceType,      // s
-                $firstName,        // s
-                $lastName,         // s
-                $idNum,            // s
-                $email,            // s
-                $phoneClean,       // s
-                $social,           // s
-                $socialNumClean,   // s
-                $upload,           // s
-                $special,          // i - Integer (0 or 1)
-                $specialNote,      // s - String or null
-                $orderDetailsJson, // s
-                $promoCode,        // s
-                $status,           // i
-                $amount,           // s
-                $paymentMethod,    // s
-                $isDeleted,        // i
-                $createdDate       // s
-            );
-            
-            if ($stmt->execute()) {
-                $orderId = $mysqli->insert_id;
+
+            // Prepare data for insert
+            $data = [
+                'service_type' => $bookingData['service'],
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'id_num' => $identificationNumber,
+                'email' => $email,
+                'phone' => $phone,
+                'social' => $social,
+                'social_num' => $socialContactValue,
+                'upload' => $uploadedFilePath,
+                'special' => $special,
+                'special_note' => $specialNote,
+                'order_details_json' => $orderDetailsJson,
+                'promo_code' => $bookingData['promoCode'] ?? '',
+                'status' => 0,
+                'amount' => $bookingData['totalPrice'],
+                'payment_method' => 'pending',
+                'is_deleted' => 0,
+                'created_date' => date('Y-m-d H:i:s')
+            ];
+
+            // Use CodeIgniter's Query Builder for insert
+            $db = \Config\Database::connect();
+            $builder = $db->table($this->table);
+            $insertResult = $builder->insert($data);
+
+            if ($insertResult) {
+                $orderId = $db->insertID();
                 log_message('info', 'OrderModel: Order inserted successfully with ID: ' . $orderId);
-                
-                $stmt->close();
-                $mysqli->close();
-                
+
                 return [
                     'success' => true,
                     'order_id' => $orderId,
@@ -389,16 +341,12 @@ class OrderModel extends Model
                     'uploaded_file' => $uploadedFilePath
                 ];
             } else {
-                log_message('error', 'OrderModel: Failed to execute statement: ' . $stmt->error);
-                $stmt->close();
-                $mysqli->close();
-                
+                log_message('error', 'OrderModel: Failed to save order');
                 return [
                     'success' => false,
-                    'message' => 'Failed to save order: ' . $stmt->error
+                    'message' => 'Failed to save order'
                 ];
             }
-            
         } catch (\Exception $e) {
             log_message('error', 'OrderModel: Exception in processAndSaveOrder: ' . $e->getMessage());
             return [
