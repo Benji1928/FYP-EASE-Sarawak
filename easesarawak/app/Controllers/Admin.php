@@ -330,7 +330,7 @@ class Admin extends BaseController
     {
         $model = new \App\Models\ServiceManagementModel();
         $services = $model->findAll();
-        return view('admin/service_management', ['services' => $services]);
+        return $this->render('admin/service_management', ['services' => $services]);
     }
 
     public function update_service_price($id)
