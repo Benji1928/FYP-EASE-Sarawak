@@ -296,28 +296,6 @@
                             </div>
                         </li>
 
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#management">
-                                <i class="fas fa-table"></i>
-                                <p>Management</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="management">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="<?= base_url('/'); ?>">
-                                            <span class="sub-item">Content</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="<?= base_url('/admin/promo_code'); ?>">
-                                            <span class="sub-item">Promo Code</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
                         <?php if (session()->get('role') === '1'): ?>
                             <li class="nav-item">
                                 <a data-bs-toggle="collapse" href="#management">
