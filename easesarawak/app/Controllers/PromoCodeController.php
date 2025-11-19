@@ -12,12 +12,12 @@ class PromoCodeController extends BaseController
                             ->orderBy('created_date', 'DESC')
                             ->findAll();
 
-        return view('admin/promo_code', ['promoCodes' => $promoCodes]);
+        return $this->render('admin/promo_code', ['promoCodes' => $promoCodes]);
     }
 
     public function create()
     {
-        return view('admin/add_promo');
+        return $this->render('admin/add_promo');
     }
 
     public function store()
@@ -58,7 +58,7 @@ class PromoCodeController extends BaseController
             return redirect()->to(base_url('/admin/promo_code'))->with('error', 'Promo not found');
         }
 
-        return view('admin/edit_promo', ['promo' => $promo]);
+        return $this->render('admin/edit_promo', ['promo' => $promo]);
     }
 
     public function update($id = null)
