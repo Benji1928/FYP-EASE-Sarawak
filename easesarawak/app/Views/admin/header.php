@@ -311,7 +311,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="<?= base_url('/'); ?>">
+                                            <a href="<?= base_url('/admin/promo_code'); ?>">
                                                 <span class="sub-item">Promo Code</span>
                                             </a>
                                         </li>
