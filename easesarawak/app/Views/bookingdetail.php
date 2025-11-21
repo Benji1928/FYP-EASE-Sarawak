@@ -498,6 +498,7 @@
         let appliedPromoCode = '';
         let promoDiscount = 0;
         let basePrice = 24;
+        let promoType = 'percentage';
         const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
         const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
@@ -530,11 +531,16 @@
             // Initialize quantity and promo from booking data if exists
             currentQuantity = bookingData.quantity || 1;
             appliedPromoCode = bookingData.promoCode || '';
-            promoDiscount = bookingData.promoDiscount || 0;
+            promoDiscount = toNumber(bookingData.promoDiscount);
+            promoType = bookingData.promoType || 'percentage';
 
             renderBookingDetails(bookingData);
             updatePricing();
         });
+
+        function toNumber(val) {
+            return parseFloat(val) || 0;
+        }
 
         function renderBookingDetails(bookingData) {
             const contentDiv = document.getElementById('booking-details-content');
@@ -650,7 +656,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -735,7 +747,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -760,8 +778,17 @@
         function updatePricing() {
             const pricingDiv = document.getElementById('pricing-content');
             const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            const total = subtotal - discountAmount;
+            let discountAmount = 0;
+
+            if (appliedPromoCode && promoDiscount > 0) {
+                if (promoType === 'amount') {
+                    discountAmount = promoDiscount;
+                } else {
+                    discountAmount = subtotal * promoDiscount / 100;
+                }
+            }
+
+            const total = Math.max(0, subtotal - discountAmount);
 
             let html = `
                 <div class="price-row">
@@ -893,9 +920,16 @@
                     
                     if (data.success && data.valid) {
                         appliedPromoCode = promoCode;
-                        promoDiscount = data.discount || 20;
+                        promoDiscount = toNumber(data.discount);
+                        promoType = data.discount_type ? data.discount_type : 'percentage';
                         
-                        showPromoMessage(`Promo code applied! ${promoDiscount}% discount`, 'success');
+                        let promoMsg = '';
+                        if (promoType === 'amount') {
+                            promoMsg = `Promo code applied! RM${promoDiscount} discount`;
+                        } else {
+                            promoMsg = `Promo code applied! ${promoDiscount}% discount`;
+                        }
+                        showPromoMessage(promoMsg, 'success');
                         promoBtn.textContent = 'Applied';
                         promoInput.disabled = true;
                         updatePricing();
@@ -946,7 +980,8 @@
             if (bookingData) {
                 bookingData.quantity = currentQuantity;
                 bookingData.promoCode = appliedPromoCode;
-                bookingData.promoDiscount = promoDiscount;
+                bookingData.promoDiscount = toNumber(promoDiscount);
+                bookingData.promoType = promoType;
                 bookingData.basePrice = basePrice;
                 bookingData.totalPrice = calculateTotal();
                 sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
@@ -955,8 +990,15 @@
 
         function calculateTotal() {
             const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            return subtotal - discountAmount;
+            let discountAmount = 0;
+            if (appliedPromoCode && promoDiscount > 0) {
+                if (promoType === 'amount') {
+                    discountAmount = promoDiscount;
+                } else {
+                    discountAmount = subtotal * promoDiscount / 100;
+                }
+            }
+            return Math.max(0, subtotal - discountAmount);
         }
 
         function formatDate(dateString) {

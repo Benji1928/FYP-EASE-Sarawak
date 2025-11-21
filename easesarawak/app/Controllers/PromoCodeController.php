@@ -24,7 +24,9 @@ class PromoCodeController extends BaseController
     {
         $rules = [
             'code' => 'required|max_length[100]',
+            'discount_type' => 'required|in_list[percentage,amount]',
             'discount_percentage' => 'permit_empty|integer|less_than_equal_to[100]',
+            'discount_amount' => 'permit_empty|decimal',
             'validation_date' => 'required',
             'expired_date' => 'required'
         ];
@@ -35,9 +37,12 @@ class PromoCodeController extends BaseController
 
         $model = new PromoCodeModel();
 
+        $type = $this->request->getPost('discount_type');
         $data = [
             'code' => $this->request->getPost('code'),
-            'discount_percentage' => $this->request->getPost('discount_percentage') ?: 0,
+            'discount_type' => $type,
+            'discount_percentage' => $type === 'percentage' ? $this->request->getPost('discount_percentage') : 0,
+            'discount_amount' => $type === 'amount' ? $this->request->getPost('discount_amount') : 0,
             'validation_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('validation_date'))),
             'expired_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('expired_date'))),
             'is_deleted' => 0,
@@ -65,7 +70,9 @@ class PromoCodeController extends BaseController
     {
         $rules = [
             'code' => 'required|max_length[100]',
+            'discount_type' => 'required|in_list[percentage,amount]',
             'discount_percentage' => 'permit_empty|integer|less_than_equal_to[100]',
+            'discount_amount' => 'permit_empty|decimal',
             'validation_date' => 'required',
             'expired_date' => 'required'
         ];
@@ -76,9 +83,12 @@ class PromoCodeController extends BaseController
 
         $model = new PromoCodeModel();
 
+        $type = $this->request->getPost('discount_type');
         $data = [
             'code' => $this->request->getPost('code'),
-            'discount_percentage' => $this->request->getPost('discount_percentage') ?: 0,
+            'discount_type' => $type,
+            'discount_percentage' => $type === 'percentage' ? $this->request->getPost('discount_percentage') : 0,
+            'discount_amount' => $type === 'amount' ? $this->request->getPost('discount_amount') : 0,
             'validation_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('validation_date'))),
             'expired_date' => date('Y-m-d H:i:s', strtotime($this->request->getPost('expired_date'))),
             'modified_date' => date('Y-m-d H:i:s')

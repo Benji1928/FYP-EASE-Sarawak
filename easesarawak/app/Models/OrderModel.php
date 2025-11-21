@@ -226,18 +226,6 @@ class OrderModel extends Model
     {
         try {
             log_message('info', 'OrderModel: processAndSaveOrder called');
-
-            
-            // Use direct MySQLi connection like the original working saveOrder function
-            $mysqli = new \mysqli('localhost', 'root', 'J]77rDCDqJZudIiz', 'easesarawak', 3306);
-            
-            if ($mysqli->connect_error) {
-                log_message('error', 'OrderModel: MySQLi connection failed: ' . $mysqli->connect_error);
-                return [
-                    'success' => false,
-                    'message' => 'Database connection failed: ' . $mysqli->connect_error
-                ];
-            }
             
             // Get booking data
             $bookingDataJson = $request->getPost('bookingData');
