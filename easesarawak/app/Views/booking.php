@@ -44,6 +44,7 @@
             padding: 0;
             background-color: #f5f5f5;
             padding-top: 80px;
+            font-size: 1.15rem;
         }
 
         .booking-container {
