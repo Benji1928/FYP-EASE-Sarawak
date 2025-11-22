@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/footer_style.css">
     <link rel="stylesheet" href="assets/css/navbar_style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOEej3q--uJLfUydFQ1T2vlr3HJC35atQ"></script>
 
     <style>
         .navbar-nav,
@@ -32,6 +33,7 @@
             padding: 0;
             background-color: #f5f5f5;
             padding-top: 120px;
+            font-size: 1.25rem;
         }
 
         .booking-detail-container {
@@ -49,6 +51,11 @@
             margin-bottom: 2rem;
             margin-top: 2rem;
             grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 2rem;
         }
 
         .booking-detail-header h1 {
@@ -210,30 +217,33 @@
 
         .quantity-controls {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.3rem;
         }
 
-        .quantity-btn {
+        .quantity-btn-vertical {
             background: #007bff;
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: background 0.3s ease;
+            margin: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
 
-        .quantity-btn:hover {
+        .quantity-btn-vertical:hover {
             background: #0056b3;
         }
 
-        .quantity-btn:disabled {
+        .quantity-btn-vertical:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
@@ -328,7 +338,7 @@
             padding: 1rem 2rem;
             border: none;
             border-radius: 25px;
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
@@ -437,8 +447,22 @@
     
     <main class="booking-detail-container">
         <div class="booking-detail-header">
-            <h1>Booking Details</h1>
-            <p>Please review your booking information</p>
+            <!-- Left Content -->
+            <div class="left-content">      
+                <div class="booking-tagline">
+                    <h1>TRAVEL SMART WITH EASE</h1>
+                    <p>Whether you need secure storage or prompt delivery, we provide reliable and convenient solutions to ensure your journey is as smooth as possible.</p>
+                </div>
+            </div>
+
+            <!-- Right Content - Image -->
+            <div class="right-content">
+                <img src="<?= base_url('assets/images/bookingpage.png') ?>" alt="Booking Service" class="booking-image">
+            </div>
+            <div class="bottom-content">
+                <h1>Booking Details</h1>
+                <p>Please review your booking information</p>
+            </div>
         </div>
 
         <div class="left-column">
@@ -450,7 +474,7 @@
         <div class="right-column">
             <div class="pricing-card">
                 <h3 class="pricing-header">
-                    <i class="bi bi-calculator"></i> Price Summary
+                    <i class="bi bi-calculator"></i> Pricing
                 </h3>
                 <div id="pricing-content">
                     <!-- Pricing will be populated by JavaScript -->
@@ -475,10 +499,21 @@
         let appliedPromoCode = '';
         let promoDiscount = 0;
         let basePrice = 24;
+        let promoType = 'percentage';
+        const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
+        const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
             const contentDiv = document.getElementById('booking-details-content');
+
+            if (bookingData) {
+                if (bookingData.service === 'delivery') {
+                    basePrice = DELIVERY_BASE_PRICE;
+                } else {
+                    basePrice = STORAGE_BASE_PRICE;
+                }
+            }
             
             if (!bookingData) {
                 contentDiv.innerHTML = `
@@ -497,11 +532,16 @@
             // Initialize quantity and promo from booking data if exists
             currentQuantity = bookingData.quantity || 1;
             appliedPromoCode = bookingData.promoCode || '';
-            promoDiscount = bookingData.promoDiscount || 0;
+            promoDiscount = toNumber(bookingData.promoDiscount);
+            promoType = bookingData.promoType || 'percentage';
 
             renderBookingDetails(bookingData);
             updatePricing();
         });
+
+        function toNumber(val) {
+            return parseFloat(val) || 0;
+        }
 
         function renderBookingDetails(bookingData) {
             const contentDiv = document.getElementById('booking-details-content');
@@ -577,19 +617,25 @@
                         <h3><i class="bi bi-box"></i> Luggage Quantity & Promo</h3>
                         
                         <div class="detail-row">
-                            <div class="detail-label">
-                                <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
-                                Luggage Quantity:
+                            <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
+                            <div class="detail-label" style="flex: 2; flex-direction: column; align-items: flex-start; display: flex;">
+                                <div style="font-weight:bold; font-size:1.1rem;">Max Weight and Dimension</div>
+                                <div style="font-weight:normal; font-size:1rem; margin-top:4px;">
+                                    23kg per item 180cm in total<br>
+                                    dimensions (Length + Width + Height)
+                                </div>
                             </div>
-                            <div class="detail-value">
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="updateQuantity(-1)" id="decreaseBtn">
-                                        <i class="bi bi-dash"></i>
-                                    </button>
+                            <div class="detail-value" style="flex: 1; margin-left: auto;">
+                                <div class="quantity-controls" style="display: flex; flex-direction: row; align-items: center; gap: 1rem;">
                                     <div class="quantity-display" id="quantityDisplay">${currentQuantity}</div>
-                                    <button class="quantity-btn" onclick="updateQuantity(1)" id="increaseBtn">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
+                                    <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                        <button class="quantity-btn-vertical" onclick="updateQuantity(1)" id="increaseBtn">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                        <button class="quantity-btn-vertical" onclick="updateQuantity(-1)" id="decreaseBtn">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -611,7 +657,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -661,11 +713,24 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div id="storageMap" style="width:100%;height:300px;margin-top:1rem;border-radius:8px;"></div>
+                        <div style="background:#f5f5dc;border:1px solid #ddd;border-radius:8px;padding:1rem;margin-top:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:1rem;">
+                            <strong>Address</strong><br>
+                            No.118, Level 1, Plaza Aurora, Jln McDougall, Plaza Aurora, 93000 Kuching, Sarawak, Malaysia
+                        </div>
                     <!-- Promo Section ONLY - NO quantity for storage -->
                     <div class="detail-section">
                         <h3><i class="bi bi-tag"></i> Promo Code</h3>
-                        
+                        <div class="detail-row">
+                            <img src="assets/images/luggage-quantity.png" alt="Luggage Quantity" style="width: 120px; height: 120px; margin-right: 24px; vertical-align: middle;">
+                            <div class="detail-label" style="flex: 2; flex-direction: column; align-items: flex-start; display: flex;">
+                                <div style="font-weight:bold; font-size:1.1rem;">Max Weight and Dimension</div>
+                                <div style="font-weight:normal; font-size:1rem; margin-top:4px;">
+                                    23kg per item 180cm in total<br>
+                                    dimensions (Length + Width + Height)
+                                </div>
+                            </div>
+                        </div>
                         <div class="detail-row">
                             <div class="detail-label">Promo Code:</div>
                             <div class="detail-value" style="flex: 3;">
@@ -683,7 +748,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -694,6 +765,10 @@
 
             html += '</div>';
             contentDiv.innerHTML = html;
+
+            if (bookingData.service === 'storage') {
+                showStorageMap(1.556622, 110.344510);
+            }
             
             // Only update quantity display for delivery service
             if (bookingData.service === 'delivery') {
@@ -703,40 +778,124 @@
 
         function updatePricing() {
             const pricingDiv = document.getElementById('pricing-content');
-            const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            const total = subtotal - discountAmount;
+            const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
+            if (!bookingData) {
+                pricingDiv.innerHTML = '<div class="no-data">No booking data found.</div>';
+                return;
+            }
 
-            let html = `
-                <div class="price-row">
-                    <span class="price-label">Price per item:</span>
-                    <span class="price-value">RM ${basePrice}</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-label">Quantity:</span>
-                    <span class="price-value">${currentQuantity}</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-label">Subtotal:</span>
-                    <span class="price-value">RM ${subtotal.toFixed(2)}</span>
-                </div>
-            `;
+            // Calculate time difference
+            const start = new Date(bookingData.dropoffDate + ' ' + bookingData.dropoffTime);
+            const end = new Date(bookingData.pickupDate + ' ' + bookingData.pickupTime);
+            const diffHours = Math.ceil((end - start) / (1000 * 60 * 60));
+            let html = '';
 
-            if (appliedPromoCode && promoDiscount > 0) {
+            if (bookingData.service === 'delivery') {
+                // In Town Delivery
+                const baseHours = 24;
+                const extraRate = 6;
+                const exceededTimes = Math.max(0, Math.ceil((diffHours - baseHours) / 12));
+                const baseStoragePrice = basePrice * currentQuantity;
+                const extraStoragePrice = extraRate * exceededTimes * currentQuantity;
+
+                html += `
+                    <div class="price-row"><span class="price-label">Kuching Luggage Transfer</span></div>
+                    <div class="price-row"><span class="price-label">Selected Transfer Point</span></div>
+                    <div class="price-row">
+                        <span class="price-label">${currentQuantity} Standard Luggage</span>
+                    </div>
+                    <div class="price-row"><span class="price-label">Kuching Luggage Storage</span></div>
+                    <div class="price-row">
+                        <span class="price-label">First 24 Hours</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${baseStoragePrice.toFixed(2)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Subsequent 12 Hours x ${exceededTimes} Excess</span>
+                        
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${extraStoragePrice.toFixed(2)}</span>
+                    </div>
+                `;
+
+                // Discount
+                let discountAmount = 0;
+                if (appliedPromoCode && promoDiscount > 0) {
+                    if (promoType === 'amount') {
+                        discountAmount = promoDiscount;
+                    } else {
+                        discountAmount = (baseStoragePrice + extraStoragePrice) * promoDiscount / 100;
+                    }
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Discount (${appliedPromoCode}):</span>
+                            <span class="price-value discount-value">-MYR ${discountAmount.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
                 html += `
                     <div class="price-row">
-                        <span class="price-label">Discount (${appliedPromoCode}):</span>
-                        <span class="price-value discount-value">-RM ${discountAmount.toFixed(2)}</span>
+                        <span class="price-label">Total:</span>
+                        <span class="price-value total-value">MYR ${total.toFixed(2)}</span>
+                    </div>
+                `;
+            } else {
+                // Luggage Storage
+                const baseHours = 12;
+                const extraRate = 6;
+                const exceededTimes = Math.max(0, Math.ceil((diffHours - baseHours) / 12));
+                const baseStoragePrice = basePrice * currentQuantity;
+                const extraStoragePrice = extraRate * exceededTimes * currentQuantity;
+
+                html += `
+                    <div class="price-row"><span class="price-label">Kuching Luggage Storage</span></div>
+                    <div class="price-row">
+                        <span class="price-label">First 12 Hours</span>
+                    </div>
+                    <div class="price-row">
+                    <span class="price-value">${currentQuantity} Standard Luggage</span>
+                    <span class="price-value">MYR ${baseStoragePrice.toFixed(2)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Subsequent 12 Hours x ${exceededTimes} Excess</span>
+                        
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${extraStoragePrice.toFixed(2)}</span>
+                    </div>
+                `;
+
+                // Discount
+                let discountAmount = 0;
+                if (appliedPromoCode && promoDiscount > 0) {
+                    if (promoType === 'amount') {
+                        discountAmount = promoDiscount;
+                    } else {
+                        discountAmount = (baseStoragePrice + extraStoragePrice) * promoDiscount / 100;
+                    }
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Discount (${appliedPromoCode}):</span>
+                            <span class="price-value discount-value">-MYR ${discountAmount.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
+                html += `
+                    <div class="price-row">
+                        <span class="price-label">Total:</span>
+                        <span class="price-value total-value">MYR ${total.toFixed(2)}</span>
                     </div>
                 `;
             }
-
-            html += `
-                <div class="price-row">
-                    <span class="price-label">Total:</span>
-                    <span class="price-value total-value">RM ${total.toFixed(2)}</span>
-                </div>
-            `;
 
             pricingDiv.innerHTML = html;
         }
@@ -837,9 +996,16 @@
                     
                     if (data.success && data.valid) {
                         appliedPromoCode = promoCode;
-                        promoDiscount = data.discount || 20;
+                        promoDiscount = toNumber(data.discount);
+                        promoType = data.discount_type ? data.discount_type : 'percentage';
                         
-                        showPromoMessage(`Promo code applied! ${promoDiscount}% discount`, 'success');
+                        let promoMsg = '';
+                        if (promoType === 'amount') {
+                            promoMsg = `Promo code applied! RM${promoDiscount} discount`;
+                        } else {
+                            promoMsg = `Promo code applied! ${promoDiscount}% discount`;
+                        }
+                        showPromoMessage(promoMsg, 'success');
                         promoBtn.textContent = 'Applied';
                         promoInput.disabled = true;
                         updatePricing();
@@ -890,7 +1056,8 @@
             if (bookingData) {
                 bookingData.quantity = currentQuantity;
                 bookingData.promoCode = appliedPromoCode;
-                bookingData.promoDiscount = promoDiscount;
+                bookingData.promoDiscount = toNumber(promoDiscount);
+                bookingData.promoType = promoType;
                 bookingData.basePrice = basePrice;
                 bookingData.totalPrice = calculateTotal();
                 sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
@@ -899,8 +1066,15 @@
 
         function calculateTotal() {
             const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            return subtotal - discountAmount;
+            let discountAmount = 0;
+            if (appliedPromoCode && promoDiscount > 0) {
+                if (promoType === 'amount') {
+                    discountAmount = promoDiscount;
+                } else {
+                    discountAmount = subtotal * promoDiscount / 100;
+                }
+            }
+            return Math.max(0, subtotal - discountAmount);
         }
 
         function formatDate(dateString) {
@@ -969,6 +1143,34 @@
                 alert('No booking data found. Please go back and complete your booking.');
                 window.location.href = 'booking';
             }
+        }
+
+        function showStorageMap(lat, lng) {
+            const mapDiv = document.getElementById('storageMap');
+            if (!mapDiv) return;
+            const map = new google.maps.Map(mapDiv, {
+                center: { lat: lat, lng: lng },
+                zoom: 16
+            });
+            new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map
+            });
+        }
+
+        function calculateExtraCharge(serviceType, baseHours, extraRate, startDateTime, endDateTime, quantity) {
+            // Parse dates
+            const start = new Date(startDateTime);
+            const end = new Date(endDateTime);
+            // Calculate total hours
+            const diffMs = end - start;
+            const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+            // Calculate extra hours
+            const extraHours = Math.max(0, diffHours - baseHours);
+            // Number of extra 12-hour blocks
+            const extraBlocks = Math.ceil(extraHours / 12);
+            // Total extra charge
+            return extraBlocks * extraRate * quantity;
         }
     </script>
 </body>
