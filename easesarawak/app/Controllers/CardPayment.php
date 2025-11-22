@@ -27,7 +27,7 @@ class CardPayment extends BaseController
     public function createIntent()
     {
         $body = $this->request->getJSON(true) ?? $this->request->getPost();
-        $amount = intval($body['amount'] ?? 0);    // 单位：sen / cents
+        $amount = intval($body['amount'] ?? 0);    // sen / cents
 
         if ($amount <= 0) {
             return $this->response
@@ -63,11 +63,11 @@ class CardPayment extends BaseController
     /**
      * POST /card-payment/store
      * Body: { payment_intent_id: "pi_xxx" }
-     * 作用：从 Stripe 拿 PaymentIntent 详情，写入 payments 表 6 个字段
+     *  Stripe take PaymentIntent field，write in payments database
      */
    public function store()
 {
-    // 从前端 JSON 拿 payment_intent_id
+    //  payment_intent_id take from payment
     $body = $this->request->getJSON(true) ?? [];
     $piId = $body['payment_intent_id'] ?? null;
 
@@ -99,7 +99,6 @@ class CardPayment extends BaseController
             'amount_cents'      => $pi->amount_received ?? $pi->amount ?? 0,
             'currency'          => $pi->currency ?? 'myr',
             'status'            => $pi->status ?? 'unknown',
-            'created_at'        => date('Y-m-d H:i:s'),
         ];
 
         // 使用 insert() 明确做“新增”

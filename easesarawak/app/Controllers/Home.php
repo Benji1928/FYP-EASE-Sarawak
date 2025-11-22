@@ -62,7 +62,7 @@ class Home extends BaseController
         return view('bookingcustomerdetail');
     }
     
-    public function bookingConfirmation(): string
+    public function booking_confirmation(): string
     {
         $data = [
             'order_id' => $this->request->getGet('order_id')
@@ -71,7 +71,15 @@ class Home extends BaseController
         return view('booking_confirmation', $data);
     }
 
-    public function payment() { return view('payment'); }
+    public function payment()
+    {
+    // from POST get email
+    $email = $this->request->getPost('email');
+
+    return view('payment', [
+        'receiptEmail' => $email,   // 传给 view
+    ]);
+    }
     
     public function saveOrder()
     {

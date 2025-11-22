@@ -309,7 +309,7 @@
         </form>
 
         <div class="action-buttons">
-            <button><a href="payment" class="btn btn-submit">Payment</a></button>
+            <button type="button" class="btn btn-submit" onclick="goToPayment()">Payment </button>
         </div>
 
         <div class="action-buttons">
@@ -498,6 +498,38 @@
             });
         }
     </script>
+
+    <script>
+    function goToPayment() {
+    // take the email from the email address
+        const emailInput = document.getElementById('email');
+        const email = emailInput ? emailInput.value.trim() : '';
+
+        if (!email) {
+            alert('Please fill in your Email Address before going to payment.');
+            if (emailInput) {
+                emailInput.focus();
+        }
+        return;
+    }
+
+    // bring email to payment page using POST, so email will not appear in URL
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'payment';  // 指向 /payment
+
+    const emailInputHidden = document.createElement('input');
+    emailInputHidden.type = 'hidden';
+    emailInputHidden.name = 'email';
+    emailInputHidden.value = email;
+
+    form.appendChild(emailInputHidden);
+    document.body.appendChild(form);
+    form.submit();
+    }
+    </script>
+
+
 </body>
 
 </html>
