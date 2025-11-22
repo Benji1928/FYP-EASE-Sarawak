@@ -28,8 +28,21 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Discount Type</label>
+                        <select name="discount_type" id="discount_type" class="form-control" required>
+                            <option value="percentage" <?= old('discount_type') === 'percentage' ? 'selected' : '' ?>>Percentage (%)</option>
+                            <option value="amount" <?= old('discount_type') === 'amount' ? 'selected' : '' ?>>Amount (RM)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="percentage_input">
                         <label class="form-label">Discount (%)</label>
                         <input type="number" name="discount_percentage" class="form-control" min="0" max="100" value="<?= esc(old('discount_percentage')) ?>">
+                    </div>
+
+                    <div class="mb-3" id="amount_input" style="display:none;">
+                        <label class="form-label">Discount Amount (RM)</label>
+                        <input type="number" step="0.01" name="discount_amount" class="form-control" min="0" value="<?= esc(old('discount_amount')) ?>">
                     </div>
 
                     <div class="mb-3">
@@ -57,6 +70,23 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     flatpickr(".datetimepicker", { enableTime: true, dateFormat: "Y-m-d H:i", time_24hr: true, allowInput: true });
+
+    const typeSelect = document.getElementById('discount_type');
+    const percentInput = document.getElementById('percentage_input');
+    const amountInput = document.getElementById('amount_input');
+
+    function toggleDiscountInputs() {
+        if (typeSelect.value === 'percentage') {
+            percentInput.style.display = '';
+            amountInput.style.display = 'none';
+        } else {
+            percentInput.style.display = 'none';
+            amountInput.style.display = '';
+        }
+    }
+
+    typeSelect.addEventListener('change', toggleDiscountInputs);
+    toggleDiscountInputs(); // Set initial state
 });
 </script>
 

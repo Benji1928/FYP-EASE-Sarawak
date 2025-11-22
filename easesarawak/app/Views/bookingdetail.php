@@ -33,6 +33,7 @@
             padding: 0;
             background-color: #f5f5f5;
             padding-top: 120px;
+            font-size: 1.25rem;
         }
 
         .booking-detail-container {
@@ -337,7 +338,7 @@
             padding: 1rem 2rem;
             border: none;
             border-radius: 25px;
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
@@ -473,7 +474,7 @@
         <div class="right-column">
             <div class="pricing-card">
                 <h3 class="pricing-header">
-                    <i class="bi bi-calculator"></i> Price Summary
+                    <i class="bi bi-calculator"></i> Pricing
                 </h3>
                 <div id="pricing-content">
                     <!-- Pricing will be populated by JavaScript -->
@@ -498,6 +499,7 @@
         let appliedPromoCode = '';
         let promoDiscount = 0;
         let basePrice = 24;
+        let promoType = 'percentage';
         const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
         const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
@@ -530,11 +532,16 @@
             // Initialize quantity and promo from booking data if exists
             currentQuantity = bookingData.quantity || 1;
             appliedPromoCode = bookingData.promoCode || '';
-            promoDiscount = bookingData.promoDiscount || 0;
+            promoDiscount = toNumber(bookingData.promoDiscount);
+            promoType = bookingData.promoType || 'percentage';
 
             renderBookingDetails(bookingData);
             updatePricing();
         });
+
+        function toNumber(val) {
+            return parseFloat(val) || 0;
+        }
 
         function renderBookingDetails(bookingData) {
             const contentDiv = document.getElementById('booking-details-content');
@@ -650,7 +657,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -735,7 +748,13 @@
                                         </button>
                                     </div>
                                     <div id="promoMessage" class="promo-message" style="display: ${appliedPromoCode ? 'block' : 'none'};">
-                                        ${appliedPromoCode ? `Promo code applied! ${promoDiscount}% discount` : ''}
+                                        ${
+                                            appliedPromoCode
+                                                ? (promoType === 'amount'
+                                                    ? `Promo code applied! RM${promoDiscount} discount`
+                                                    : `Promo code applied! ${promoDiscount}% discount`)
+                                                : ''
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -759,40 +778,124 @@
 
         function updatePricing() {
             const pricingDiv = document.getElementById('pricing-content');
-            const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            const total = subtotal - discountAmount;
+            const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
+            if (!bookingData) {
+                pricingDiv.innerHTML = '<div class="no-data">No booking data found.</div>';
+                return;
+            }
 
-            let html = `
-                <div class="price-row">
-                    <span class="price-label">Price per item:</span>
-                    <span class="price-value">RM ${basePrice}</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-label">Quantity:</span>
-                    <span class="price-value">${currentQuantity}</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-label">Subtotal:</span>
-                    <span class="price-value">RM ${subtotal.toFixed(2)}</span>
-                </div>
-            `;
+            // Calculate time difference
+            const start = new Date(bookingData.dropoffDate + ' ' + bookingData.dropoffTime);
+            const end = new Date(bookingData.pickupDate + ' ' + bookingData.pickupTime);
+            const diffHours = Math.ceil((end - start) / (1000 * 60 * 60));
+            let html = '';
 
-            if (appliedPromoCode && promoDiscount > 0) {
+            if (bookingData.service === 'delivery') {
+                // In Town Delivery
+                const baseHours = 24;
+                const extraRate = 6;
+                const exceededTimes = Math.max(0, Math.ceil((diffHours - baseHours) / 12));
+                const baseStoragePrice = basePrice * currentQuantity;
+                const extraStoragePrice = extraRate * exceededTimes * currentQuantity;
+
+                html += `
+                    <div class="price-row"><span class="price-label">Kuching Luggage Transfer</span></div>
+                    <div class="price-row"><span class="price-label">Selected Transfer Point</span></div>
+                    <div class="price-row">
+                        <span class="price-label">${currentQuantity} Standard Luggage</span>
+                    </div>
+                    <div class="price-row"><span class="price-label">Kuching Luggage Storage</span></div>
+                    <div class="price-row">
+                        <span class="price-label">First 24 Hours</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${baseStoragePrice.toFixed(2)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Subsequent 12 Hours x ${exceededTimes} Excess</span>
+                        
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${extraStoragePrice.toFixed(2)}</span>
+                    </div>
+                `;
+
+                // Discount
+                let discountAmount = 0;
+                if (appliedPromoCode && promoDiscount > 0) {
+                    if (promoType === 'amount') {
+                        discountAmount = promoDiscount;
+                    } else {
+                        discountAmount = (baseStoragePrice + extraStoragePrice) * promoDiscount / 100;
+                    }
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Discount (${appliedPromoCode}):</span>
+                            <span class="price-value discount-value">-MYR ${discountAmount.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
                 html += `
                     <div class="price-row">
-                        <span class="price-label">Discount (${appliedPromoCode}):</span>
-                        <span class="price-value discount-value">-RM ${discountAmount.toFixed(2)}</span>
+                        <span class="price-label">Total:</span>
+                        <span class="price-value total-value">MYR ${total.toFixed(2)}</span>
+                    </div>
+                `;
+            } else {
+                // Luggage Storage
+                const baseHours = 12;
+                const extraRate = 6;
+                const exceededTimes = Math.max(0, Math.ceil((diffHours - baseHours) / 12));
+                const baseStoragePrice = basePrice * currentQuantity;
+                const extraStoragePrice = extraRate * exceededTimes * currentQuantity;
+
+                html += `
+                    <div class="price-row"><span class="price-label">Kuching Luggage Storage</span></div>
+                    <div class="price-row">
+                        <span class="price-label">First 12 Hours</span>
+                    </div>
+                    <div class="price-row">
+                    <span class="price-value">${currentQuantity} Standard Luggage</span>
+                    <span class="price-value">MYR ${baseStoragePrice.toFixed(2)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Subsequent 12 Hours x ${exceededTimes} Excess</span>
+                        
+                    </div>
+                    <div class="price-row">
+                        <span class="price-value">${currentQuantity} Standard Luggage</span>
+                        <span class="price-value">MYR ${extraStoragePrice.toFixed(2)}</span>
+                    </div>
+                `;
+
+                // Discount
+                let discountAmount = 0;
+                if (appliedPromoCode && promoDiscount > 0) {
+                    if (promoType === 'amount') {
+                        discountAmount = promoDiscount;
+                    } else {
+                        discountAmount = (baseStoragePrice + extraStoragePrice) * promoDiscount / 100;
+                    }
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Discount (${appliedPromoCode}):</span>
+                            <span class="price-value discount-value">-MYR ${discountAmount.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
+                html += `
+                    <div class="price-row">
+                        <span class="price-label">Total:</span>
+                        <span class="price-value total-value">MYR ${total.toFixed(2)}</span>
                     </div>
                 `;
             }
-
-            html += `
-                <div class="price-row">
-                    <span class="price-label">Total:</span>
-                    <span class="price-value total-value">RM ${total.toFixed(2)}</span>
-                </div>
-            `;
 
             pricingDiv.innerHTML = html;
         }
@@ -893,9 +996,16 @@
                     
                     if (data.success && data.valid) {
                         appliedPromoCode = promoCode;
-                        promoDiscount = data.discount || 20;
+                        promoDiscount = toNumber(data.discount);
+                        promoType = data.discount_type ? data.discount_type : 'percentage';
                         
-                        showPromoMessage(`Promo code applied! ${promoDiscount}% discount`, 'success');
+                        let promoMsg = '';
+                        if (promoType === 'amount') {
+                            promoMsg = `Promo code applied! RM${promoDiscount} discount`;
+                        } else {
+                            promoMsg = `Promo code applied! ${promoDiscount}% discount`;
+                        }
+                        showPromoMessage(promoMsg, 'success');
                         promoBtn.textContent = 'Applied';
                         promoInput.disabled = true;
                         updatePricing();
@@ -946,7 +1056,8 @@
             if (bookingData) {
                 bookingData.quantity = currentQuantity;
                 bookingData.promoCode = appliedPromoCode;
-                bookingData.promoDiscount = promoDiscount;
+                bookingData.promoDiscount = toNumber(promoDiscount);
+                bookingData.promoType = promoType;
                 bookingData.basePrice = basePrice;
                 bookingData.totalPrice = calculateTotal();
                 sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
@@ -955,8 +1066,15 @@
 
         function calculateTotal() {
             const subtotal = basePrice * currentQuantity;
-            const discountAmount = appliedPromoCode ? (subtotal * promoDiscount / 100) : 0;
-            return subtotal - discountAmount;
+            let discountAmount = 0;
+            if (appliedPromoCode && promoDiscount > 0) {
+                if (promoType === 'amount') {
+                    discountAmount = promoDiscount;
+                } else {
+                    discountAmount = subtotal * promoDiscount / 100;
+                }
+            }
+            return Math.max(0, subtotal - discountAmount);
         }
 
         function formatDate(dateString) {
@@ -1038,6 +1156,21 @@
                 position: { lat: lat, lng: lng },
                 map: map
             });
+        }
+
+        function calculateExtraCharge(serviceType, baseHours, extraRate, startDateTime, endDateTime, quantity) {
+            // Parse dates
+            const start = new Date(startDateTime);
+            const end = new Date(endDateTime);
+            // Calculate total hours
+            const diffMs = end - start;
+            const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+            // Calculate extra hours
+            const extraHours = Math.max(0, diffHours - baseHours);
+            // Number of extra 12-hour blocks
+            const extraBlocks = Math.ceil(extraHours / 12);
+            // Total extra charge
+            return extraBlocks * extraRate * quantity;
         }
     </script>
 </body>

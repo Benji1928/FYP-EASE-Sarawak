@@ -44,6 +44,7 @@
             padding: 0;
             background-color: #f5f5f5;
             padding-top: 80px;
+            font-size: 1.15rem;
         }
 
         .booking-container {
@@ -653,7 +654,7 @@
                     <div class="form-group">
                         <label for="dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
                         <div class="datetime-group">
-                            <input type="date" id="dropoff-date" name="dropoff_date" value="2025-10-04">
+                            <input type="date" id="dropoff-date" name="dropoff_date">
                             <input type="time" id="dropoff-time" name="dropoff_time" value="14:00">
                         </div>
                         <div id="dropoff-time-warning" class="time-warning">
@@ -664,7 +665,7 @@
                     <div class="form-group">
                         <label for="pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
                         <div class="datetime-group">
-                            <input type="date" id="pickup-date" name="pickup_date" value="2025-10-04">
+                            <input type="date" id="pickup-date" name="pickup_date">
                             <input type="time" id="pickup-time" name="pickup_time" value="16:00">
                         </div>
                         <div id="pickup-time-warning" class="time-warning">
@@ -715,7 +716,7 @@
                     <div class="form-group">
                         <label for="storage-dropoff-datetime">Drop-off date & time <i class="bi bi-info-circle"></i></label>
                         <div class="datetime-group">
-                            <input type="date" id="storage-dropoff-date" name="storage_dropoff_date" value="2025-10-04">
+                            <input type="date" id="storage-dropoff-date" name="storage_dropoff_date">
                             <input type="time" id="storage-dropoff-time" name="storage_dropoff_time" value="12:00">
                         </div>
                         <div id="storage-dropoff-time-warning" class="time-warning">
@@ -726,7 +727,7 @@
                     <div class="form-group">
                         <label for="storage-pickup-datetime">Pick-up date & time <i class="bi bi-info-circle"></i></label>
                         <div class="datetime-group">
-                            <input type="date" id="storage-pickup-date" name="storage_pickup_date" value="2025-10-04">
+                            <input type="date" id="storage-pickup-date" name="storage_pickup_date">
                             <input type="time" id="storage-pickup-time" name="storage_pickup_time" value="14:00">
                         </div>
                         <div id="storage-pickup-time-warning" class="time-warning">

@@ -26,10 +26,11 @@
                 <div class="table-responsive">
                     <table class="table table-striped mb-0 align-middle" id="promoTable">
                         <thead class="table-light">
-                            <tr>
+                            <tr>  
                                 <th>ID</th>
                                 <th>Code</th>
-                                <th>Discount %</th>
+                                <th>Type</th>
+                                <th>Discount</th>
                                 <th>Valid From</th>
                                 <th>Expires</th>
                                 <th>Created</th>
@@ -43,7 +44,14 @@
                                     <tr>
                                         <td><?= esc($p['id']); ?></td>
                                         <td><?= esc($p['code']); ?></td>
-                                        <td><?= esc($p['discount_percentage'] ?? '0'); ?></td>
+                                        <td><?= esc($p['discount_type'] ?? 'percentage'); ?></td>
+                                        <td>
+                                            <?php if (($p['discount_type'] ?? 'percentage') === 'amount'): ?>
+                                                RM<?= esc($p['discount_amount'] ?? '0.00') ?>
+                                            <?php else: ?>
+                                                <?= esc($p['discount_percentage'] ?? '0') ?>%
+                                            <?php endif; ?>
+                                        </td>
                                         <td><?= esc($p['validation_date'] ?? ''); ?></td>
                                         <td><?= esc($p['expired_date'] ?? ''); ?></td>
                                         <td><?= esc($p['created_date'] ?? $p['created_at'] ?? ''); ?></td>
