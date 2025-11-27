@@ -500,6 +500,7 @@
         let promoDiscount = 0;
         let basePrice = 24;
         let promoType = 'percentage';
+        let insuranceSelected = false;
         const DELIVERY_BASE_PRICE = <?= json_encode($deliveryPrice) ?>;
         const STORAGE_BASE_PRICE = <?= json_encode($storagePrice) ?>;
 
@@ -639,6 +640,13 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <input type="checkbox" id="insuranceCheckbox" onchange="toggleInsurance()" />
+                                <label for="insuranceCheckbox" style="margin-left:8px; font-weight:bold;">Add Insurance (RM 3 per luggage)</label>
+                            </div>
+                        </div>
                         
                         <div class="detail-row">
                             <div class="detail-label">Promo Code:</div>
@@ -731,6 +739,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <input type="checkbox" id="insuranceCheckbox" onchange="toggleInsurance()" />
+                                <label for="insuranceCheckbox" style="margin-left:8px; font-weight:bold;">Add Insurance (RM 3 per luggage)</label>
+                            </div>
+                        </div>
+
                         <div class="detail-row">
                             <div class="detail-label">Promo Code:</div>
                             <div class="detail-value" style="flex: 3;">
@@ -790,6 +806,8 @@
             const diffHours = Math.ceil((end - start) / (1000 * 60 * 60));
             let html = '';
 
+            let insuranceCharge = insuranceSelected ? (3 * currentQuantity) : 0;
+
             if (bookingData.service === 'delivery') {
                 // In Town Delivery
                 const baseHours = 24;
@@ -822,6 +840,16 @@
                     </div>
                 `;
 
+                if (insuranceSelected) {
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Insurance</span>
+                            <span class="price-value">${currentQuantity} Standard Luggage</span>
+                            <span class="price-value">MYR ${insuranceCharge.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
                 // Discount
                 let discountAmount = 0;
                 if (appliedPromoCode && promoDiscount > 0) {
@@ -838,7 +866,7 @@
                     `;
                 }
 
-                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice + insuranceCharge - discountAmount);
                 html += `
                     <div class="price-row">
                         <span class="price-label">Total:</span>
@@ -872,6 +900,16 @@
                     </div>
                 `;
 
+                if (insuranceSelected) {
+                    html += `
+                        <div class="price-row">
+                            <span class="price-label">Insurance</span>
+                            <span class="price-value">${currentQuantity} Standard Luggage</span>
+                            <span class="price-value">MYR ${insuranceCharge.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
                 // Discount
                 let discountAmount = 0;
                 if (appliedPromoCode && promoDiscount > 0) {
@@ -888,7 +926,7 @@
                     `;
                 }
 
-                const total = Math.max(0, baseStoragePrice + extraStoragePrice - discountAmount);
+                const total = Math.max(0, baseStoragePrice + extraStoragePrice + insuranceCharge - discountAmount);
                 html += `
                     <div class="price-row">
                         <span class="price-label">Total:</span>
@@ -1060,6 +1098,8 @@
                 bookingData.promoType = promoType;
                 bookingData.basePrice = basePrice;
                 bookingData.totalPrice = calculateTotal();
+                bookingData.insuranceSelected = insuranceSelected;
+                bookingData.insuranceAmount = insuranceSelected ? (3 * currentQuantity) : 0;
                 sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
             }
         }
@@ -1171,6 +1211,12 @@
             const extraBlocks = Math.ceil(extraHours / 12);
             // Total extra charge
             return extraBlocks * extraRate * quantity;
+        }
+
+        function toggleInsurance() {
+            insuranceSelected = document.getElementById('insuranceCheckbox').checked;
+            updatePricing();
+            updateBookingData();
         }
     </script>
 </body>
