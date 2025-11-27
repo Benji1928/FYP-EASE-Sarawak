@@ -183,10 +183,37 @@ class Admin extends BaseController
 
     public function order()
     {
-        $order_model = new Order_model();
-        $orders = $order_model->where('is_deleted', 0)->findAll();
-        // print_r($orders);exit;
-        return $this->render('admin/order', ['orders' => $orders]);
+        helper('form');
+        
+        $status = $this->request->getGet('status');
+        $service = $this->request->getGet('service_type');
+        $start = $this->request->getGet('start_date');
+        $end   = $this->request->getGet('end_date');
+
+        $orderModel = new Order_model();
+
+        $orderModel->where('1=1'); // base
+
+        if ($status !== null && $status !== '') {
+            $orderModel->where('status', $status);
+        }
+
+        if ($service !== null && $service !== '') {
+            $orderModel->where('service_type', $service);
+        }
+
+        if (!empty($start)) {
+            $orderModel->where('DATE(created_date) >=', $start);
+        }
+
+        if (!empty($end)) {
+            $orderModel->where('DATE(created_date) <=', $end);
+        }
+
+        $data['orders'] = $orderModel->where('is_deleted', 0)->paginate(10, 'group1');
+        $data['pager'] = $orderModel->pager;
+
+        return $this->render('admin/order', $data);
     }
 
     public function order_activity_log($order_id)
@@ -241,10 +268,13 @@ class Admin extends BaseController
     public function user()
     {
         $user_model = new User_model();
-        $users = $user_model->where('is_deleted', 0)->findAll();
+        $perPage = 10;
+        $users = $user_model->where('is_deleted', 0)->paginate($perPage, 'group1');
+        $pager = $user_model->pager;
 
         $data = [
-            'users' => $users
+            'users' => $users,
+            'pager' => $pager
         ];
         // print_r($users);exit;
         return $this->render('admin/user', $data);

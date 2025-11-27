@@ -1,5 +1,12 @@
 <?= $this->include('admin/header'); ?>
 
+<?php
+$status     = $_GET['status'] ?? '';
+$service    = $_GET['service_type'] ?? '';
+$startDate  = $_GET['start_date'] ?? '';
+$endDate    = $_GET['end_date'] ?? '';
+?>
+
 <div class="container mt-4">
     <div class="page-inner" style="padding-top: 80px;">
         <div class="d-flex align-items-center mb-4">
@@ -11,6 +18,17 @@
             <div class="card-header bg-softblue d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0 text-white fw-semibold">Orders Overview</h5>
                 <div class="input-group w-auto">
+                    <!-- Filter Button -->
+                    <button
+                        class="btn me-4"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#filterOffcanvas"
+                        style="background: #fff; border: 1px solid #a2a9afff; border-radius: 4px; color: #807a7aff; padding: 6px 10px;">
+                        <i class="fa fa-filter"></i>
+                    </button>
+
+                    <!-- Search Bar -->
                     <input type="text" class="form-control form-control-sm" placeholder="Search orders..." id="orderSearch">
                     <button class="btn btn-light btn-sm"><i class="fa fa-search"></i></button>
                 </div>
@@ -58,20 +76,20 @@
                                             <div class="d-inline-flex align-items-center">
                                                 <button type="button" class="btn btn-sm viewOrderBtn me-2"
                                                     data-id="<?= $order['order_id']; ?>"
-                                                    style="background: #fff; border: 2px solid #a2a9afff;">
+                                                    style="background: #fff; border: 1px solid #a2a9afff; color: #504c4cff;">
                                                     <i class="fa fa-eye"></i>
                                                 </button>
 
                                                 <button class="btn btn-sm btn-add-note"
                                                     data-id="<?= $order['order_id']; ?>"
                                                     data-note="<?= htmlspecialchars($order['comment'] ?? '', ENT_QUOTES); ?>"
-                                                    style="background: #fff; border: 2px solid #a2a9afff;">
+                                                    style="background: #fff; border: 1px solid #a2a9afff; color: #504c4cff;">
                                                     <i class="fa fa-sticky-note"></i>
                                                 </button>
 
                                                 <button class="btn btn-sm btn-activity-log ms-2"
                                                     data-id="<?= $order['order_id']; ?>"
-                                                    style="background: #fff; border: 2px solid #a2a9afff;">
+                                                    style="background: #fff; border: 1px solid #a2a9afff; color: #504c4cff;">
                                                     <i class="fa fa-history"></i>
                                                 </button>
                                             </div>
@@ -85,6 +103,10 @@
                             <?php endif; ?>
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-3">
+                    <?= $pager->links('group1', 'pagination') ?>
                 </div>
             </div>
         </div>
@@ -159,6 +181,67 @@
         </div>
     </div>
 </div>
+
+<!-- Right Offcanvas Filter Panel -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas">
+    <div class="offcanvas-header text-white d-flex justify-content-center align-items-center" style="background: #dbdee0ff;">
+        <!-- Back button -->
+        <button type="button" class="btn btn-sm me-2" data-bs-dismiss="offcanvas">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+
+        <h5 class="offcanvas-title flex-grow-1 text-center text-black fw-semibold">
+            Filter Orders
+        </h5>
+    </div>
+
+
+    <div class="offcanvas-body">
+        <form method="GET" action="<?= base_url('order'); ?>">
+
+            <!-- Status Filter -->
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="0" <?= ($status === "0" ? "selected" : "") ?>>Pending</option>
+                    <option value="1" <?= ($status === "1" ? "selected" : "") ?>>In-Progress</option>
+                    <option value="2" <?= ($status === "2" ? "selected" : "") ?>>Completed</option>
+                </select>
+            </div>
+
+            <!-- Date Range -->
+            <div class="mb-3">
+                <label class="form-label">Date Range</label>
+                <div class="input-group">
+                    <input type="date" name="start_date" class="form-control" value="<?= $startDate ?>">
+                    <input type="date" name="end_date" class="form-control" value="<?= $endDate ?>">
+                </div>
+            </div>
+
+            <!-- Service Type -->
+            <div class="mb-3">
+                <label class="form-label">Service Type</label>
+                <select name="service_type" class="form-select">
+                    <option value="">All</option>
+                    <option value="storage" <?= ($service === "storage") ? "selected" : "" ?>>Storage</option>
+                    <option value="delivery" <?= ($service === "delivery") ? "selected" : "" ?>>Delivery</option>
+                </select>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-update" type="submit">
+                    <i class="fa fa-check me-1"></i> Apply Filters
+                </button>
+                <a href="<?= base_url('order'); ?>" class="btn btn-cancel">
+                    <i class="fa fa-undo me-1"></i> Reset
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 
 <?= $this->include('admin/footer'); ?>
 
