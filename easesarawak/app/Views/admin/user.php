@@ -66,6 +66,10 @@
                 </tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-3">
+            <?= $pager->links('group1', 'pagination') ?>
+        </div>
     </div>
 </div>
 
