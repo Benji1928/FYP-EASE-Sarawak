@@ -59,5 +59,6 @@ $routes->get('/change_password', 'Profile::change_password_form');
 $routes->post('/change_password', 'Profile::change_password');
 $routes->get('/admin/service_management', 'Admin::service_management');
 $routes->post('/admin/service_management/update/(:num)', 'Admin::update_service_price/$1');
+$routes->get('order_activity_log/(:num)', 'Admin::order_activity_log/$1');
 
 

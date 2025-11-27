@@ -58,14 +58,21 @@
                                             <div class="d-inline-flex align-items-center">
                                                 <button type="button" class="btn btn-sm viewOrderBtn me-2"
                                                     data-id="<?= $order['order_id']; ?>"
-                                                    style="background: #f2be00">
+                                                    style="background: #fff; border: 2px solid #a2a9afff;">
                                                     <i class="fa fa-eye"></i>
                                                 </button>
 
-                                                <button class="btn btn-sm btn-dark btn-add-note"
+                                                <button class="btn btn-sm btn-add-note"
                                                     data-id="<?= $order['order_id']; ?>"
-                                                    data-note="<?= htmlspecialchars($order['comment'] ?? '', ENT_QUOTES); ?>">
+                                                    data-note="<?= htmlspecialchars($order['comment'] ?? '', ENT_QUOTES); ?>"
+                                                    style="background: #fff; border: 2px solid #a2a9afff;">
                                                     <i class="fa fa-sticky-note"></i>
+                                                </button>
+
+                                                <button class="btn btn-sm btn-activity-log ms-2"
+                                                    data-id="<?= $order['order_id']; ?>"
+                                                    style="background: #fff; border: 2px solid #a2a9afff;">
+                                                    <i class="fa fa-history"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -101,7 +108,7 @@
                 </div>
             </div>
             <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-update" data-bs-dismiss="modal">
                     <i class="fa fa-times me-1"></i>Close
                 </button>
             </div>
@@ -132,9 +139,54 @@
         </div>
     </div>
 </div>
+
+<!-- Activity Log Modal -->
+<div class="modal fade" id="logModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="fa fa-history me-2"></i>Activity Log</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="activityLogContent" class="text-center py-3 text-muted">
+                    <i class="fa fa-spinner fa-spin me-2"></i>Loading logs...
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button class="btn btn-update" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->include('admin/footer'); ?>
 
 <script>
+    document.querySelectorAll('.btn-activity-log').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            const modal = new bootstrap.Modal(document.getElementById('logModal'));
+            const contentDiv = document.getElementById('activityLogContent');
+
+            contentDiv.innerHTML = `
+            <div class="text-center py-4 text-muted">
+                <i class="fa fa-spinner fa-spin me-2"></i>Loading activity log...
+            </div>`;
+
+            modal.show();
+
+            fetch("<?= base_url('/order_activity_log/') ?>" + orderId)
+                .then(response => response.text())
+                .then(data => {
+                    contentDiv.innerHTML = data;
+                })
+                .catch(() => {
+                    contentDiv.innerHTML = `<div class="alert alert-danger">Failed to load logs.</div>`;
+                });
+        });
+    });
+
     document.getElementById('orderSearch').addEventListener('keyup', function() {
         const filter = this.value.toLowerCase();
         const rows = document.querySelectorAll('#orderTable tbody tr');
