@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Order_model;
 use App\Models\PaymentModel;
 use App\Models\User_model;
+use App\Models\ActivityLogModel;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -188,20 +189,46 @@ class Admin extends BaseController
         return $this->render('admin/order', ['orders' => $orders]);
     }
 
+    public function order_activity_log($order_id)
+    {
+        $logModel = new ActivityLogModel();
+
+        $logs = $logModel->where('order_id', $order_id)
+            ->orderBy('modified_date', 'DESC')
+            ->findAll();
+
+        return $this->render('admin/activity_log_table', ['logs' => $logs]);
+    }
+
     public function change_status($order_id)
     {
         $orderModel = new Order_model();
+        $logModel = new ActivityLogModel();
         $session = session();
         $userId = $session->get('user_id');
 
         $order = $orderModel->find($order_id);
 
         if ($order) {
+            $statusText = [
+                0 => 'Pending',
+                1 => 'In Progress',
+                2 => 'Completed'
+            ];
+
             // Cycle through status: 0 → 1 → 2 → 0
             $newStatus = ($order['status'] + 1) % 3;
             $orderModel->update($order_id, ['status' => $newStatus,
                     'modified_by' => $userId,
                     'modified_date' => date('Y-m-d H:i:s')]);
+
+            $logModel->insert([
+                'order_id' => $order_id,
+                'user_id' => $userId,
+                'username' => session()->get('username'),
+                'action' => 'Changed order status to ' . $statusText[$newStatus],
+                'modified_date' => date('Y-m-d H:i:s')
+            ]);
 
             session()->setFlashdata('success', 'Order status updated successfully.');
         } else {
@@ -265,9 +292,21 @@ class Admin extends BaseController
     {
         $orderId = $this->request->getPost('order_id');
         $note = $this->request->getPost('note');
+        $userId = session()->get('user_id');
 
         $orderModel = new Order_model();
-        $orderModel->update($orderId, ['comment' => $note]);
+        $orderModel->update($orderId, ['comment' => $note,
+                'modified_date' => date('Y-m-d H:i:s'),
+                'modified_by' => session()->get('user_id')]);
+
+        $logModel = new ActivityLogModel();
+        $logModel->insert([
+            'order_id' => $orderId,
+            'user_id' => $userId,
+            'username' => session()->get('username'),
+            'action' => 'Changed note to "' . $note . '"',
+            'modified_date' => date('Y-m-d H:i:s')
+        ]);
 
         return $this->response->setJSON(['status' => 'success']);
     }
