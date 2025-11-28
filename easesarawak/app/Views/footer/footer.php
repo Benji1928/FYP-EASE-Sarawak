@@ -15,7 +15,19 @@
         <li><a href="<?= base_url('/terms-and-conditions'); ?>">Terms & Conditions</a></li>
     </ul>
 
-    <hr>
+    </hr>
+
+    <div class="icons">
+    <a href="https://instagram.com/yourusername" target="blank" title="Instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://tiktok.com/@yourusername" target="blank" title="TikTok">
+        <i class="fab fa-tiktok"></i>
+    </a>
+    <a href="https://facebook.com/yourusername" target="blank" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+    </div>
 
     <p class="footer-copy">© 2025 EASE SARAWAK. All rights reserved.</p>
 </footer>
