@@ -799,7 +799,7 @@
                 with our easy-to-use Kuching Luggage Storage and Delivery service.
             </p>
             <a href="#contact" class="btn btn-primary">CONTACT NOW</a>
-            <a href="#book" class="btn btn-primary">BOOK NOW</a>
+            <a href="booking" class="btn btn-primary">BOOK NOW</a>
         </div>
     </section>
 
@@ -813,7 +813,7 @@
             </h2>
             <h3>STREAMLINING YOUR TRAVEL</h3>
             <p>
-                Every moment in Kuching is an opportunity for discovery. With EASE, you’re free to seize each one.
+                Every moment in Kuching is an opportunity for discovery. With EASE, you're free to seize each one.
                 Our seamless luggage storage and delivery services let you explore without limits—no bags to hold you back, no burdens to slow you down.
             </p>
             <p>
@@ -845,13 +845,13 @@
         </div>
 
         <div class="services-cards">
-            <!-- Card 1 -->
+            <!-- Card 1 - Basic (Luggage Storage) -->
             <div class="card">
                 <div class="card-image">
                     <img src="assets/images/case-1.png" alt="Basic Service">
                 </div>
                 <h4>Basic</h4>
-                <p class="price">Starts from <strong>RM18</strong></p>
+                <p class="price">Starts from <strong>RM<?= esc($prices['storage']) ?></strong></p>
                 <p class="desc">
                     Looking for short-term storage? Our Kuching Luggage Storage service keeps your luggage safe
                     for as long as needed while you explore the city worry-free!
@@ -859,13 +859,13 @@
                 <button><a href="payment" class="btn-card">BOOK NOW</a></button> <!--change code -->
             </div>
 
-            <!-- Card 2 -->
+            <!-- Card 2 - Standard (In Town Delivery) -->
             <div class="card">
                 <div class="card-image">
                     <img src="assets/images/baggage.png" alt="Standard Service">
                 </div>
                 <h4>Standard</h4>
-                <p class="price">Starts from <strong>RM24</strong></p>
+                <p class="price">Starts from <strong>RM<?= esc($prices['delivery']) ?></strong></p>
                 <p class="desc">
                     Enjoy our complimentary Kuching Luggage Transfer with 24 hours of secure storage, offering
                     seamless transfers between selected locations for added convenience!
@@ -873,7 +873,7 @@
                 <button><a href="intowndelivery" class="btn-card">BOOK NOW</a></button> <!--change code-->
             </div>
 
-            <!-- Card 3 -->
+            <!-- Card 3 - On-demand -->
             <div class="card">
                 <div class="card-image">
                     <img src="assets/images/suitcase .png" alt="On-demand Service">
@@ -884,7 +884,7 @@
                     Carrying oversized luggage or need a specific pickup/drop-off location? Our Kuching Luggage
                     Delivery service got you covered—flexible and hassle-free!
                 </p>
-                <a href="#book" class="btn-card">BOOK NOW</a>
+                <a href="#" onclick="bookDelivery()" class="btn-card">BOOK NOW</a>
             </div>
         </div>
     </section>
@@ -934,7 +934,7 @@
         </div>
 
         <div class="how-footer">
-            <a href="#book" class="btn-how">BOOK NOW</a>
+            <a href="booking" class="btn-how">BOOK NOW</a>
         </div>
     </section>
 
@@ -1061,6 +1061,34 @@
     </section>
 
     <?= $this->include('footer/footer') ?>
+
+    <script>
+        // Function to book storage service (Basic card)
+        function bookStorage() {
+            // Set service preference in sessionStorage
+            sessionStorage.setItem('preferredService', 'storage');
+            
+            // Clear any existing booking data to start fresh
+            sessionStorage.removeItem('bookingData');
+            sessionStorage.removeItem('isEditing');
+            
+            // Redirect to booking page
+            window.location.href = 'booking';
+        }
+
+        // Function to book delivery service (Standard and On-demand cards)
+        function bookDelivery() {
+            // Set service preference in sessionStorage
+            sessionStorage.setItem('preferredService', 'delivery');
+            
+            // Clear any existing booking data to start fresh
+            sessionStorage.removeItem('bookingData');
+            sessionStorage.removeItem('isEditing');
+            
+            // Redirect to booking page
+            window.location.href = 'booking';
+        }
+    </script>
 
 </body>
 
