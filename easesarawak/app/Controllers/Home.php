@@ -41,6 +41,13 @@ class Home extends BaseController
         return view('tnc');
     }
 
+    return view('payment', [
+        'receiptEmail' => $email,   // send view
+    ]);
+    }
+    
+    public function saveOrder()
+
     public function payment(): string
     {
         return view('payment');

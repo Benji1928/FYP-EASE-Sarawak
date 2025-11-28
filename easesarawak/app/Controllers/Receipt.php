@@ -8,13 +8,19 @@ use Config\Services;
 class Receipt extends Controller
 {
     /**
-     * POST /send-receipt
-     * 参数：
-     *  - email
-     *  - amount_cents   (整数，单位分，例如 7000 = RM70.00)
-     *  - currency       (myr)
-     *  - status         (succeeded 等)
-     *  - payment_intent_id (可选)
+* POST /send-receipt
+
+* Parameters:
+
+* - email
+
+* - amount_cents (integer, in cents, e.g., 7000 = RM70.00)
+
+* - currency (myr)
+
+* - status (succeeded, etc.)
+
+* - payment_intent_id (optional)
      */
     public function send()
     {

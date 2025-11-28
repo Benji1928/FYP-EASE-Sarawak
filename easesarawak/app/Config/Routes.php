@@ -15,11 +15,13 @@ $routes->get('/booking', 'Home::booking');
 $routes->get('/bookingdetail', 'Home::bookingdetail');
 $routes->get('/bookingcustomerdetail', 'Home::bookingcustomerdetail');
 $routes->post('/saveOrder', 'Home::saveOrder');
+
+// payment
 $routes->get('/booking_confirmation', 'Home::booking_confirmation');
+$routes->post('webhook', 'CardPayment::webhook');
 $routes->match(['get', 'post'], '/payment', 'Home::payment');
 $routes->post('card-payment/intent', 'CardPayment::createIntent');
 $routes->post('card-payment/store',  'CardPayment::store');
-
 $routes->post('send-receipt', 'Receipt::send');
 
 $routes->post('/checkPromoCode', 'Home::checkPromoCode');
