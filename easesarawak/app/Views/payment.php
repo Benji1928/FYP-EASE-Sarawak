@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,25 +90,8 @@
             <div class="payment-summary">
                 <h2 class="section-title">Order Summary</h2>
                 
-                <div class="summary-item">
-                    <span>In-Town Delivery</span>
-                    <span>RM 25.00</span>
-                </div>
-                
-                <div class="summary-item">
-                    <span>Storage Fee (2 days)</span>
-                    <span>RM 40.00</span>
-                </div>
-                
-                <div class="summary-item">
-                    <span>Service Tax</span>
-                    <span>RM 5.00</span>
-                </div>
-                
-                <div class="summary-total">
-                    <span>Total</span>
-                    <span>RM 70.00</span>
-                </div>
+                <!-- Filled by renderOrderSummary() -->
+                    <div id="order-summary-content"></div>
                 
                 <div style="margin-top: 2rem;">
                     <h3 style="margin-bottom: 1rem;">Need Help?</h3>
@@ -121,6 +102,120 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var container = document.getElementById('order-summary-content');
+    if (!container) return;
+
+    var html = '';
+
+    try {
+        var raw = sessionStorage.getItem('bookingData');
+
+        if (!raw) {
+            html += '<div class="summary-item">' +
+                        '<span>Service</span>' +
+                        '<span>-</span>' +
+                    '</div>';
+            html += '<div class="summary-total">' +
+                        '<span>Total</span>' +
+                        '<span>RM 0.00</span>' +
+                    '</div>';
+            container.innerHTML = html;
+            return;
+        }
+
+        var bookingData = JSON.parse(raw);
+        console.log('bookingData in payment.php:', bookingData);
+
+        // ===== （Service type：In Town Delivery / Luggage Storage） =====
+        var serviceLabel = '-';
+        if (bookingData.service === 'delivery') {
+            serviceLabel = 'In Town Delivery';
+        } else if (bookingData.service === 'storage') {
+            serviceLabel = 'Luggage Storage';
+        } else if (bookingData.service) {
+            serviceLabel = bookingData.service;
+        }
+
+        html += '<div class="summary-item">' +
+                    '<span>' + serviceLabel + '</span>' +
+                    '<span></span>' +
+                '</div>';
+
+        // baseprice + exceedtimes =====
+        var quantity  = Number(bookingData.quantity || 1);
+        var basePrice = Number(bookingData.basePrice || 0);
+
+        // baseprice：first 24 hours（delivery）or first 12 hours（storage）
+        var baseStoragePrice = basePrice * quantity;
+
+        // exceedTimes
+        var extraStoragePrice = 0;
+        var exceededTimes = 0;
+
+        if (bookingData.dropoffDate && bookingData.dropoffTime &&
+            bookingData.pickupDate && bookingData.pickupTime) {
+
+            var start = new Date(bookingData.dropoffDate + ' ' + bookingData.dropoffTime);
+            var end   = new Date(bookingData.pickupDate  + ' ' + bookingData.pickupTime);
+            var diffMs = end - start;
+
+            if (!isNaN(diffMs) && diffMs > 0) {
+                var diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+
+                // In Town Delivery：first 24hours；Luggage Storage：first 12 hours
+                var baseHours = (bookingData.service === 'storage') ? 12 : 24;
+                var extraRate = 6; 
+
+                exceededTimes = Math.max(0, Math.ceil((diffHours - baseHours) / 12));
+                extraStoragePrice = Math.max(0, exceededTimes * extraRate * quantity);
+            }
+        }
+
+        // =====order summary base storage price =====
+        if (baseStoragePrice > 0) {
+            html += '<div class="summary-item">' +
+                        '<span>' + quantity + ' Standard Luggage</span>' +
+                        '<span>RM ' + baseStoragePrice.toFixed(2) + '</span>' +
+                    '</div>';
+        }
+
+        // ===== order summary “Subsequent 12 Hours x 3 Excess”  =====
+        if (extraStoragePrice > 0 && exceededTimes > 0) {
+            html += '<div class="summary-item">' +
+                        '<span>Subsequent 12 Hours x ' + exceededTimes + ' Excess</span>' +
+                        '<span></span>' +
+                    '</div>';
+
+            // order summary total price
+            html += '<div class="summary-item">' +
+                        '<span>' + quantity + ' Standard Luggage</span>' +
+                        '<span>RM ' + extraStoragePrice.toFixed(2) + '</span>' +
+                    '</div>';
+        }
+
+        // ===== total price calculation =====
+        var finalTotal = baseStoragePrice + extraStoragePrice;
+
+        html += '<div class="summary-total">' +
+                    '<span>Total</span>' +
+                    '<span>RM ' + finalTotal.toFixed(2) + '</span>' +
+                '</div>';
+
+    } catch (e) {
+        console.error('Order Summary error:', e);
+        html = '<div class="summary-item">' +
+                   '<span>Order summary not available</span>' +
+                   '<span></span>' +
+               '</div>';
+    }
+
+    container.innerHTML = html;
+    });
+    </script>
 
 
     <script>
@@ -135,6 +230,31 @@
         });
     </script>
 
+    <script>
+    // Order Summary Total 
+    function getOrderTotalFromSummary() {
+        var totalEl = document.querySelector('.summary-total span:last-child');
+        if (!totalEl) {
+            alert('Order total not found.');
+            throw new Error("Order total not found.");
+        }
+
+        // exp： "RM 33.00"
+        var text = totalEl.textContent.trim();
+
+        // take off RM，change to decimal
+        text = text.replace(/[^\d.]/g, '');
+        var val = parseFloat(text);
+
+        if (isNaN(val)) {
+            alert('Order total invalid.');
+            throw new Error("Order total invalid: " + text);
+        }
+
+        return val; 
+    }
+    </script>
+
 <script>
   // Highlight selected payment method
   document.querySelectorAll('.payment-method').forEach(method => {
@@ -144,12 +264,13 @@
     });
   });
 
-  // 从 .env 读取 Stripe 公钥
+
+  // read stripe public key from .env
   const STRIPE_PUBLISHABLE_KEY = "<?= esc(env('STRIPE_PUBLISHABLE_KEY')) ?>";
   const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
   const elements = stripe.elements();
 
-  // 创建三个分拆的 Elements：卡号 / 有效期 / CVC
+  // card Elements
   const cardNumberElement = elements.create('cardNumber', { hidePostalCode: true });
   cardNumberElement.mount('#card-number-element');
 
@@ -159,7 +280,7 @@
   const cardCvcElement = elements.create('cardCvc');
   cardCvcElement.mount('#card-cvc-element');
 
-  // 显示错误信息
+  // error message 
   const errorDiv = document.getElementById('card-errors');
   [cardNumberElement, cardExpiryElement, cardCvcElement].forEach(el => {
     el.on('change', function (event) {
@@ -171,7 +292,8 @@
     });
   });
 
-  // 点击 Complete Payment 按钮
+  
+  // Complete Payment
   document.querySelector('.btn-primary').addEventListener('click', async function (e) {
     e.preventDefault();
 
@@ -181,10 +303,16 @@
       return;
     }
 
-    const amountCents = 7000; // 这里先写死 RM70，你之后可以换成动态金额
+    // Order Summary （RM）
+    const orderTotalRm = getOrderTotalFromSummary();
+
+    //  Stripe cents
+    const amountCents = Math.round(orderTotalRm * 100);
+
+    console.log("Final charge amount:", orderTotalRm, "RM →", amountCents, "cents");
 
     try {
-      // 1️⃣ 先让你的服务器创建 PaymentIntent
+      //  PaymentIntent
       const intentRes = await fetch("<?= site_url('card-payment/intent') ?>", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -203,7 +331,7 @@
         alert(
             'Server error when creating payment.\n\n' +
             'Status: ' + intentRes.status + '\n' +
-            text.slice(0, 300)   // 截前 300 字，通常就能看到具体错误
+            text.slice(0, 300)   // mention the error if got 
         );
         return;
     }
@@ -212,10 +340,10 @@
       const intentData = await intentRes.json();
       const clientSecret = intentData.client_secret;
 
-      // 2️⃣ 在当前页面用 Stripe 完成扣款（使用 cardNumberElement）
+      // card payment function
       const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardNumberElement,          // 只需要传 cardNumber 元素
+          card: cardNumberElement,          
           billing_details: { name: cardName }
         }
       });
@@ -231,7 +359,7 @@
         return;
       }
 
-      // 3️⃣ 扣款成功后，告诉你的服务器把 6 个字段写进数据库
+      // Database
       const storeRes = await fetch("<?= site_url('card-payment/store') ?>", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -246,7 +374,7 @@
     alert(
         'Payment succeeded, but failed to store in database.\n\n' +
         'Status: ' + storeRes.status + '\n' +
-        text.slice(0, 400)   // 把后端返回的 JSON / 错误信息前 400 字显示出来
+        text.slice(0, 400)   // mention the error if got 
     );
     return;
       }
@@ -255,7 +383,7 @@
     try {
       const receiptForm = new FormData();
       receiptForm.append('email', receiptEmail);
-      receiptForm.append('amount_cents', amountCents);             // 例子：7000
+      receiptForm.append('amount_cents', amountCents);            
       receiptForm.append('currency', 'myr');
       receiptForm.append('status', paymentIntent.status);
       receiptForm.append('payment_intent_id', paymentIntent.id);
