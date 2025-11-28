@@ -77,7 +77,7 @@ class Home extends BaseController
     $email = $this->request->getPost('email');
 
     return view('payment', [
-        'receiptEmail' => $email,   // 传给 view
+        'receiptEmail' => $email,   // send view
     ]);
     }
     
