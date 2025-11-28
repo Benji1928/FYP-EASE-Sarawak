@@ -31,7 +31,9 @@ class OrderModel extends Model
         'payment_method',
         'is_deleted',
         'created_date',
-        'modified_date'
+        'modified_date',
+        'insurance_selected',
+        'insurance_amount'
     ];
 
     // Dates
@@ -196,8 +198,14 @@ class OrderModel extends Model
             'Quantity' => !empty($bookingData['quantity']) ? $bookingData['quantity'] . ' item(s)' : 'Null',
             'Base Price' => !empty($bookingData['basePrice']) ? 'RM ' . $bookingData['basePrice'] : 'Null',
             'Promo Code' => !empty($bookingData['promoCode']) ? $bookingData['promoCode'] : 'Null',
-            'Promo Discount' => !empty($bookingData['promoDiscount']) ? $bookingData['promoDiscount'] . '%' : 'Null',
-            'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null'
+            'Promo Discount' => !empty($bookingData['promoDiscount'])
+                ? ($bookingData['promoType'] === 'amount'
+                    ? $bookingData['promoDiscount'] . 'RM'
+                    : $bookingData['promoDiscount'] . '%')
+                : 'Null',
+            'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null',
+            'Insurance Selected' => !empty($bookingData['insuranceSelected']) ? 'Yes' : 'No',
+            'Insurance Amount' => isset($bookingData['insuranceAmount']) ? 'RM ' . number_format($bookingData['insuranceAmount'], 2) : 'RM 0.00'
         ];
         if ($bookingData['service'] === 'storage') {
             $orderDetails = [
@@ -212,8 +220,14 @@ class OrderModel extends Model
                 'Quantity' => !empty($bookingData['quantity']) ? $bookingData['quantity'] . ' item(s)' : 'Null',
                 'Base Price' => !empty($bookingData['basePrice']) ? 'RM ' . $bookingData['basePrice'] : 'Null',
                 'Promo Code' => !empty($bookingData['promoCode']) ? $bookingData['promoCode'] : 'Null',
-                'Promo Discount' => !empty($bookingData['promoDiscount']) ? $bookingData['promoDiscount'] . '%' : 'Null',
-                'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null'
+                'Promo Discount' => !empty($bookingData['promoDiscount'])
+                    ? ($bookingData['promoType'] === 'amount'
+                        ? $bookingData['promoDiscount'] . 'RM'
+                        : $bookingData['promoDiscount'] . '%')
+                    : 'Null',
+                'Total Price' => !empty($bookingData['totalPrice']) ? 'RM ' . $bookingData['totalPrice'] : 'Null',
+                'Insurance Selected' => !empty($bookingData['insuranceSelected']) ? 'Yes' : 'No',
+                'Insurance Amount' => isset($bookingData['insuranceAmount']) ? 'RM ' . number_format($bookingData['insuranceAmount'], 2) : 'RM 0.00'
             ];
         }
         return json_encode($orderDetails, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -310,7 +324,9 @@ class OrderModel extends Model
                 'amount' => $bookingData['totalPrice'],
                 'payment_method' => 'pending',
                 'is_deleted' => 0,
-                'created_date' => date('Y-m-d H:i:s')
+                'created_date' => date('Y-m-d H:i:s'),
+                'insurance_selected' => !empty($bookingData['insuranceSelected']) ? 1 : 0,
+                'insurance_amount' => !empty($bookingData['insuranceAmount']) ? $bookingData['insuranceAmount'] : 0.00
             ];
 
             // Use CodeIgniter's Query Builder for insert
