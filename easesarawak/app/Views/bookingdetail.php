@@ -905,7 +905,7 @@
                 if (insuranceSelected) {
                     html += `
                         <div class="price-row">
-                            <span class="price-label">Insurance</span>
+                            <span class="price-label">Insurance</span>   
                         </div>
                         <div class="price-row">
                             <span class="price-value">${currentQuantity} Standard Luggage</span>
