@@ -1109,6 +1109,20 @@
                 font-size: 1.02rem;
             }
         }
+        @media (max-width: 768px) {
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .cta-section p {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                padding: 6px 12px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 
