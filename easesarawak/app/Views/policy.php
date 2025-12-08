@@ -111,6 +111,12 @@
             margin-bottom: 15px;
             color: #555;
         }
+
+        @media (max-width: 768px) {
+            .about-title{
+                margin-top: 70px;
+            }
+        }
     </style>
 </head>
 
