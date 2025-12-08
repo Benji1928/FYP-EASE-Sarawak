@@ -32,9 +32,12 @@
             box-sizing: border-box;
         }
 
-        body {
+        body,
+        html {
             font-family: 'EurostarRegular', sans-serif, Arial, 'BebasKai';
             line-height: 1.6;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         /* Hero section */
@@ -734,15 +737,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .navbar {
-                flex-wrap: wrap;
-            }
-
-            .navbar .menu {
-                flex-direction: column;
-                align-items: flex-end;
-            }
-
             .hero-content h1 {
                 font-size: 2rem;
             }
@@ -1067,11 +1061,11 @@
         function bookStorage() {
             // Set service preference in sessionStorage
             sessionStorage.setItem('preferredService', 'storage');
-            
+
             // Clear any existing booking data to start fresh
             sessionStorage.removeItem('bookingData');
             sessionStorage.removeItem('isEditing');
-            
+
             // Redirect to booking page
             window.location.href = 'booking';
         }
@@ -1080,11 +1074,11 @@
         function bookDelivery() {
             // Set service preference in sessionStorage
             sessionStorage.setItem('preferredService', 'delivery');
-            
+
             // Clear any existing booking data to start fresh
             sessionStorage.removeItem('bookingData');
             sessionStorage.removeItem('isEditing');
-            
+
             // Redirect to booking page
             window.location.href = 'booking';
         }
