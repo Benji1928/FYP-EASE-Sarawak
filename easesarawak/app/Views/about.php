@@ -42,7 +42,7 @@
             background-image: url("assets/images/ease-1-2.webp");
             background-size: cover;
             background-position: center;
-            margin-top: 113.5px;
+            margin-top: 90px;
         }
 
         .title-overlay {

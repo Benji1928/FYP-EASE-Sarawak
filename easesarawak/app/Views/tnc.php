@@ -42,7 +42,7 @@
             background-image: url("assets/images/loading-of-luggage-to-airplane.webp");
             background-size: cover;
             background-position: center;
-            margin-top: 113.5px;
+            margin-top: 90px;
         }
 
         .title-overlay {
