@@ -972,6 +972,45 @@
                 font-size: 1.45rem;
             }
         }
+
+        /* Fix squeezed geo icon on mobile */
+        @media (max-width: 480px) {
+            .contact-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                /* space between icon and text */
+                margin-bottom: 15px;
+            }
+
+            .icon-circle {
+                flex-shrink: 0;
+                /* ← THIS IS THE KEY LINE */
+                width: 50px;
+                height: 50px;
+                min-width: 50px;
+                /* prevents shrinking */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .contact-text {
+                flex: 1;
+                min-width: 0;
+                /* allows text to wrap properly */
+            }
+
+            .contact-text .label {
+                font-size: 1.05rem;
+            }
+
+            .contact-text .value {
+                font-size: 0.98rem;
+                word-break: break-word;
+                /* prevents overflow on long address */
+            }
+        }
     </style>
 </head>
 
