@@ -884,6 +884,94 @@
                 padding: 12px 24px;
             }
         }
+
+        /* ==================== WHY CHOOSE EASE – MOBILE LIKE CAPTURE.PNG ==================== */
+        @media (max-width: 768px) {
+            .why-choose-ease {
+                padding: 4rem 1rem 5rem;
+                background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.65)),
+                    url('assets/images/valet-holding-baggage-side-view_23-2149901449-1 (1).webp') center/cover no-repeat;
+            }
+
+            .why-choose-ease .content {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            /* Left side – text */
+            .left {
+                text-align: center;
+                margin-bottom: 3rem;
+                padding: 0 1rem;
+            }
+
+            .left h2.pill-title {
+                justify-content: center;
+                font-size: 1rem;
+            }
+
+            .left h3 {
+                font-size: 2.3rem !important;
+                margin: 1rem 0;
+            }
+
+            .left p {
+                font-size: 1.15rem;
+                line-height: 1.7;
+                max-width: 100%;
+            }
+
+            /* Right side – 4 reasons stacked vertically */
+            .right {
+                display: flex;
+                flex-direction: column;
+                gap: 1.8rem;
+                padding: 0 1rem;
+            }
+
+            /* Hide the cross lines on mobile */
+            .right::before,
+            .right::after {
+                display: none;
+            }
+
+            .quadrant {
+                background: rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(8px);
+                padding: 1.8rem 1.5rem;
+                border-radius: 16px;
+                border-left: 5px solid #f2be00;
+                text-align: left;
+            }
+
+            .quadrant h4 {
+                color: #f2be00;
+                font-size: 1.55rem;
+                font-weight: bold;
+                margin-bottom: 0.8rem;
+            }
+
+            .quadrant p {
+                font-size: 1.05rem;
+                line-height: 1.6;
+                color: #eee;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 480px) {
+            .left h3 {
+                font-size: 2rem;
+            }
+
+            .quadrant {
+                padding: 1.5rem 1.3rem;
+            }
+
+            .quadrant h4 {
+                font-size: 1.45rem;
+            }
+        }
     </style>
 </head>
 
@@ -968,7 +1056,7 @@
                     Looking for short-term storage? Our Kuching Luggage Storage service keeps your luggage safe
                     for as long as needed while you explore the city worry-free!
                 </p>
-                <button><a href="payment" class="btn-card">BOOK NOW</a></button> <!--change code -->
+                <a href="payment" class="btn-card">BOOK NOW</a>
             </div>
 
             <!-- Card 2 - Standard (In Town Delivery) -->
@@ -982,7 +1070,7 @@
                     Enjoy our complimentary Kuching Luggage Transfer with 24 hours of secure storage, offering
                     seamless transfers between selected locations for added convenience!
                 </p>
-                <button><a href="intowndelivery" class="btn-card">BOOK NOW</a></button> <!--change code-->
+                <a href="intowndelivery" class="btn-card">BOOK NOW</a>
             </div>
 
             <!-- Card 3 - On-demand -->
