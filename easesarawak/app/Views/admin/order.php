@@ -296,12 +296,28 @@ $endDate    = $_GET['end_date'] ?? '';
                 .then(data => {
                     if (data.success) {
                         const o = data.order;
+                        const detailsObj = JSON.parse(o.order_details_json);
+                        let tableRows = '';
+
+                        Object.entries(detailsObj).forEach(([key, value]) => {
+                            // Convert camelCase to "Camel Case"
+                            const prettyKey = key.replace(/([A-Z])/g, ' $1')
+                                .replace(/^./, str => str.toUpperCase());
+
+                            tableRows += `
+                            <tr>
+                                <td class="fw-semibold">${prettyKey}</td>
+                                <td>${value || '-'}</td>
+                            </tr>
+                        `;
+                        });
+
                         contentDiv.innerHTML = `
                         <div class="container-fluid">
                             <!-- Section 1 -->
                             <div class="card border-0 shadow-sm mb-3 rounded-3">
                                 <div class="card-header bg-light fw-semibold">
-                                    <i class="fa fa-user me-2 text-primary"></i>Customer Information
+                                    Customer Information
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3">
@@ -323,7 +339,7 @@ $endDate    = $_GET['end_date'] ?? '';
                             <!-- Section 2 -->
                             <div class="card border-0 shadow-sm mb-3 rounded-3">
                                 <div class="card-header bg-light fw-semibold">
-                                    <i class="fa fa-briefcase me-2 text-primary"></i>Order Information
+                                    Order Information
                                 </div>
                                 <div class="card-body">
                                     <div class="row g-3">
@@ -358,10 +374,14 @@ $endDate    = $_GET['end_date'] ?? '';
                             <!-- Section 3 -->
                             <div class="card border-0 shadow-sm rounded-3">
                                 <div class="card-header bg-light fw-semibold">
-                                    <i class="fa fa-database me-2 text-primary"></i>Order Details
+                                    Order Details
                                 </div>
                                 <div class="card-body">
-                                    <pre class="bg-light p-3 rounded" style="font-size: 0.9rem; white-space: pre-wrap;">${o.order_details_json}</pre>
+                                    <table class="table table-bordered table-sm">
+                                        <tbody>
+                                            ${tableRows}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
